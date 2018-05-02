@@ -1,0 +1,83 @@
+.App {
+    margin: auto;
+    width: 800px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.Nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+.logo {
+    padding-top: 5px;
+    padding-top: 27px;
+    padding-bottom: 7px;
+    display: flex;
+    justify-content: center;
+}
+
+.design {
+    color: #00bbbb;
+    font-weight: bold;
+}
+
+.button {
+    text-decoration: none;
+    padding: 5px 15px 5px 15px;
+}
+
+.sign-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    font-size: 12px;
+}
+
+.signin {
+    width: 60px;
+    color: #505050;
+    margin-top: 4px;
+}
+
+.signup {
+    background-color: #00bbbb;
+    color: white;
+    padding: 7px 18px 7px 18px;
+}
+
+.image {
+    margin: auto;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    width: 400px;
+    border-style: solid;
+}
+
+.slogan {
+    color: #505050;
+    font-size: 30px;
+    line-height: 30px;
+    margin-bottom: 30px;
+}
+
+.description {
+    color: #505050;
+    font-size: 16px;
+    line-height: 30px;
+    margin: auto;
+    width: 600px;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 40px;
+}
+
+.buy {
+    color: white;
+    background-color:#00bbbb;
+    text-decoration: none;
+    padding: 10px 70px 10px 70px;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
