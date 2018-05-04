@@ -26,6 +26,7 @@ const UserSchema = new mongoose.Schema({
     },
 });
 
+//https://devdactic.com/restful-api-user-authentication-1/
 UserSchema.pre('save', function (next) {
     var user = this;
     if (this.isModified('password') || this.isNew) {
@@ -55,15 +56,6 @@ UserSchema.methods.comparePassword = function(password, cb) {
         
      })
 };
- 
-
-// bcrypt.compare('somePassword', hash, function(err, res) {
-//     if(res) {
-//      // Passwords match
-//     } else {
-//      // Passwords don't match
-//     } 
-//   });
 
 
 const UserModel = mongoose.model('User', UserSchema);

@@ -49,7 +49,7 @@ server.post('/api/users/adduser', function(req, res) {
     })
 });
 
-// route to authenticate a user (POST http://localhost:8080/api/authenticate)
+// route to authenticate a user (POST http://localhost:8080/api/login)
 server.post('/api/login', function(req, res) {
     User.findOne({
       username: req.body.username
@@ -74,6 +74,12 @@ server.post('/api/login', function(req, res) {
         });
       }
     });
+  });
+  
+  //how to setup routes that need auth as well as test it on postman
+  //https://jonathanmh.com/express-passport-json-web-token-jwt-authentication-beginners/
+  server.get('/api/routeThatNeedsJWTToken', passport.authenticate('jwt', { session: false }), function(req, res){
+    res.json("Success! You can not see this without a token");
   });
 
 mongoose.Promise = global.Promise;
