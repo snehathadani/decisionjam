@@ -5,7 +5,8 @@ const mongoose = require('mongoose');
 const User = require('./db/UserModel.js');
 const cors = require('cors');
 const jwt = require('jwt-simple');
-var passport = require('passport');
+const passport = require('passport');
+const config = require('./config/passport.js')
 
 const STATUS_USER_ERROR = 422;
 const STATUS_SERVER_ERROR = 500;
@@ -47,6 +48,33 @@ server.post('/api/users/adduser', function(req, res) {
         }
     })
 });
+
+// route to authenticate a user (POST http://localhost:8080/api/authenticate)
+server.post('/api/login', function(req, res) {
+    User.findOne({
+      username: req.body.username
+    }, function(err, user) {
+      if (err) throw err;
+   
+      if (!user) {
+        res.send({success: false, msg: 'Authentication failed. User not found.'});
+      } else {
+        // check if password matches
+        console.log (user.password, req.body.password);
+        user.comparePassword(req.body.password, function (err, isMatch) {
+          console.log(isMatch);
+          if (isMatch && !err) {
+            // if user is found and password is right create a token
+            var token = jwt.encode(user, 'cs5Rocks');
+            // return the information including token as JSON
+            res.json({success: true, token: 'JWT ' + token});
+          } else {
+            res.send({success: false, msg: 'Authentication failed. Wrong password.', err });
+          }
+        });
+      }
+    });
+  });
 
 mongoose.Promise = global.Promise;
 const connect = mongoose.connect(
