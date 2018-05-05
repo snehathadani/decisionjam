@@ -4,10 +4,10 @@ import "./Question.css";
 const Question = () => {
     return(
         <div>
-        <div>
-            <label> Question or decision </label>   
-            <input type = "text"/>
-        </div>    
+            <div>
+                <label> Question or decision </label>   
+                <input type = "text"/>
+            </div>    
             <button> Create Question </button>
         </div>
     )
