@@ -3,6 +3,7 @@ const express = require ('express');
 const server = express();
 const mongoose = require('mongoose');
 const User = require('./db/UserModel.js');
+const Decision = require('./db/DecisionModel.js');
 const cors = require('cors');
 
 const STATUS_USER_ERROR = 422;
@@ -22,7 +23,7 @@ server.get ('/api/users', function (req, res) {
         if (err) {
         res.status(STATUS_USER_ERROR).json({error:'Could not find the user.'});
         } else {
-            res.status(200).json(users);
+            res.status(STATUS_OKAY).json(users);
         }
   })
 });
@@ -34,10 +35,22 @@ server.post('/api/users/adduser', function(req, res) {
         if(err) {
             res.status(STATUS_USER_ERROR).json({error: "Error while adding"});
         } else {
-            res.status(200).json(user);
+            res.status(STATUS_OKAY).json(user);
         }
     })
 });
+
+server.post('/api/decision/create', function(req, res) {
+    const newDecision = new Decision (req.body);
+    //check the user contains all required data
+    newDecision.save((err, decision) => {
+        if(err) {
+            res.status(STATUS_USER_ERROR).json({error: "Error while adding"});
+        } else {
+            res.status(STATUS_OKAY).json({decisionId: decision._id});
+        }
+    })
+})
 
 mongoose.Promise = global.Promise;
 const connect = mongoose.connect(
