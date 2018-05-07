@@ -49,10 +49,12 @@ server.post('/api/users/adduser', function(req, res) {
     })
 });
 
+//gotta convert ugly callback code to beautiful promises
+//http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/
 // route to authenticate a user (POST http://localhost:8080/api/login)
 server.post('/api/login', function(req, res) {
     User.findOne({
-      username: req.body.username
+      $or: [{'email': req.body.emailOrUsername}, {'username': req.body.emailOrUsername}]
     }, function(err, user) {
       if (err) throw err;
    
@@ -75,6 +77,18 @@ server.post('/api/login', function(req, res) {
       }
     });
   });
+
+  /* Handle Logout */
+  // nice to have, need to refresh the session on each authorised route so the user
+  
+  //see last comment https://stackoverflow.com/questions/45541182/passport-req-logout-function-not-working 
+server.get('/api/logout', function(req, res) {
+  console.log("I am Logout")
+  req.logout(); 
+  res.status(200).redirect('/');
+});
+
+
   
   //how to setup routes that need auth as well as test it on postman
   //https://jonathanmh.com/express-passport-json-web-token-jwt-authentication-beginners/
