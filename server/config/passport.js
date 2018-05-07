@@ -13,7 +13,8 @@ module.exports = function(passport) {
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');
   
   opts.JWT_ALLOW_REFRESH = true;
-  opts.expiresIn = 900; // set session time to expire in 15 mins
+  opts.expiresIn = '15m'; // set session time to expire in 15 mins, not sure if it's working
+                          // i seem to be able to the token after 15 mins, lets see in live
   opts.secretOrKey = 'cs5Rocks';
   passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
     User.findOne({id: jwt_payload.id}, function(err, user) {
