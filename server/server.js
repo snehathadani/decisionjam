@@ -78,6 +78,17 @@ server.post('/api/login', function(req, res) {
     });
   });
 
+  /* Handle Logout */
+  //see last comment https://stackoverflow.com/questions/45541182/passport-req-logout-function-not-working 
+server.get('/api/logout', function(req, res) {
+  console.log("I am Logout")
+  req.logout(); 
+  res.status(200).json({ 
+          status: "logout",
+          msg:"Please Log In again"
+  });
+});
+
 
   
   //how to setup routes that need auth as well as test it on postman
