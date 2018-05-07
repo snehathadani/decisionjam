@@ -79,14 +79,13 @@ server.post('/api/login', function(req, res) {
   });
 
   /* Handle Logout */
+  // nice to have, need to refresh the session on each authorised route so the user
+  // stays logged in while using the side
   //see last comment https://stackoverflow.com/questions/45541182/passport-req-logout-function-not-working 
 server.get('/api/logout', function(req, res) {
   console.log("I am Logout")
   req.logout(); 
-  res.status(200).json({ 
-          status: "logout",
-          msg:"Please Log In again"
-  });
+  res.status(200).redirect('/');
 });
 
 
