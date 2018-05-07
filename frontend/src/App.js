@@ -9,22 +9,23 @@ import {StripeProvider} from 'react-stripe-elements';
 class App extends Component {
   render() {
     return (
+      <StripeProvider apiKey="pk_test_zwL3UU7M5FXPJkHognp6dYFr">
       <BrowserRouter>
-      <div className="App">
-        {/* <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p> */}
-      <Route exact path="/" component={ Landing }/>
-      <Route exact path="/billing" component={ Billing }/>
-        <StripeProvider apiKey="pk_test_zwL3UU7M5FXPJkHognp6dYFr">
-          <Billing />
-        </StripeProvider>
+        <div className="App">
+          {/* <header className="App-header">
+            <img src={logo} className="App-logo" alt="logo" />
+            <h1 className="App-title">Welcome to React</h1>
+          </header>
+          <p className="App-intro">
+            To get started, edit <code>src/App.js</code> and save to reload.
+          </p> */}
+        <Route exact path="/" component={ Landing }/>
+        <Route exact path="/landing-page" component={ Landing }/>
+        <Route exact path="/billing" component={ Billing }/>
       </div>
       </BrowserRouter>
+      </StripeProvider> 
+
     );
   }
 }

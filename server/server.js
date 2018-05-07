@@ -13,6 +13,16 @@ server.use(cors());
 server.use(bodyParser.json());
 
 
+server.post ('/billing', function (req, res) {
+    console.log('server: card charge button clicked');
+    console.log('req.body.postData.token.id', req.body.postData.token.id);
+    console.log('req.body.postData.selectedOption', req.body.postData.selectedOption);
+
+    res.status(200).json ({message: 'Card charged'});
+ });
+ 
+
+
 server.get ('/', function (req, res) {
    res.status(200).json ({message: 'API running'});
 });
@@ -37,11 +47,11 @@ server.post('/api/users/adduser', function(req, res) {
             res.status(200).json(user);
         }
     })
-});
+}); 
 
 mongoose.Promise = global.Promise;
 const connect = mongoose.connect(
-   'mongodb://sneha.thadani:decisionjam@ds163769.mlab.com:63769/decisionjam');
+   'mongodb://localhost/decisionjam)');
 
 connect.then(()=> {
    const port= 8000;
