@@ -49,10 +49,12 @@ server.post('/api/users/adduser', function(req, res) {
     })
 });
 
+//gotta convert ugly callback code to beautiful promises
+//http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/
 // route to authenticate a user (POST http://localhost:8080/api/login)
 server.post('/api/login', function(req, res) {
     User.findOne({
-      username: req.body.username
+      $or: [{'email': req.body.emailOrUsername}, {'username': req.body.emailOrUsername}]
     }, function(err, user) {
       if (err) throw err;
    
@@ -75,6 +77,8 @@ server.post('/api/login', function(req, res) {
       }
     });
   });
+
+
   
   //how to setup routes that need auth as well as test it on postman
   //https://jonathanmh.com/express-passport-json-web-token-jwt-authentication-beginners/
