@@ -4,9 +4,10 @@ const server = express();
 const mongoose = require('mongoose');
 const User = require('./db/UserModel.js');
 const cors = require('cors');
-// const jwt = require('jwt-simple');
-// const passport = require('passport');
-// const config = require('./config/passport.js');
+
+const jwt = require('jwt-simple');
+const passport = require('passport');
+const config = require('./config/passport.js')
 
 const STATUS_USER_ERROR = 422;
 const STATUS_SERVER_ERROR = 500;
@@ -14,14 +15,13 @@ const STATUS_OKAY = 200;
 
 server.use(cors());
 server.use(bodyParser.json());
-// server.use(passport.initialize());
-// pass passport for configuration
-// require('./config/passport')(passport);
-
 
 const payments = require('./Payments.js');
 payments(server);
 
+server.use(passport.initialize());
+// pass passport for configuration
+require('./config/passport')(passport);
 
 
 server.get ('/', function (req, res) {
@@ -97,9 +97,9 @@ server.get('/api/logout', function(req, res) {
   
   //how to setup routes that need auth as well as test it on postman
   //https://jonathanmh.com/express-passport-json-web-token-jwt-authentication-beginners/
-  // server.get('/api/routeThatNeedsJWTToken', passport.authenticate('jwt', { session: false }), function(req, res){
-  //   res.json("Success! You can not see this without a token");
-  // });
+  server.get('/api/routeThatNeedsJWTToken', passport.authenticate('jwt', { session: false }), function(req, res){
+    res.json("Success! You can not see this without a token");
+  });
 
 mongoose.Promise = global.Promise;
 const connect = mongoose.connect(
