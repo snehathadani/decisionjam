@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Route } from "react-router-dom";
 import Landing from "./components/landing/Landing";
+import Question from "./components/question/Question";
 
 class App extends Component {
   render() {
@@ -17,6 +18,7 @@ class App extends Component {
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
       <Route exact path="/landing-page" component={ Landing }/>
+      <Route exact path="/question-page" component={ Question }/>
       </div>
       </BrowserRouter>
     );
