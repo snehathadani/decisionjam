@@ -24,6 +24,7 @@ const UserSchema = new mongoose.Schema({
         required: true,
         default: Date.now,
     },
+    
 });
 
 //https://devdactic.com/restful-api-user-authentication-1/

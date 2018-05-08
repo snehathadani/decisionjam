@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const User = require('./db/UserModel.js');
 const Decision = require('./db/DecisionModel.js');
 const cors = require('cors');
+
 const jwt = require('jwt-simple');
 const passport = require('passport');
 const config = require('./config/passport.js')
@@ -15,6 +16,10 @@ const STATUS_OKAY = 200;
 
 server.use(cors());
 server.use(bodyParser.json());
+
+const payments = require('./Payments.js');
+payments(server);
+
 server.use(passport.initialize());
 // pass passport for configuration
 require('./config/passport')(passport);
