@@ -23,7 +23,7 @@ class CheckoutForm extends Component {
       selectedOption: this.state.selectedOption,
       token: token,
     }
-      axios.post(`${ROOT_URL}/billing`, { postData })
+      axios.post(`${ROOT_URL}/api/payment`, { postData })
       // console.log('postData:', postData);
       // console.log(`You chose ${this.state.selectedOption}`);
       console.log('Received Stripe token:', token);
@@ -45,16 +45,16 @@ class CheckoutForm extends Component {
             <CardSection />
             <div className="radiobuttons">
             <label> 
-              <input type="radio" value="HalfYearly" checked={this.state.selectedOption === 'HalfYearly'} onChange={this.handleOptionChange}/>
-              HalfYearly
-            </label>
-            <label> 
               <input type="radio" value="Monthly" checked={this.state.selectedOption === 'Monthly'} onChange={this.handleOptionChange}/>
               Monthly
             </label>
             <label> 
-              <input type="radio" value="PerDecision" checked={this.state.selectedOption === 'PerDecision'} onChange={this.handleOptionChange}/>
-              Per Decision
+              <input type="radio" value="HalfYearly" checked={this.state.selectedOption === 'HalfYearly'} onChange={this.handleOptionChange}/>
+              6 Months
+            </label>
+            <label> 
+              <input type="radio" value="Yearly" checked={this.state.selectedOption === 'Yearly'} onChange={this.handleOptionChange}/>
+              Yearly
             </label>
             </div>
             <button>Confirm order</button>
