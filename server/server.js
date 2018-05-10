@@ -13,6 +13,7 @@ const config = require('./config/passport.js')
 const STATUS_USER_ERROR = 422;
 const STATUS_SERVER_ERROR = 500;
 const STATUS_OKAY = 200;
+const STATUS_NOT_FOUND = 404;
 
 server.use(cors());
 server.use(bodyParser.json());
@@ -56,16 +57,46 @@ server.post('/api/users/adduser', function(req, res) {
 });
 
 server.post('/api/decision/create', function(req, res) {
-    const newDecision = new Decision (req.body);
-    //check the user contains all required data
-    newDecision.save((err, decision) => {
-        if(err) {
-            res.status(STATUS_USER_ERROR).json({error: "Error while adding"});
-        } else {
-            res.status(STATUS_OKAY).json({decisionId: decision._id});
-        }
-    })
+  const newDecision = new Decision (req.body);
+  //check the user contains all required data
+  newDecision.save((err, decision) => {
+      if(err) {
+          res.status(STATUS_USER_ERROR).json({error: "Error while adding"});
+      } else {
+          res.status(STATUS_OKAY).json({decisionId: decision._id});
+      }
+  })
 })
+
+server.get('/api/decision/:id', function(req, res) {
+  const id = req.params.id
+  Decision.find({_id: id})
+          .then ((decision) => res.status(STATUS_OKAY).json(decision),
+                 (err) => res.status(STATUS_NOT_FOUND).json({error: "Decision with id " + id + " not found"}));
+})
+
+server.put('/api/decision/:id/answer', function(req,res) {
+  const id = req.params.id;
+  console.log(req.body);
+  const answer = req.body.answer; //TODO add with the user id right now only string
+  Decision.findOne({_id: id})
+          .then ((decision) => {
+                    let answers = decision.answers;
+                    if(answers === undefined) {
+                       answers = [{answerText: answer}];
+                      } else {
+                      answers.push({answerText: answer});
+                    }
+                    Decision.updateOne({_id: id}, {$set: {answers: answers}})
+                            .then(result =>  res.status(STATUS_OKAY).json(decision),
+                                  err => res.status(STATUS_NOT_FOUND).json({error: "Decision with id " + id + " not updated" +  " " + err}));
+                 },
+                 (err) => res.status(STATUS_NOT_FOUND).json({error: "Decision with id " + id + " not found"}));          
+})
+
+
+
+
 
 //gotta convert ugly callback code to beautiful promises
 //http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/
@@ -117,8 +148,8 @@ server.get('/api/logout', function(req, res) {
 
 mongoose.Promise = global.Promise;
 const connect = mongoose.connect(
-   'mongodb://localhost/decisionjam');
-   //mongodb://sneha.thadani:decisionjam@ds163769.mlab.com:63769/decisionjam
+   //'mongodb://localhost/decisionjam');
+   'mongodb://sneha.thadani:decisionjam@ds163769.mlab.com:63769/decisionjam');
 
 connect.then(()=> {
    const port= 8000;
