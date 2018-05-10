@@ -111,7 +111,7 @@ server.get('/api/logout', function(req, res) {
   //how to setup routes that need auth as well as test it on postman
   //https://jonathanmh.com/express-passport-json-web-token-jwt-authentication-beginners/
   server.get('/api/routeThatNeedsJWTToken', passport.authenticate('jwt', { session: false }), function(req, res){
-    res.json("Success! You can not see this without a token");
+    res.json({"Success! You can not see this without a token":"bla",user :req.user});
   });
 
 

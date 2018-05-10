@@ -17,7 +17,7 @@ module.exports = function(passport) {
                           // i seem to be able to the token after 15 mins, lets see in live
   opts.secretOrKey = 'cs5Rocks';
   passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({id: jwt_payload.id}, function(err, user) {
+    User.findOne({_id: jwt_payload._id}, function(err, user) {
           if (err) {
               return done(err, false);
           }
