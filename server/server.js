@@ -79,13 +79,12 @@ server.put('/api/decision/:id/answer', function(req,res) {
   const id = req.params.id;
   console.log(req.body);
   const answer = req.body.answer; //TODO add with the user id right now only string
-  Decision.find({_id: id})
+  Decision.findOne({_id: id})
           .then ((decision) => {
-                    console.log(decision);
                     let answers = decision.answers;
                     if(answers === undefined) {
-                       answers = [{answerText: answer}]; 
-                    } else {
+                       answers = [{answerText: answer}];
+                      } else {
                       answers.push({answerText: answer});
                     }
                     Decision.updateOne({_id: id}, {$set: {answers: answers}})
