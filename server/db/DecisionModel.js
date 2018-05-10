@@ -6,6 +6,16 @@ const DecisionSchema =  new mongoose.Schema({
         required: true,
     },
 
+    answers: [{    
+        answerText: {
+        type: String,
+        required: true,
+        },
+        //Votes contain list of user ids
+        upVotes: [String],
+        downVotes: [String]}
+    ],
+
     createdOn: {
         type: Date,
         required: true,
