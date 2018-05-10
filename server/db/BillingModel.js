@@ -1,22 +1,16 @@
 const mongoose = require ('mongoose');
 
 const BillingSchema = new mongoose.Schema({
-    token: {
+    userID: {
         type: String,
         required: true,
-        unique: true,
+        unique: false,
     },
-    purchaseType: {
-        type: String,
+    subscriptionEndDate: {
+        type: Number,
         required: true,
-        unique: true,
+        unique: false,
     },
-    userid: {
-        type: String,
-        required: true,
-        unique: true,
-    }
-  
     
 });
 const BillingModel = mongoose.model('Billing', BillingSchema);
