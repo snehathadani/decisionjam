@@ -4,12 +4,12 @@ const BillingSchema = new mongoose.Schema({
     userID: {
         type: String,
         required: true,
-        unique: true,
+        unique: false,
     },
     subscriptionEndDate: {
         type: Number,
         required: true,
-        unique: true,
+        unique: false,
     },
     
 });

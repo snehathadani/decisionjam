@@ -6,9 +6,15 @@ const BillingModel = require('./db/BillingModel.js');
 module.exports = (server) => {
 
 
+
 // charge customer 
 server.post('/api/payment', (req, res) => {
     // console.log("req.body", req.body);
+
+    //passport function needed
+    // console.log('req.user:', req.user);
+
+
     const token = req.body.postData.token.id;
     const selectedOption = req.body.postData.selectedOption;
 
@@ -35,7 +41,7 @@ server.post('/api/payment', (req, res) => {
         }, function(err, subscription) {
         // console.log('subscription log:', subscription);
         const newModelData = {
-            userID: 'myNewID',
+            userID: 'myNewID2',
             subscriptionEndDate: subscription.current_period_end
         }
         // console.log('req.body', req.body);
@@ -44,20 +50,24 @@ server.post('/api/payment', (req, res) => {
         newBilling.save();
         });
     })
+    res.send({ 'message': 'Your card was charged'});
 });
 
 
-// based on userID check subscriptionEnd 
+// based on userID check subscription end date and compare with today's date
 server.get('/api/make-decision/:soID', (req, res) => {
     console.log('req.params', req.params.soID);
     const soID = req.params.soID;
     BillingModel
         .findOne({ 'userID': soID })        
         .then(endDate => {
-            res.send({'subscription end Date': endDate.subscriptionEndDate});
-            //check current date vs subscription end date
-            //if subscription is over, then automatically charge card again
-        })
+            const newDate = new Date();
+            const dateToday = Math.round(newDate.getTime()/1000);
+            const subEndDate = endDate.subscriptionEndDate;
+            if (dateToday > subEndDate) {
+                res.send('Your Subscription has ended');
+            };
+        });
 
 });
 

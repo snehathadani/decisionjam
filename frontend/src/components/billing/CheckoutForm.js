@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from "react-router-dom";
 import {injectStripe} from 'react-stripe-elements';
 import "./Billing.css"
 import CardSection from './CardSection';
@@ -10,13 +11,12 @@ class CheckoutForm extends Component {
   state = {
     user: '',
     selectedOption: '',
+    redirect: false,
   }
 
   handleSubmit = (ev) => {
-    console.log("confirmed button clicked")
+    // console.log("confirmed button clicked")
     ev.preventDefault();
-
-
     this.props.stripe.createToken({user: this.state.name})
     .then(({token}) => {
     const postData = {
@@ -24,22 +24,30 @@ class CheckoutForm extends Component {
       token: token,
     }
       axios.post(`${ROOT_URL}/api/payment`, { postData })
-      // console.log('postData:', postData);
-      // console.log(`You chose ${this.state.selectedOption}`);
-      console.log('Received Stripe token:', token);
-    });
-
+      .then(() => {
+        this.setState({ redirect: true })
+      }
+    )
+      // console.log('Received Stripe token:', token);
+    })
   }
 
   handleOptionChange = (changeEvent) => {
     this.setState({
       selectedOption: changeEvent.target.value
-    });
+    })
   }
 
 
   render() {
+    console.log ('this.state:',  this.state);
+    if (this.state.redirect) {
+      return <Redirect to='/payment-result'/>;
+    }
+    
+
     return (
+      
         <form onSubmit={this.handleSubmit}>
            
             <CardSection />
@@ -59,8 +67,10 @@ class CheckoutForm extends Component {
             </div>
             <button>Confirm order</button>
         </form>
+
     );
   }
+
 }
 
 export default injectStripe(CheckoutForm);
