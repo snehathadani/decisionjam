@@ -35,6 +35,8 @@ class Signup extends Component {
     .then(res => { 
       console.log('res.data', res.data)
       if (res.data.success) {
+      localStorage.setItem('token', res.data.token);
+      console.log('res.data.token', res.data.token)
       this.setState({ redirect: true });
       } else {
       // console.log('res.data.msg', res.data.msg)

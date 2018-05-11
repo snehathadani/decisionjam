@@ -102,11 +102,11 @@ server.put('/api/decision/:id/answer', function(req,res) {
 //http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/
 // route to authenticate a user (POST http://localhost:8080/api/login)
 server.post('/api/login', function(req, res) {
-  console.log('req.body', req.body);
     User.findOne({
       $or: [{'email': req.body.email}, {'username': req.body.username}]
     }, function(err, user) {
       if (err) throw err;
+   
       if (!user) {
         res.send({success: false, msg: 'Authentication failed. User not found.'});
       } else {
@@ -148,8 +148,8 @@ server.get('/api/logout', function(req, res) {
 
 mongoose.Promise = global.Promise;
 const connect = mongoose.connect(
-   'mongodb://localhost/decisionjam');
-  //  'mongodb://sneha.thadani:decisionjam@ds163769.mlab.com:63769/decisionjam');
+   //'mongodb://localhost/decisionjam');
+   'mongodb://sneha.thadani:decisionjam@ds163769.mlab.com:63769/decisionjam');
 
 connect.then(()=> {
    const port= 8000;

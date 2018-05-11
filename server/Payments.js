@@ -1,17 +1,18 @@
 const stripe = require("stripe")("sk_test_LdNhOn0s563Qt83R14hhLyGQ");
 const server = require("./server.js");
 const BillingModel = require("./db/BillingModel.js");
+const passport = require('passport');
+const jwt = require('jwt-simple');
 
 // export function that takes server as an argument
 module.exports = server => {
   // charge customer
-  server.post("/api/payment", (req, res) => {
-    console.log("req.body", req.body);
+  server.post("/api/payment", passport.authenticate('jwt'), (req, res) => {
+    // console.log("req.body", req.body);
+    console.log("req", req.user);
 
-    //passport function needed
-    // console.log('req.user:', req.user);
 
-    const token = req.body.postData.token.id;
+    const stripeToken = req.body.postData.stripeToken.id;
     const selectedOption = req.body.postData.selectedOption;
 
     let planName = "";
@@ -29,7 +30,7 @@ module.exports = server => {
     const customer = stripe.customers
       .create({
         email: "jd@gmail.com",
-        source: token
+        source: stripeToken
       })
       .then(customer => {
         // console.log('customer:', customer);

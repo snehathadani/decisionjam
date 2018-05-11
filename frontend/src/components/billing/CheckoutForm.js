@@ -17,12 +17,16 @@ class CheckoutForm extends Component {
   handleSubmit = e => {
     // console.log("confirmed button clicked")
     e.preventDefault();
+    const jwtToken = localStorage.getItem('token');
+    console.log('token:', jwtToken);
+
     this.props.stripe
       .createToken({ user: this.state.name })
       .then(({ token }) => {
         const postData = {
           selectedOption: this.state.selectedOption,
-          token: token
+          stripeToken: token,
+          jwtToken: jwtToken
         };
         axios.post(`${ROOT_URL}/api/payment`, { postData }).then(() => {
           this.setState({ redirect: true });
