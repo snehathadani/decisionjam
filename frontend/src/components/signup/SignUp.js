@@ -1,64 +1,89 @@
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
+import "./SignUp.css";
+import axios from "axios";
 
-var Input = React.createClass({
-	render: function() {
-		return (
-			<div className="Input">
-				<input id={this.props.name} autocomplete="false" required type={this.props.type} placeholder={this.props.placeholder} />	
-				<label for={this.props.name}></label>
-			</div>
-		);
-	}
-});
+const ROOT_URL = "http://localhost:8000";
 
-var Modal = React.createClass({
-	render: function() {
-		return (
-			<div className="Modal">
-				<form onSubmit={this.props.onSubmit} className="ModalForm">
-					<Input id="name" type="text" placeholder="Jack-Edward Oliver" />
-					<Input id="username" type="email" placeholder="mrjackolai@gmail.com" />
-					<Input id="password" type="password" placeholder="password" />
-					<button>Log in <i className="fa fa-fw fa-chevron-right"></i></button>
-				</form>
-			</div>
-		);
-	}
-});
+class Signup extends Component {
+  constructor() {
+    super();
+    this.state = {
+      username: "",
+      email: "",
+      password: "",
+      redirect: false,
+      loginError: false
+    };
+  }
 
-var App = React.createClass({
-	
-	getInitialState: function() {
-		return { mounted: false };
-	},
-	
-	componentDidMount: function() {
-		this.setState({ mounted: true });
-	},
-	
-	handleSubmit: function(e) {
-		this.setState({ mounted: false });
-		e.preventDefault();
-	},
+  handleUsernameChange = e => {
+    this.setState({ username: e.target.value,})
+  };
 
-	render: function() {
-		
-		var child;
-		if(this.state.mounted) {
-			child = (<Modal onSubmit={this.handleSubmit} />);
-		}
-		
-		return(
-			<div className="App">
-				<ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTimeout={300}>
-					{child}
-				</ReactCSSTransitionGroup>
-			</div>
-		);
-	}
-});
+  handleEmailChange = e => {
+    this.setState({ email: e.target.value });
+  };
 
-ReactDOM.render(
-	<App />,
-	document.getElementById('app')
-);
+  handlePasswordChange = e => {
+    this.setState({ password: e.target.value });
+  };
+
+  handleFormSubmit = e => {
+    e.preventDefault();
+    const newUser = {
+      username: this.state.username,
+      email: this.state.email,
+      password: this.state.password
+    };
+    axios.post(`${ROOT_URL}/api/users/adduser`, newUser )
+    .then(res => { 
+      console.log('res', res)
+      this.setState({ redirect: true });
+    })
+    .catch(error => {
+        console.log('error.response', error.response)
+        this.setState({ loginError: true});
+    });
+  };
+
+  render() {
+    // console.log("this.state:", this.state);
+
+    const loginError = this.state.loginError;
+    console.log('ispasswordvalid', loginError);
+
+    if (this.state.redirect) {
+      return <Redirect to="/billing" />;
+    }
+
+    return (
+      <div>
+        <form onSubmit={this.handleFormSubmit}>
+          <label>
+            Username
+            <input type="text" name="username" value={this.state.username} onChange={this.handleUsernameChange} />
+          </label>
+          <label>
+            Email
+            <input type="text" name="email" value={this.state.email} onChange={this.handleEmailChange} />
+          </label>
+          <label>
+            Password
+            <input type="text" name="password" value={this.state.password} onChange={this.handlePasswordChange} />
+          </label>
+          <div>
+            <p>{loginError ? 'Invalid Sign Up' : ''}</p>
+          </div>
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+    );
+
+  }
+
+
+
+}
+
+export default Signup;

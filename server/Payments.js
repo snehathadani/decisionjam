@@ -6,7 +6,7 @@ const BillingModel = require("./db/BillingModel.js");
 module.exports = server => {
   // charge customer
   server.post("/api/payment", (req, res) => {
-    // console.log("req.body", req.body);
+    console.log("req.body", req.body);
 
     //passport function needed
     // console.log('req.user:', req.user);
