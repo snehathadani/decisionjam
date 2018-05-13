@@ -13,12 +13,12 @@ class Signup extends Component {
       email: "",
       password: "",
       redirect: false,
-      loginError: false,
+      loginError: false
     };
   }
 
   handleUsernameChange = e => {
-    this.setState({ username: e.target.value,})
+    this.setState({ username: e.target.value });
   };
 
   handlePasswordChange = e => {
@@ -31,21 +31,22 @@ class Signup extends Component {
       username: this.state.username,
       password: this.state.password
     };
-    axios.post(`${ROOT_URL}/api/login`, User )
-    .then(res => { 
-      console.log('res.data', res.data)
-      if (res.data.success) {
-      localStorage.setItem('token', res.data.token);
-      console.log('res.data.token', res.data.token)
-      this.setState({ redirect: true });
-      } else {
-      // console.log('res.data.msg', res.data.msg)
-      this.setState({ loginError: true});
-      }
-    })
-    .catch(error => {
-        console.log('error.response', error.response)
-    });
+    axios
+      .post(`${ROOT_URL}/api/login`, User)
+      .then(res => {
+        console.log("res.data", res.data);
+        if (res.data.success) {
+          localStorage.setItem("token", res.data.token);
+          // console.log('res.data.token', res.data.token)
+          this.setState({ redirect: true });
+        } else {
+          // console.log('res.data.msg', res.data.msg)
+          this.setState({ loginError: true });
+        }
+      })
+      .catch(error => {
+        console.log("error.response", error.response);
+      });
   };
 
   render() {
@@ -63,24 +64,30 @@ class Signup extends Component {
         <form onSubmit={this.handleFormSubmit}>
           <label>
             Username
-            <input type="text" name="username" value={this.state.username} onChange={this.handleUsernameChange} />
+            <input
+              type="text"
+              name="username"
+              value={this.state.username}
+              onChange={this.handleUsernameChange}
+            />
           </label>
           <label>
             Password
-            <input type="text" name="password" value={this.state.password} onChange={this.handlePasswordChange} />
+            <input
+              type="text"
+              name="password"
+              value={this.state.password}
+              onChange={this.handlePasswordChange}
+            />
           </label>
           <div>
-            <p>{loginError ? 'Login Error: User not found.' : ''}</p>
+            <p>{loginError ? "Login Error: User not found." : ""}</p>
           </div>
           <button type="submit">Sign In</button>
         </form>
       </div>
     );
-
   }
-
-
-
 }
 
 export default Signup;
