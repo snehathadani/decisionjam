@@ -39,6 +39,7 @@ class CheckoutForm extends Component {
           .post(`${ROOT_URL}/api/payment`, { postData }, { headers })
           .then(response => {
             console.log("response.data", response.data);
+            console.log("postData", postData);
             if (response.data.success) {
               this.setState({
                 success: true,
