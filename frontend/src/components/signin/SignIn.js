@@ -56,7 +56,7 @@ class Signup extends Component {
     // console.log('loginError', loginError);
 
     if (this.state.redirect) {
-      return <Redirect to="/billing" />;
+      return <Redirect to="/billing/:HalfYearly" />;
     }
 
     return (
