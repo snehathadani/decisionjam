@@ -94,9 +94,42 @@ server.put('/api/decision/:id/answer', function(req,res) {
                  (err) => res.status(STATUS_NOT_FOUND).json({error: "Decision with id " + id + " not found"}));          
 })
 
-
-
-
+server.put('/api/answer/:id/vote', function(req, res) {
+  const answerId = req.params.id;
+  const vote = req.query.vote;
+  if(vote === undefined || (vote.toUpperCase() !== 'YES' && vote.toUpperCase() !== 'NO')) {
+    res.status(STATUS_USER_ERROR).json({error: "Decision must be yes or no"});
+  } else {
+    Decision.findOne({answers: {"$in": [{_id: answerId}]}})
+            .then((decision) => {
+              console.log(decision);
+              let answers = decision.answers;
+              
+              const voteForAnswer = answers.find(x => x._id === answerId)[0];
+              const upVotes = voteForAnswer.upVotes;
+              const downVotes = voteForAnswer.downVotes;
+              var voted = false;
+              if(vote.toUpperCase() === 'YES') {
+                //TODO see if user already exists here
+                upVotes.push("a user for upvote");
+                voted = true;
+              } else {
+                //TODO see if user already exists here
+                downVotes.push("a user for down vote");
+              }
+              //TODO error check
+              if(voted) {
+                decision.updateOne({answers: {$in: {_id: answerId}}}, 
+                                   {$set: {"answers.$.upVotes": upVotes}}); 
+              } else {
+                decision.updateOne({answers: {$in: {_id: answerId}}}, 
+                                   {$set: {"answers.$.downVotes": upVotes}});
+              }
+              res.status(STATUS_OKAY)
+            }, 
+            (err) => res.status(STATUS_NOT_FOUND).json({error: "answer with id " + id + " not found"}));
+  }
+}) 
 
 //gotta convert ugly callback code to beautiful promises
 //http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/
