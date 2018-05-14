@@ -6,6 +6,8 @@ import Billing from "./components/billing/Billing";
 import {StripeProvider} from 'react-stripe-elements';
 import Question from "./components/question/Question";
 import PaymentResult from "./components/billing/PaymentResult";
+import Main from "./components/question/Main";
+import DecisionPost from "./components/question/DecisionPost";
 
 class App extends Component {
   render() {
@@ -18,6 +20,8 @@ class App extends Component {
         <Route exact path="/billing" component={ Billing }/>
         <Route exact path="/question-page" component={ Question }/>
         <Route exact path="/payment-result" component={ PaymentResult }/>
+        <Route exact path="/mainpage" component={Main}/>
+        <Route path="/decision-post/:id" component={DecisionPost}/>    
       </div>
       </BrowserRouter>
       </StripeProvider> 
