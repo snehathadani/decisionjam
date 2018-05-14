@@ -47,7 +47,7 @@ class LandingPage extends Component {
               <h3>$5</h3>
               <p>Monthly</p>
               <div className="buy-container pricing-buy">
-                <Link className="buy" to="/billing">
+                <Link className="buy" to="/billing/Monthly">
                   BUY NOW
                 </Link>
               </div>
@@ -57,7 +57,7 @@ class LandingPage extends Component {
               <h3>$20</h3>
               <p>6 Months</p>
               <div className="buy-container pricing-buy">
-                <Link className="buy" to="/billing">
+                <Link className="buy" to="/billing/HalfYearly">
                   BUY NOW
                 </Link>
               </div>
@@ -67,7 +67,7 @@ class LandingPage extends Component {
               <h3>$50</h3>
               <p>1 Year</p>
               <div className="buy-container pricing-buy">
-                <Link className="buy" to="/billing">
+                <Link className="buy" to="/billing/Yearly">
                   BUY NOW
                 </Link>
               </div>

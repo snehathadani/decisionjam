@@ -8,22 +8,16 @@ import { Redirect } from "react-router-dom";
 const ROOT_URL = "http://localhost:8000";
 
 class CheckoutForm extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       user: "",
-      selectedOption: "",
+      selectedOption: props.plan.params.id,
       success: false,
       fail: false,
       jwtToken: localStorage.getItem("token")
     };
   }
-
-  // componentDidMount = () => {
-  //   const token = localStorage.getItem("token");
-  //   this.setState({ jwtToken: token });
-  //   console.log("token", token);
-  // };
 
   handleSubmit = e => {
     // console.log("confirmed button clicked")
@@ -66,7 +60,9 @@ class CheckoutForm extends Component {
 
   render() {
     // console.log("this.state:", this.state);
+    console.log("this.props:", this.props);
 
+    const planID = this.props.plan.params.id;
     const success = this.state.success;
     const fail = this.state.fail;
     const jwtToken = this.state.jwtToken;
