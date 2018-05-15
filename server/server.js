@@ -66,27 +66,27 @@ server.post('/api/users/adduser', function(req, res) {
 
 server.post('/api/decision/create', function(req, res) {
   const newDecision = new Decision (req.body);
-  let decisionCode = '';
+  let decisionCode = 'feck';
   console.log(decisionCode);
   let decisionCodeUnique = false;
 
-  do {
-    //getUser(Math.random().toString(36).substr(2, 5));
-    Decision.findOne( {decisonCode : decisionCode = Math.random().toString(36).substr(2, 5)}, function (err, result) {
-      if (err) { 
-        console.log('in err');
-        //res.status(STATUS_USER_ERROR).json({error: "Error while adding", err});
-      }
-      if (result) {
-        console.log('got a duplicate code looping');
+  // do {
+  //   //getUser(Math.random().toString(36).substr(2, 5));
+  //   Decision.findOne( {decisonCode : decisionCode = Math.random().toString(36).substr(2, 5)}, function (err, result) {
+  //     if (err) { 
+  //       console.log('in err');
+  //       //res.status(STATUS_USER_ERROR).json({error: "Error while adding", err});
+  //     }
+  //     if (result) {
+  //       console.log('got a duplicate code looping');
         
-      } else {
-        console.log('code must be unique');
-        decisonCodeUnique = true;
-      }
-    })
-  }
-  while(decisionCodeUnique == false);
+  //     } else {
+  //       console.log('code must be unique');
+  //       decisonCodeUnique = true;
+  //     }
+  //   })
+  // }
+  // while(decisionCodeUnique == false);
   
   newDecision.decisionCode = decisionCode;
   //check the user contains all required data
