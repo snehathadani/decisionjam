@@ -7,16 +7,14 @@ const jwt = require("jwt-simple");
 module.exports = server => {
   // charge customer
 
-  server.post(
-    "/api/payment",
-    passport.authenticate("jwt", { session: false }),
-    function(req, res) {
+  server.post("/api/payment",passport.authenticate("jwt", { session: false }), function(req, res) {
+      console.log('req.user', req.user);
       // console.log("req", req);
-      // console.log('req.user', req.user);
 
       const stripeToken = req.body.postData.stripeToken.id;
       const selectedOption = req.body.postData.selectedOption;
 
+      console.log("stripeToken:", stripeToken);
       //translate plan names from front end to ids
       let planName = "";
       if (selectedOption === "Monthly") {
@@ -46,9 +44,11 @@ module.exports = server => {
                 console.log("subscription creation failed:", err);
               }
               // save customer info to database
+              // console.log('subscription', subscription.id);
               const newModelData = {
                 username: req.user.username,
                 email: req.user.email,
+                subscriptionID: subscription.id,
                 subscriptionType: subscription.plan.nickname,
                 amountBilled: subscription.plan.amount,
                 subscriptionStartDate: subscription.current_period_start,

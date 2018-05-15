@@ -15,8 +15,12 @@ class CheckoutForm extends Component {
       selectedOption: props.plan.params.id,
       success: false,
       fail: false,
-      jwtToken: localStorage.getItem("token")
+      jwtToken: localStorage.getItem("token"),
     };
+  }
+
+  componentDidMount() {
+    const { dispatch, currentURL } = this.props
   }
 
   handleSubmit = e => {
@@ -67,9 +71,10 @@ class CheckoutForm extends Component {
     const success = this.state.success;
     const fail = this.state.fail;
     const jwtToken = this.state.jwtToken;
+    console.log('jwtToken', jwtToken);
 
-    if (!this.state.jwtToken) {
-      return <Redirect to="/signup" />;
+    if (!jwtToken) {
+      return <Redirect to={`/signup/?redirect=${window.location.pathname}`}/>;
     }
 
     if (success) {

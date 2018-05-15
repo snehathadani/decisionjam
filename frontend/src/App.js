@@ -26,20 +26,9 @@ class App extends Component {
             <Route path="/decision-post/:id" component={DecisionPost} />
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/signin" component={SignIn} />
+            <Route exact path="/logout" component={Landing} />
           </div>
         </BrowserRouter>
-        {/* </StripeProvider> 
-        <BrowserRouter>
-          <div className="App">
-            <Route exact path="/" component={Landing} />
-            <Route exact path="/landing-page" component={Landing} />
-            <Route exact path="/billing/:id" component={Billing} />
-            <Route exact path="/question-page" component={Question} />
-            <Route exact path="/payment-result" component={PaymentResult} />
-            <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/signin" component={SignIn} />
-          </div>
-        </BrowserRouter> */}
       </StripeProvider>
     );
   }
