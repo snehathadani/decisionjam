@@ -66,12 +66,35 @@ server.post('/api/users/adduser', function(req, res) {
 
 server.post('/api/decision/create', function(req, res) {
   const newDecision = new Decision (req.body);
+  let decisionCode = '';
+  console.log(decisionCode);
+  let decisionCodeUnique = false;
+
+  do {
+    //getUser(Math.random().toString(36).substr(2, 5));
+    Decision.findOne( {decisonCode : decisionCode = Math.random().toString(36).substr(2, 5)}, function (err, result) {
+      if (err) { 
+        console.log('in err');
+        //res.status(STATUS_USER_ERROR).json({error: "Error while adding", err});
+      }
+      if (result) {
+        console.log('got a duplicate code looping');
+        
+      } else {
+        console.log('code must be unique');
+        decisonCodeUnique = true;
+      }
+    })
+  }
+  while(decisionCodeUnique == false);
+  
+  newDecision.decisionCode = decisionCode;
   //check the user contains all required data
   newDecision.save((err, decision) => {
       if(err) {
           res.status(STATUS_USER_ERROR).json({error: "Error while adding"});
       } else {
-          res.status(STATUS_OKAY).json({decisionId: decision._id});
+          res.status(STATUS_OKAY).json({decision: decision.decisionCode});
       }
   })
 })
@@ -146,7 +169,7 @@ server.post('/api/login', function(req, res) {
   // nice to have, need to refresh the session on each authorised route so the user
   
   //see last comment https://stackoverflow.com/questions/45541182/passport-req-logout-function-not-working 
-server.get('/api/logout', function(req, res) {
+server.get('/api/logout', passport.authenticate('jwt', { session: false }),function(req, res) {
   console.log("I am Logout")
   req.logout(); 
   res.status(200).redirect('/');
