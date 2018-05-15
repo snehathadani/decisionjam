@@ -94,40 +94,36 @@ server.put('/api/decision/:id/answer', function(req,res) {
                  (err) => res.status(STATUS_NOT_FOUND).json({error: "Decision with id " + id + " not found"}));          
 })
 
-server.put('/api/answer/:id/vote', function(req, res) {
+server.put('/api/decision/answer/:id/vote', passport.authenticate('jwt', {session: false}), function(req, res) {
   const answerId = req.params.id;
   const vote = req.query.vote;
+  const userId = req.user.username; 
   if(vote === undefined || (vote.toUpperCase() !== 'YES' && vote.toUpperCase() !== 'NO')) {
     res.status(STATUS_USER_ERROR).json({error: "Decision must be yes or no"});
   } else {
-    Decision.findOne({answers: {"$in": [{_id: answerId}]}})
+        Decision.findOne({'answers._id' : answerId})
             .then((decision) => {
-              console.log(decision);
               let answers = decision.answers;
-              
-              const voteForAnswer = answers.find(x => x._id === answerId)[0];
+              const voteForAnswer = answers.find(x =>  (String(x._id) === answerId));
               const upVotes = voteForAnswer.upVotes;
               const downVotes = voteForAnswer.downVotes;
               var voted = false;
-              if(vote.toUpperCase() === 'YES') {
-                //TODO see if user already exists here
-                upVotes.push("a user for upvote");
+              if(vote.toUpperCase() === 'YES' && upVotes.find(x => x === userId) === undefined) {
+                upVotes.push(userId);
                 voted = true;
-              } else {
-                //TODO see if user already exists here
-                downVotes.push("a user for down vote");
+              } else if (vote.toUpperCase() === 'NO' && downVotes.find(x => x === userId) === undefined){
+                downVotes.push(userId);
+                voted = true;
               }
-              //TODO error check
               if(voted) {
-                decision.updateOne({answers: {$in: {_id: answerId}}}, 
-                                   {$set: {"answers.$.upVotes": upVotes}}); 
+                decision.save().then(d => res.status(STATUS_OKAY).json(d), 
+                                     err => res.status(STATUS_SERVER_ERROR).json({error: err}));
               } else {
-                decision.updateOne({answers: {$in: {_id: answerId}}}, 
-                                   {$set: {"answers.$.downVotes": upVotes}});
+                res.status(STATUS_OKAY).json({status: "User already voted not allowed to vote again"});
               }
-              res.status(STATUS_OKAY)
             }, 
-            (err) => res.status(STATUS_NOT_FOUND).json({error: "answer with id " + id + " not found"}));
+            (err) => res.status(STATUS_NOT_FOUND).json({error: "answer with id " + answerId + " not found"}))
+            .catch(e => console.log(e));
   }
 }) 
 
