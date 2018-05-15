@@ -126,9 +126,13 @@ server.post('/api/login', function(req, res) {
             var token = jwt.encode(user, 'cs5Rocks');
             // return the information including token as JSON
             Billing.findOne({'username': req.body.username}).sort({'subscriptionID': -1})
-            .then ((subscription) => {
-              res.json({success: true, token: 'JWT ' + token, subcriptionID: subscription.subscriptionID });
-              // return subscriptionID
+            .then ((subscription, err) => {
+              // console.log('subscription', subscription, 'err', err);
+              if (!subscription) {
+                res.json({success: true, token: 'JWT ' + token, subscriptionID: false });
+              } else {
+                res.json({success: true, token: 'JWT ' + token, subscriptionID: subscription.subscriptionID });
+              }
             })
           } else {
             res.json({success: false, msg: 'Authentication failed. Username or password is incorrect. ', err });

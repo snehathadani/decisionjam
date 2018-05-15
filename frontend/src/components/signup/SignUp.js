@@ -6,14 +6,16 @@ import axios from "axios";
 const ROOT_URL = "http://localhost:8000";
 
 class Signup extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       username: "",
       email: "",
       password: "",
       redirect: false,
-      loginError: false
+      loginError: false,
+      selectedOption: "",
+      url: "",
     };
   }
 
@@ -49,12 +51,18 @@ class Signup extends Component {
 
   render() {
     // console.log("this.state:", this.state);
+    console.log("this.props:", this.props);
 
     const loginError = this.state.loginError;
     console.log('ispasswordvalid', loginError);
 
     if (this.state.redirect) {
-      return <Redirect to="/billing" />;
+      console.log('href', window.location.href);
+
+      let newhref = window.location.href;
+      let newRedirect = newhref.split("?redirect=")[1];
+      console.log('newRedirect', newRedirect);
+      return <Redirect to={`/signin/?redirect=${newRedirect}`}/>;
     }
 
     return (
