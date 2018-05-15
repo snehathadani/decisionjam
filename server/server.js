@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const User = require('./db/UserModel.js');
 const Decision = require('./db/DecisionModel.js');
 const cors = require('cors');
+const Billing = require('./db/BillingModel.js');
 
 const jwt = require('jwt-simple');
 const passport = require('passport');
@@ -113,9 +114,8 @@ server.post('/api/login', function(req, res) {
       $or: [{'email': req.body.email}, {'username': req.body.username}]
     }, function(err, user) {
       if (err) throw err;
-   
       if (!user) {
-        res.send({success: false, msg: 'Authentication failed. User not found.'});
+        res.json({success: false, msg: 'Authentication failed. User not found.'});
       } else {
         // check if password matches
         console.log (user.password, req.body.password);
@@ -125,9 +125,13 @@ server.post('/api/login', function(req, res) {
             // if user is found and password is right create a token
             var token = jwt.encode(user, 'cs5Rocks');
             // return the information including token as JSON
-            res.json({success: true, token: 'JWT ' + token});
+            Billing.findOne({'username': req.body.username}).sort({'subscriptionID': -1})
+            .then ((subscription) => {
+              res.json({success: true, token: 'JWT ' + token, subcriptionID: subscription.subscriptionID });
+              // return subscriptionID
+            })
           } else {
-            res.send({success: false, msg: 'Authentication failed. Wrong password.', err });
+            res.json({success: false, msg: 'Authentication failed. Username or password is incorrect. ', err });
           }
         });
       }

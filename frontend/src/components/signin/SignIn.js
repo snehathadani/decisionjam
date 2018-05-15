@@ -13,7 +13,8 @@ class Signup extends Component {
       email: "",
       password: "",
       redirect: false,
-      loginError: false
+      loginError: false,
+      subscriptionID: false
     };
   }
 
@@ -38,7 +39,7 @@ class Signup extends Component {
         if (res.data.success) {
           localStorage.setItem("token", res.data.token);
           // console.log('res.data.token', res.data.token)
-          this.setState({ redirect: true });
+          this.setState({ redirect: true, subscriptionID: true });
         } else {
           // console.log('res.data.msg', res.data.msg)
           this.setState({ loginError: true });
@@ -56,7 +57,11 @@ class Signup extends Component {
     // console.log('loginError', loginError);
 
     if (this.state.redirect) {
+      if (this.state.subscriptionID) {
+        return <Redirect to="/question-page" />;
+      } else {
       return <Redirect to="/billing/:HalfYearly" />;
+      }
     }
 
     return (

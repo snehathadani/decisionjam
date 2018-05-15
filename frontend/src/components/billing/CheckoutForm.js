@@ -68,7 +68,7 @@ class CheckoutForm extends Component {
     const fail = this.state.fail;
     const jwtToken = this.state.jwtToken;
 
-    if (!this.state.jwtToken) {
+    if (!jwtToken) {
       return <Redirect to="/signup" />;
     }
 

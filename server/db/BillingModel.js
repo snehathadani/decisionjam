@@ -11,6 +11,11 @@ const BillingSchema = new mongoose.Schema({
     required: true,
     unique: false
   },
+  subscriptionID: {
+    type: String,
+    required: true,
+    unique: false
+  },
   subscriptionType: {
     type: String,
     required: true,
