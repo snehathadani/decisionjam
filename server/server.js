@@ -176,7 +176,7 @@ server.post('/api/login', function(req, res) {
   
   //see last comment https://stackoverflow.com/questions/45541182/passport-req-logout-function-not-working 
 server.get('/api/logout', function(req, res) {
-  console.log("I am Logout")
+  console.log("I am Logged Out")
   req.logout(); 
   res.status(200).redirect('/');
 });
