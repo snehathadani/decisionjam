@@ -70,7 +70,12 @@ server.post('/api/decision/create', function(req, res) {
   console.log(decisionCode);
   let decisionCodeDupe = true;
 
-  while (decisionCodeDupe) {
+  //while (decisionCodeDupe) {  // i need to get this working so that it loops 
+       //keeps generating a code until there is no match on the database. while
+       // while loops don't work with async findOne callback/promises as the while loop
+       // will always keep running and get priority over the async code but there must be
+       // a common solution for this as the general pattern i'm trying to cover is very common
+       // just have to match it into node async way of doing things
     //getUser(Math.random().toString(36).substr(2, 5));
     console.log('in loop');
     //decisionCodeNotUnique = true;
@@ -82,7 +87,7 @@ server.post('/api/decision/create', function(req, res) {
         //res.status(STATUS_USER_ERROR).json({error: "Error while adding", err});
       }
       if (result) {
-        console.log('got a duplicate code looping');
+        console.log('got a duplicate code server should be setup to generate another code');
         
       } else {
         console.log('code must be unique');
@@ -92,7 +97,7 @@ server.post('/api/decision/create', function(req, res) {
       }
     })
   
-  }
+  //}
 
   
   
@@ -103,7 +108,7 @@ server.post('/api/decision/create', function(req, res) {
       if(err) {
           res.status(STATUS_USER_ERROR).json({error: "Error while adding"});
       } else {
-          res.status(STATUS_OKAY).json({decision: decision.decisionCode});
+          res.status(STATUS_OKAY).json({decision: decision});
       }
   })
 })
