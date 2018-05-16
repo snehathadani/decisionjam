@@ -3,7 +3,6 @@ import { Redirect } from "react-router-dom";
 import "./SignIn.css";
 import axios from "axios";
 
-
 const ROOT_URL = "http://localhost:8000";
 
 class Signup extends Component {
@@ -14,12 +13,11 @@ class Signup extends Component {
       email: "",
       password: "",
       redirect: false,
-      loginError: false,
-      subscriptionID: false,
+      loginError: "",
+      subscriptionID: false
     };
   }
 
-  
   handleUsernameChange = e => {
     this.setState({ username: e.target.value });
   };
@@ -37,22 +35,22 @@ class Signup extends Component {
     axios
       .post(`${ROOT_URL}/api/login`, User)
       .then(res => {
-        // console.log("res.data", res.data);
+        console.log("res.data", res);
         if (res.data.success) {
           localStorage.setItem("token", res.data.token);
-          // console.log('res.data.token', res.data.token)
           if (res.data.subscriptionID) {
-            this.setState({ redirect: true, subscriptionID: true});
+            this.setState({ redirect: true, subscriptionID: true });
           } else {
-            this.setState({ redirect: true, subscriptionID: false});
+            this.setState({ redirect: true, subscriptionID: false });
           }
         } else {
-          // console.log('res.data.msg', res.data.msg)
-          this.setState({ loginError: true });
+          console.log("login error", this.state.loginError);
+          this.setState({ loginError: res.data.msg });
         }
       })
       .catch(error => {
-        console.log("error.response", error.response);
+        console.log("error", error.response);
+        this.setState({ loginError: error.response.data.error });
       });
   };
 
@@ -60,26 +58,27 @@ class Signup extends Component {
     // console.log("this.state:", this.state);
     // console.log("this.props:", this.props);
 
-    const loginError = this.state.loginError;
-    // console.log('loginError', loginError);
-
     if (this.state.redirect) {
       if (this.state.subscriptionID) {
-        return <Redirect to="/question-page" />;
-      } else {     
-      console.log('redirect')
+        return <Redirect to="/landing-page" />;
+      } else {
+        console.log("redirect");
 
-      const getQueryString = ( field, url ) => {
-        let href = url ? url : window.location.href;
-        let reg = new RegExp( '[?&]' + field + '=([^&#]*)', 'i' );
-        let string = reg.exec(href);
-        console.log('string', string);
-        return string ? string[1] : null;
-      };
-      let redirect = getQueryString('redirect'); 
-      console.log('redirect', redirect);
-     
-      return <Redirect to={redirect}/>;
+        const getQueryString = (field, url) => {
+          let href = url ? url : window.location.href;
+          let reg = new RegExp("[?&]" + field + "=([^&#]*)", "i");
+          let string = reg.exec(href);
+          console.log("string", string);
+          return string ? string[1] : null;
+        };
+        let redirect = getQueryString("redirect");
+        console.log("redirect", redirect);
+
+        if (redirect === "undefined" || redirect === null) {
+          return <Redirect to="/billing" />;
+        } else {
+          return <Redirect to={redirect} />;
+        }
       }
     }
 
@@ -105,7 +104,7 @@ class Signup extends Component {
             />
           </label>
           <div>
-            <p>{loginError ? "Login Error: User not found." : ""}</p>
+            <div className="login-error">{this.state.loginError}</div>
           </div>
           <button type="submit">Sign In</button>
         </form>

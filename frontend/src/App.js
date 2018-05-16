@@ -10,6 +10,7 @@ import Main from "./components/question/Main";
 import DecisionPost from "./components/question/DecisionPost";
 import SignUp from "./components/signup/SignUp";
 import SignIn from "./components/signin/SignIn";
+import Navigation from "./components/landing/Navigation";
 
 class App extends Component {
   render() {
@@ -17,9 +18,11 @@ class App extends Component {
       <StripeProvider apiKey="pk_test_zwL3UU7M5FXPJkHognp6dYFr">
         <BrowserRouter>
           <div className="App">
+          <Navigation/>
             <Route exact path="/" component={Landing} />
             <Route exact path="/landing-page" component={Landing} />
             <Route exact path="/billing/:id" component={Billing} />
+            <Route exact path="/billing" component={Billing} />
             <Route exact path="/question-page" component={Question} />
             <Route exact path="/payment-result" component={PaymentResult} />
             <Route exact path="/mainpage" component={Main} />

@@ -3,61 +3,6 @@
   font-family: Camphor, Open Sans, Segoe UI, sans-serif;
 }
 
-/* navigation */
-
-.Nav {
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  margin-bottom: 30px;
-  width: 1000px;
-}
-
-.logo {
-  padding-top: 5px;
-  padding-top: 27px;
-  padding-bottom: 7px;
-  display: flex;
-  justify-content: center;
-  font-size: 20px;
-}
-
-.design {
-  color: #ffa500;
-  font-weight: bold;
-}
-
-.jam {
-  color: #505050;
-}
-
-.button {
-  text-decoration: none;
-  padding: 5px 15px 5px 15px;
-}
-
-.sign-container {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  font-size: 12px;
-  margin-top: 20px;
-}
-
-.signin {
-  width: 60px;
-  color: #505050;
-  margin-top: 4px;
-}
-
-.signup {
-  background-color: #ffa500;
-  color: white;
-  padding: 7px 18px 7px 18px;
-  border-radius: 6px;
-}
-
 /* image */
 
 .image-container {
@@ -86,6 +31,7 @@
 
 .description-container {
   width: 470px;
+  text-align: left;
 }
 
 .description {
@@ -93,7 +39,6 @@
   font-size: 17px;
   line-height: 30px;
   width: 440px;
-  text-align: left;
   padding-bottom: 40px;
 }
 
@@ -114,6 +59,22 @@
   font-size: 16px;
   letter-spacing: 1px;
   padding: 14px 58px 14px 58px;
+}
+
+.or {
+  padding-top: 20px;
+  padding-left: 85px;
+  color: gray;
+  font-size: 14px;
+}
+
+.freeuser-container {
+  padding-top: 10px;
+  padding-left: 5px;
+}
+
+.freeuser {
+  color: #ffa500;
 }
 
 /* Pricing */
