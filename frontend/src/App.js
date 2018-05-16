@@ -11,6 +11,7 @@ import DecisionPost from "./components/question/DecisionPost";
 import SignUp from "./components/signup/SignUp";
 import SignIn from "./components/signin/SignIn";
 import Navigation from "./components/landing/Navigation";
+import Decision from "./components/question/Decision";
 
 class App extends Component {
   render() {
@@ -18,7 +19,7 @@ class App extends Component {
       <StripeProvider apiKey="pk_test_zwL3UU7M5FXPJkHognp6dYFr">
         <BrowserRouter>
           <div className="App">
-          <Navigation/>
+            <Navigation />
             <Route exact path="/" component={Landing} />
             <Route exact path="/landing-page" component={Landing} />
             <Route exact path="/billing/:id" component={Billing} />
@@ -30,6 +31,7 @@ class App extends Component {
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/signin" component={SignIn} />
             <Route exact path="/logout" component={Landing} />
+            <Route exact path="/decision" component={Decision} />
           </div>
         </BrowserRouter>
       </StripeProvider>

@@ -1,0 +1,45 @@
+.decision-title {
+  font-size: 30px;
+  padding-bottom: 30px;
+}
+
+.decision-buttons-container {
+  width: 600px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 30px;
+}
+
+.decision-button {
+  font-size: 14px;
+}
+
+.answersList {
+  margin: auto;
+  height: 400px;
+}
+
+.answer-container {
+  border: solid 1px;
+  width: 800px;
+  margin: auto;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.answer-text {
+  text-align: left;
+  padding-left: 10px;
+  padding-top: 10px;
+  width: 750px;
+  margin: auto;
+}
+
+.white {
+  background-color: 6772e5;
+}
+
+.gray {
+  background-color: #b8b8b8;
+}
