@@ -40,19 +40,24 @@ class Post extends Component {
 
   render() {
     console.log("this.props", this.props);
-    console.log("this.state", this.state);
+    console.log("this.state.answers.length", this.state.answers.length);
+    const answersArray = this.state.answers.length;
+    // console.log("answersArray", answersArray);
 
     return (
-      <div>
-        <div>
-          <div className="decision-title">Post Page</div>
-        </div>
-        <div className="answersList">
-          {this.state.answers.map((answers, i) => (
-            <div className="answer-container" key={i}>
-              <div className="answer-text">{answers.text}</div>
+      <div className="post-container">
+        <div className="answers-container">
+          {answersArray === 0 ? (
+            <div className="no-answer">Suggest an answer</div>
+          ) : (
+            <div>
+              {this.state.answers.map((answers, i) => (
+                <div className="answer-container" key={i}>
+                  <div className="answer-text">{answers.text}</div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
         <form
           className="answer-form-container"
@@ -60,7 +65,7 @@ class Post extends Component {
         >
           <input
             type="text"
-            name="answer"
+            className="answer-input"
             placeholder="Suggest an answer..."
             value={this.state.newAnswer}
             onChange={this.handleAnswerInput}
@@ -69,6 +74,44 @@ class Post extends Component {
         </form>
       </div>
     );
+
+    // )
+
+    // return <div>hi</div>;
+
+    //   if (answersArray === 0) {
+    //     return (
+    //       <div className="post-container">
+    //         <div className="no-answer">Suggest an answer</div>
+    //       </div>
+    //     );
+    //   } else {
+    //     return (
+    //       <div className="post-container">
+    //         <div className="answersList">
+    //           {this.state.answers.map((answers, i) => (
+    //             <div className="answer-container" key={i}>
+    //               <div className="answer-text">{answers.text}</div>
+    //             </div>
+    //           ))}
+    //         </div>
+    //         <form
+    //           className="answer-form-container"
+    //           onSubmit={this.handleFormSubmit}
+    //         >
+    //           <input
+    //             type="text"
+    //             name="answer"
+    //             placeholder="Suggest an answer..."
+    //             value={this.state.newAnswer}
+    //             onChange={this.handleAnswerInput}
+    //           />
+    //           <button type="submit">Submit</button>
+    //         </form>
+    //       </div>
+    //     );
+    //   }
+    // }
   }
 }
 

@@ -1,23 +1,42 @@
+.post-container {
+  width: 800px;
+  margin: auto;
+}
+
 .decision-title {
   font-size: 30px;
   padding-bottom: 30px;
 }
 
+/* tabs */
 .decision-buttons-container {
   width: 600px;
   margin: auto;
   display: flex;
   justify-content: space-between;
-  padding-bottom: 30px;
+  padding-bottom: 50px;
 }
 
 .decision-button {
   font-size: 14px;
 }
 
-.answersList {
-  margin: auto;
+.white {
+  background-color: 6772e5;
+}
+
+.gray {
+  background-color: #b8b8b8;
+}
+/* answers */
+
+.answers-container {
+  width: 800px;
   height: 400px;
+}
+
+.no-answer {
+  font-size: 16px;
 }
 
 .answer-container {
@@ -36,10 +55,9 @@
   margin: auto;
 }
 
-.white {
-  background-color: 6772e5;
-}
-
-.gray {
-  background-color: #b8b8b8;
+/* form */
+.answer-input {
+  width: 300px;
+  height: 30px;
+  margin: 20px;
 }
