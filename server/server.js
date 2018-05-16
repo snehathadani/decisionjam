@@ -120,6 +120,15 @@ server.get('/api/decision/:id', function(req, res) {
                  (err) => res.status(STATUS_NOT_FOUND).json({error: "Decision with id " + id + " not found"}));
 })
 
+// postman test example localhost:8000/api/decision/decisionCode/k65gy
+server.get('/api/decision/decisionCode/:decisionCode', function(req, res) {
+  const decisionCode = req.params.decisionCode
+  console.log(decisionCode);
+  Decision.find({decisionCode: decisionCode})
+          .then ((decision) => res.status(STATUS_OKAY).json(decision),
+                 (err) => res.status(STATUS_NOT_FOUND).json({error: "Decision with code " + decisionCode + " not found"}));
+})
+
 server.put('/api/decision/:id/answer', function(req,res) {
   const id = req.params.id;
   console.log(req.body);
