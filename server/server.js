@@ -55,7 +55,6 @@ server.post("/api/users/adduser", function(req, res) {
     return;
   }
   newUser.save((err, user) => {
-    console.log("err:", err.name);
     if (err) {
       if (err.name === "BulkWriteError") {
         res
