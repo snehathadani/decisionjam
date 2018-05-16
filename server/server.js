@@ -68,27 +68,36 @@ server.post('/api/decision/create', function(req, res) {
   const newDecision = new Decision (req.body);
   let decisionCode = 'feck';
   console.log(decisionCode);
-  let decisionCodeUnique = false;
+  let decisionCodeDupe = true;
 
-  // do {
-  //   //getUser(Math.random().toString(36).substr(2, 5));
-  //   Decision.findOne( {decisonCode : decisionCode = Math.random().toString(36).substr(2, 5)}, function (err, result) {
-  //     if (err) { 
-  //       console.log('in err');
-  //       //res.status(STATUS_USER_ERROR).json({error: "Error while adding", err});
-  //     }
-  //     if (result) {
-  //       console.log('got a duplicate code looping');
+  while (decisionCodeDupe) {
+    //getUser(Math.random().toString(36).substr(2, 5));
+    console.log('in loop');
+    //decisionCodeNotUnique = true;
+    console.log(decisionCodeDupe);
+  //}
+    Decision.findOne( {decisonCode : decisionCode = Math.random().toString(36).substr(2, 5)}, function (err, result) {
+      if (err) { 
+        console.log('in err');
+        //res.status(STATUS_USER_ERROR).json({error: "Error while adding", err});
+      }
+      if (result) {
+        console.log('got a duplicate code looping');
         
-  //     } else {
-  //       console.log('code must be unique');
-  //       decisonCodeUnique = true;
-  //     }
-  //   })
-  // }
-  // while(decisionCodeUnique == false);
+      } else {
+        console.log('code must be unique');
+        console.log(decisionCodeDupe);
+        decisionCodeDupe = false;
+        console.log(decisionCodeDupe);
+      }
+    })
+  
+  }
+
+  
   
   newDecision.decisionCode = decisionCode;
+  console.log(decisionCode);
   //check the user contains all required data
   newDecision.save((err, decision) => {
       if(err) {

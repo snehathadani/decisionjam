@@ -9,6 +9,8 @@ const DecisionSchema =  new mongoose.Schema({
     decisionCode: {
         type: String,
         required: true,
+        unique: true,
+        index: true,
     },
 
     answers: [{    
