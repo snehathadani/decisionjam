@@ -37,7 +37,7 @@ server.get("/", function(req, res) {
   res.status(200).json({ message: "API running" });
 });
 
-server.get("/api/users", function(req, res) {
+server.get("/api/users", passport.authenticate("jwt", { session: false }), function(req, res) {
   User.find({}, (err, users) => {
     if (err) {
       res.status(STATUS_USER_ERROR).json({ error: "Could not find the user." });
@@ -76,19 +76,56 @@ server.post("/api/users/adduser", function(req, res) {
   });
 });
 
-server.post("/api/decision/create", function(req, res) {
-  const newDecision = new Decision(req.body);
+server.post('/api/decision/create',passport.authenticate("jwt", { session: false }), function(req, res) {
+  const newDecision = new Decision (req.body);
+  let decisionCode = 'feck';
+  console.log(decisionCode);
+  let decisionCodeDupe = true;
+
+  //while (decisionCodeDupe) {  // i need to get this working so that it loops 
+       //keeps generating a code until there is no match on the database. while
+       // while loops don't work with async findOne callback/promises as the while loop
+       // will always keep running and get priority over the async code but there must be
+       // a common solution for this as the general pattern i'm trying to cover is very common
+       // just have to match it into node async way of doing things
+    //getUser(Math.random().toString(36).substr(2, 5));
+    console.log('in loop');
+    //decisionCodeNotUnique = true;
+    console.log(decisionCodeDupe);
+  //}
+    Decision.findOne( {decisonCode : decisionCode = Math.random().toString(36).substr(2, 5)}, function (err, result) {
+      if (err) { 
+        console.log('in err');
+        //res.status(STATUS_USER_ERROR).json({error: "Error while adding", err});
+      }
+      if (result) {
+        console.log('got a duplicate code server should be setup to generate another code');
+        
+      } else {
+        console.log('code must be unique');
+        console.log(decisionCodeDupe);
+        decisionCodeDupe = false;
+        console.log(decisionCodeDupe);
+      }
+    })
+  
+  //}
+
+  
+  
+  newDecision.decisionCode = decisionCode;
+  console.log(decisionCode);
   //check the user contains all required data
   newDecision.save((err, decision) => {
-    if (err) {
-      res.status(STATUS_USER_ERROR).json({ error: "Error while adding" });
-    } else {
-      res.status(STATUS_OKAY).json({ decisionId: decision._id });
-    }
-  });
-});
+      if(err) {
+          res.status(STATUS_USER_ERROR).json({error: "Error while adding"});
+      } else {
+          res.status(STATUS_OKAY).json({decision: decision});
+      }
+  })
+})
 
-server.get("/api/decision/:id", function(req, res) {
+server.get('/api/decision/:id',passport.authenticate("jwt", { session: false }), function(req, res) {
   const id = req.params.id;
   Decision.find({ _id: id }).then(
     decision => res.status(STATUS_OKAY).json(decision),
@@ -99,31 +136,52 @@ server.get("/api/decision/:id", function(req, res) {
   );
 });
 
-server.put("/api/decision/:id/answer", function(req, res) {
+// postman test example localhost:8000/api/decision/decisionCode/k65gy
+server.get('/api/decision/decisionCode/:decisionCode', function(req, res) {
+  const decisionCode = req.params.decisionCode
+  console.log(decisionCode);
+  Decision.find({decisionCode: decisionCode})
+          .then ((decision) => res.status(STATUS_OKAY).json(decision),
+                 (err) => res.status(STATUS_NOT_FOUND).json({error: "Decision with code " + decisionCode + " not found"}));
+});
+
+server.put('/api/decision/:id/answer', function(req,res) {
   const id = req.params.id;
-  console.log(req.body);
+  console.log(`req.body ${req.body.answer}`);
+  
   const answer = req.body.answer; //TODO add with the user id right now only string
-  Decision.findOne({ _id: id }).then(
-    decision => {
-      let answers = decision.answers;
-      if (answers === undefined) {
-        answers = [{ answerText: answer }];
-      } else {
-        answers.push({ answerText: answer });
-      }
-      Decision.updateOne({ _id: id }, { $set: { answers: answers } }).then(
-        result => res.status(STATUS_OKAY).json(decision),
-        err =>
-          res.status(STATUS_NOT_FOUND).json({
-            error: "Decision with id " + id + " not updated" + " " + err
-          })
-      );
-    },
-    err =>
-      res
-        .status(STATUS_NOT_FOUND)
-        .json({ error: "Decision with id " + id + " not found" })
-  );
+  //check if string answer is empty or null
+  // https://stackoverflow.com/questions/154059/how-do-you-check-for-an-empty-string-in-javascript
+  if (!answer) {
+    console.log('answer is blank or undefined');
+    res
+        .status(STATUS_USER_ERROR)
+        .json({ error: "Answer cannot be blank" });
+  } else {
+    console.log(answer);
+    Decision.findOne({ _id: id }).then(
+      decision => {
+        let answers = decision.answers;
+        if (answers === undefined) {
+          answers = [{ answerText: answer }];
+        } else {
+          answers.push({ answerText: answer });
+        }
+        Decision.updateOne({ _id: id }, { $set: { answers: answers } }).then(
+          result => res.status(STATUS_OKAY).json(decision),
+          err =>
+            res.status(STATUS_NOT_FOUND).json({
+              error: "Decision with id " + id + " not updated" + " " + err
+            })
+        );
+      },
+      err =>
+        res
+          .status(STATUS_NOT_FOUND)
+          .json({ error: "Decision with id " + id + " not found" })
+    );
+  }
+ 
 });
 
 server.put(
@@ -241,18 +299,15 @@ server.post("/api/login", function(req, res) {
           }
         });
       }
-    }
-  );
-});
+    });
+  });
 
-/* Handle Logout */
-// nice to have, need to refresh the session on each authorised route so the user
-
-//see last comment https://stackoverflow.com/questions/45541182/passport-req-logout-function-not-working
-server.get("/api/logout", function(req, res) {
-  console.log("I am Logged Out");
-  req.logout();
-  res.status(200).redirect("/");
+  /* Handle Logout */ 
+  //see last comment https://stackoverflow.com/questions/45541182/passport-req-logout-function-not-working 
+server.get('/api/logout', passport.authenticate('jwt', { session: false }),function(req, res) {
+  console.log("I am Logout")
+  req.logout(); 
+  res.status(200).redirect('/');
 });
 
 //how to setup routes that need auth as well as test it on postman

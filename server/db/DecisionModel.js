@@ -6,6 +6,13 @@ const DecisionSchema =  new mongoose.Schema({
         required: true,
     },
 
+    decisionCode: {
+        type: String,
+        required: true,
+        unique: true,
+        index: true,
+    },
+
     answers: [{    
         answerText: {
         type: String,
