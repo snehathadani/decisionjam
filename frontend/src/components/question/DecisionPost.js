@@ -1,13 +1,3 @@
-// import React from "react";
-
-// const DecisionPost = ({ match }) => (
-//   <div>
-//     <p> Decision code is {match.params.id} </p>
-//   </div>
-// );
-
-// export default DecisionPost;
-
 import React, { Component } from "react";
 import axios from "axios";
 
@@ -17,7 +7,7 @@ class DecisionPost extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      answers: [],
+      answersArray: [],
       newAnswer: "",
       decisionCode: this.props.decisionCode
     };
@@ -30,32 +20,35 @@ class DecisionPost extends Component {
 
   handleFormSubmit = e => {
     e.preventDefault();
-    const answersObject = {
-      text: this.state.newAnswer //
-    };
-    const answersArray = this.state.answers;
-    answersArray.push(answersObject);
+
+    const decisionCode = this.state.decisionCode;
+    const answersObject = { answerText: this.state.newAnswer };
+
+    const newAnswersArray = this.state.answersArray;
+    newAnswersArray.push(answersObject);
     this.setState({
-      answers: answersArray,
+      answersArray: newAnswersArray,
       newAnswer: ""
     });
 
-    // save code and answersArray to database
-    axios.post(`${ROOT_URL}/api/answer`, answersObject).then(res => {
-      console.log("res", res);
-      if (res.data.success) {
-        this.setState({ redirect: true, subscriptionID: false });
-      } else {
-        console.log("login error", this.state.loginError);
-      }
-    });
+    // use decisionCode to get all answers for a decision
+    // NEED GET REQUEST
+
+    // use decisionCode to save answers in the database
+    axios
+      .put(`${ROOT_URL}/api/decision/${decisionCode}/answer`, answersObject)
+      .then(res => {
+        console.log("res", res);
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
   };
 
   render() {
-    console.log("this.props", this.props);
+    // console.log("this.props", this.props);
     // console.log("this.state", this.state);
-
-    const answersArray = this.state.answers.length;
+    const answersArray = this.state.answersArray.length;
 
     return (
       <div className="post-container">
@@ -64,9 +57,9 @@ class DecisionPost extends Component {
             <div className="no-answer">Suggest an answer</div>
           ) : (
             <div>
-              {this.state.answers.map((answers, i) => (
+              {this.state.answersArray.map((answers, i) => (
                 <div className="answer-container" key={i}>
-                  <div className="answer-text">{answers.text}</div>
+                  <div className="answer-text">{answers.answerText}</div>
                 </div>
               ))}
             </div>

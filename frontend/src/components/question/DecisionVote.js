@@ -1,12 +1,50 @@
 import React, { Component } from "react";
+import axios from "axios";
+
+const ROOT_URL = "http://localhost:8000";
 
 class DecisionVote extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      answersArray: [],
+      newAnswer: "",
+      decisionCode: this.props.decisionCode
+    };
+  }
+
+  componentDidMount = () => {
+    const decisionCode = this.state.decisionCode;
+
+    // use decisionCode to query answers
+    axios
+      .get(`${ROOT_URL}/api/decision/${decisionCode}`)
+      .then(res => {
+        console.log("res", res);
+        this.setState({
+          // answersArray: newAnswersArray
+        });
+      })
+      .catch(error => {
+        console.log(error.response);
+      });
+  };
+
   render() {
-    // console.log(this.props);
+    console.log("this.props", this.props);
+    console.log("this.state", this.state);
+
+    const answersArray = this.state.answersArray.length;
 
     return (
-      <div>
-        <div className="decision-title">Vote Page</div>
+      <div className="reveal-container">
+        <div className="answers-container">
+          {this.state.answersArray.map((answers, i) => (
+            <div className="answer-container" key={i}>
+              <div className="answer-text">{answers.answerText}</div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

@@ -26,8 +26,8 @@ class Decision extends Component {
     axios
       .get(`${ROOT_URL}/api/decision/${decisionCode}`)
       .then(res => {
-        // console.log("res", res);
-        this.setState({ decision: this.state.decision });
+        // console.log("res.data", res.data);
+        this.setState({ decision: res.data[0].decisionText });
       })
       .catch(error => {
         // console.log("erorr", error.response.data.error);
@@ -65,7 +65,6 @@ class Decision extends Component {
   render() {
     console.log("this.state", this.state);
     console.log("this.props", this.props);
-    // console.log("match", match);
 
     return (
       <div>
@@ -93,19 +92,35 @@ class Decision extends Component {
         </div>
         {(() => {
           switch (this.state.renderPage) {
+            // pass decisionCode and decision to components
             case "post":
               return (
                 <DecisionPost
                   decisionCode={this.state.decisionCode}
-                  question={this.state.answer}
+                  decision={this.state.decision}
                 />
               );
             case "vote":
-              return <DecisionVote />;
+              return (
+                <DecisionVote
+                  decisionCode={this.state.decisionCode}
+                  decision={this.state.decision}
+                />
+              );
             case "reveal":
-              return <DecisionReveal />;
+              return (
+                <DecisionReveal
+                  decisionCode={this.state.decisionCode}
+                  decision={this.state.decision}
+                />
+              );
             default:
-              return <DecisionPost />;
+              return (
+                <DecisionPost
+                  decisionCode={this.state.decisionCode}
+                  decision={this.state.decision}
+                />
+              );
           }
         })()}
       </div>

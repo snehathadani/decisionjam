@@ -101,7 +101,6 @@ server.get("/api/decision/:id", function(req, res) {
 
 server.put("/api/decision/:id/answer", function(req, res) {
   const id = req.params.id;
-  console.log(req.body);
   const answer = req.body.answer; //TODO add with the user id right now only string
   Decision.findOne({ _id: id }).then(
     decision => {
