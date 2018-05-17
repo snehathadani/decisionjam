@@ -12,6 +12,7 @@ const DecisionSchema =  new mongoose.Schema({
         unique: true,
         index: true,
     },
+    decisionCreatorId : String,
 
     answers: [{    
         answerText: {
