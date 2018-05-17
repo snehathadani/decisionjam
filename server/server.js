@@ -81,6 +81,7 @@ server.post('/api/decision/create',passport.authenticate("jwt", { session: false
   let decisionCode = 'feck';
   console.log(decisionCode);
   let decisionCodeDupe = true;
+  
 
   //while (decisionCodeDupe) {  // i need to get this working so that it loops 
        //keeps generating a code until there is no match on the database. while
@@ -114,6 +115,8 @@ server.post('/api/decision/create',passport.authenticate("jwt", { session: false
   
   
   newDecision.decisionCode = decisionCode;
+  newDecision.decisionCreatorId = req.user._id;
+  console.log('decision make is' + newDecision.decisionCreatorId);
   console.log(decisionCode);
   //check the user contains all required data
   newDecision.save((err, decision) => {
@@ -127,6 +130,7 @@ server.post('/api/decision/create',passport.authenticate("jwt", { session: false
 
 server.get('/api/decision/:id',passport.authenticate("jwt", { session: false }), function(req, res) {
   const id = req.params.id;
+  console.log('decision user is ' + req.user);
   console.log("id", id);
   Decision.find({ _id: id }).then(
     decision => {
@@ -328,7 +332,7 @@ server.get(
 );
 
 mongoose.Promise = global.Promise;
-const connect = mongoose.connect("mongodb://localhost/decisionjam");
+const connect = mongoose.connect("mongodb://localhost/test");
 //  'mongodb://sneha.thadani:decisionjam@ds163769.mlab.com:63769/decisionjam');
 
 connect.then(
