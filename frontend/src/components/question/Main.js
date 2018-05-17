@@ -28,7 +28,7 @@ class Main extends Component {
   };
 
   joinDecision = event => {
-    this.props.history.push("/decision-post/" + this.state.decisionCode);
+    this.props.history.push("/decision/" + this.state.decisionCode);
   };
 }
 export default Main;

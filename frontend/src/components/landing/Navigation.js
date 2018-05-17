@@ -10,7 +10,7 @@ class Navigation extends Component {
   handleLogoutClick = e => {
     localStorage.removeItem("token");
     axios.get(`${ROOT_URL}/api/logout`).then(res => {
-      // console.log("res", res);
+      // console.log("res", res, "logged out");
     });
   };
 
@@ -29,14 +29,14 @@ class Navigation extends Component {
             </div>
           </Link>
           <div className="menu">
-            <Link className="menu-links" to="/decisions">
-              Decisions
+            <Link className="menu-links" to="/question-page">
+              Create Decisions
+            </Link>
+            <Link className="menu-links" to="/mainpage">
+              Find Decision
             </Link>
             <Link className="menu-links" to="/billing">
               Billing
-            </Link>
-            <Link className="menu-links" to="/settings">
-              Settings
             </Link>
           </div>
           <div className="signin-container">

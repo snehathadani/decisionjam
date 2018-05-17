@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Vote extends Component {
+class DecisionVote extends Component {
   render() {
     // console.log(this.props);
 
@@ -12,4 +12,4 @@ class Vote extends Component {
   }
 }
 
-export default Vote;
+export default DecisionVote;

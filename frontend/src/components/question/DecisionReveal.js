@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Reveal extends Component {
+class DecisionReveal extends Component {
   render() {
     // console.log(this.props);
 
@@ -12,4 +12,4 @@ class Reveal extends Component {
   }
 }
 
-export default Reveal;
+export default DecisionReveal;

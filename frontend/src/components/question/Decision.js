@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 import "./Decision.css";
-import Post from "./Post.js";
-import Vote from "./Vote.js";
-import Reveal from "./Reveal.js";
+import DecisionPost from "./DecisionPost.js";
+import DecisionVote from "./DecisionVote.js";
+import DecisionReveal from "./DecisionReveal.js";
+import axios from "axios";
+
+const ROOT_URL = "http://localhost:8000";
 
 class Decision extends Component {
   constructor(props) {
@@ -11,8 +14,25 @@ class Decision extends Component {
       renderPage: "post",
       postIsActive: true,
       voteIsActive: false,
-      revealIsActive: false
+      revealIsActive: false,
+      decisionCode: props.match.params.id,
+      decision: ""
     };
+  }
+
+  // get question based on code
+  componentDidMount() {
+    const decisionCode = this.state.decisionCode;
+    axios
+      .get(`${ROOT_URL}/api/decision/${decisionCode}`)
+      .then(res => {
+        // console.log("res", res);
+        this.setState({ decision: this.state.decision });
+      })
+      .catch(error => {
+        // console.log("erorr", error.response.data.error);
+        this.setState({ decision: error.response.data.error });
+      });
   }
 
   onPostButtonClick = () => {
@@ -43,11 +63,14 @@ class Decision extends Component {
   };
 
   render() {
-    // console.log("this.state", this.state.renderPage);
+    console.log("this.state", this.state);
+    console.log("this.props", this.props);
+    // console.log("match", match);
 
     return (
       <div>
-        <div className="decision-title">Decision Page</div>
+        <div className="decision-title">Decision:{this.state.decision}</div>
+        <div className="decision-code">Code:{this.state.decisionCode} </div>
         <div className="decision-buttons-container">
           <button
             className={this.state.postIsActive ? "white" : "gray"}
@@ -71,31 +94,22 @@ class Decision extends Component {
         {(() => {
           switch (this.state.renderPage) {
             case "post":
-              return <Post />;
+              return (
+                <DecisionPost
+                  decisionCode={this.state.decisionCode}
+                  question={this.state.answer}
+                />
+              );
             case "vote":
-              return <Vote />;
+              return <DecisionVote />;
             case "reveal":
-              return <Reveal />;
+              return <DecisionReveal />;
             default:
-              return <Post />;
+              return <DecisionPost />;
           }
         })()}
       </div>
     );
-
-    // return (
-    //   <div>
-    //     <div className="decision-title">Decision Page</div>
-    //     <Vote />
-    //   </div>
-    // );
-
-    // return (
-    //   <div>
-    //     <div className="decision-title">Decision Page</div>
-    //     <Reveal />
-    //   </div>
-    // );
   }
 }
 
