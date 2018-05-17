@@ -150,28 +150,38 @@ server.put('/api/decision/:id/answer', function(req,res) {
   console.log(`req.body ${req.body.answer}`);
   
   const answer = req.body.answer; //TODO add with the user id right now only string
-  console.log(answer);
-  Decision.findOne({ _id: id }).then(
-    decision => {
-      let answers = decision.answers;
-      if (answers === undefined) {
-        answers = [{ answerText: answer }];
-      } else {
-        answers.push({ answerText: answer });
-      }
-      Decision.updateOne({ _id: id }, { $set: { answers: answers } }).then(
-        result => res.status(STATUS_OKAY).json(decision),
-        err =>
-          res.status(STATUS_NOT_FOUND).json({
-            error: "Decision with id " + id + " not updated" + " " + err
-          })
-      );
-    },
-    err =>
-      res
-        .status(STATUS_NOT_FOUND)
-        .json({ error: "Decision with id " + id + " not found" })
-  );
+  //check if string answer is empty or null
+  // https://stackoverflow.com/questions/154059/how-do-you-check-for-an-empty-string-in-javascript
+  if (!answer || answer.length == 0) {
+    console.log('answer is blank or undefined');
+    res
+        .status(STATUS_USER_ERROR)
+        .json({ error: "Answer cannot be blank" });
+  } else {
+    console.log(answer);
+    Decision.findOne({ _id: id }).then(
+      decision => {
+        let answers = decision.answers;
+        if (answers === undefined) {
+          answers = [{ answerText: answer }];
+        } else {
+          answers.push({ answerText: answer });
+        }
+        Decision.updateOne({ _id: id }, { $set: { answers: answers } }).then(
+          result => res.status(STATUS_OKAY).json(decision),
+          err =>
+            res.status(STATUS_NOT_FOUND).json({
+              error: "Decision with id " + id + " not updated" + " " + err
+            })
+        );
+      },
+      err =>
+        res
+          .status(STATUS_NOT_FOUND)
+          .json({ error: "Decision with id " + id + " not found" })
+    );
+  }
+ 
 });
 
 server.put(
