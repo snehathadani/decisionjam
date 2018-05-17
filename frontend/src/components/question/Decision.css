@@ -1,0 +1,81 @@
+.decision-container {
+  background-color: white;
+  margin: auto;
+  width: 800px;
+  border: 1px solid #ebebeb;
+}
+
+.hr-decisions {
+  border-bottom: 1px solid #ebebeb;
+}
+
+.decision-title {
+  font-size: 18px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  font-weight: 700;
+}
+
+.decision-code {
+  font-size: 14px;
+  padding-bottom: 5px;
+}
+
+/* tabs */
+.decision-tabs-container {
+  width: 600px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+}
+
+.decision-button {
+  font-size: 14px;
+}
+
+.white {
+  background-color: 6772e5;
+}
+
+.gray {
+  background-color: #b8b8b8;
+}
+/* answers */
+
+.post-container {
+  width: 800px;
+  margin: auto;
+}
+
+.answers-container {
+  width: 750px;
+  height: 400px;
+}
+
+.no-answer {
+  font-size: 16px;
+}
+
+.answer-container {
+  border: 1px solid #ebebeb;
+  width: 750px;
+  margin: auto;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.answer-text {
+  text-align: left;
+  padding-left: 10px;
+  padding-top: 10px;
+  width: 710px;
+  margin: auto;
+}
+
+/* form */
+.answer-input {
+  width: 300px;
+  height: 30px;
+  margin: 20px;
+}

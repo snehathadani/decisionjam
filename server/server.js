@@ -127,8 +127,12 @@ server.post('/api/decision/create',passport.authenticate("jwt", { session: false
 
 server.get('/api/decision/:id',passport.authenticate("jwt", { session: false }), function(req, res) {
   const id = req.params.id;
+  console.log("id", id);
   Decision.find({ _id: id }).then(
-    decision => res.status(STATUS_OKAY).json(decision),
+    decision => {
+      res.status(STATUS_OKAY).json(decision);
+      console.log("decision", decision);
+    },
     err =>
       res
         .status(STATUS_NOT_FOUND)

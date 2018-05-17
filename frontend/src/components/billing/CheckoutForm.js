@@ -4,7 +4,6 @@ import "./Billing.css";
 import CardSection from "./CardSection";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
-import { Link } from "react-router-dom";
 
 const ROOT_URL = "http://localhost:8000";
 

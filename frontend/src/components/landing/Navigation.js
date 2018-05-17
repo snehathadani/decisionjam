@@ -10,7 +10,7 @@ class Navigation extends Component {
   handleLogoutClick = e => {
     localStorage.removeItem("token");
     axios.get(`${ROOT_URL}/api/logout`).then(res => {
-      // console.log("res", res);
+      // console.log("res", res, "logged out");
     });
   };
 
@@ -21,53 +21,60 @@ class Navigation extends Component {
     // if user signed in
     if (token) {
       return (
-        <div className="nav">
-          <Link to="/landing-page">
-            <div className="logo">
-              <div className="design">Decision</div>
-              <div className="jam">Jam</div>
+        <div className="navigation-container">
+          <div className="header">
+            <Link to="/landing-page">
+              <div className="logo">
+                <div className="design">Decision</div>
+                <div className="jam">Jam</div>
+              </div>
+            </Link>
+            <div className="signin-container">
+              <Link
+                className="logout button"
+                to="/logout"
+                onClick={this.handleLogoutClick}
+              >
+                LOGOUT
+              </Link>
             </div>
-          </Link>
+          </div>
+          <div className="hr-nav" />
           <div className="menu">
-            <Link className="menu-links" to="/decisions">
-              Decisions
+            <Link className="menu-links" to="/question-page">
+              Create Decisions
+            </Link>
+            <Link className="menu-links" to="/mainpage">
+              Find Decision
             </Link>
             <Link className="menu-links" to="/billing">
               Billing
             </Link>
-            <Link className="menu-links" to="/settings">
-              Settings
-            </Link>
           </div>
-          <div className="signin-container">
-            <Link
-              className="logout button"
-              to="/logout"
-              onClick={this.handleLogoutClick}
-            >
-              LOGOUT
-            </Link>
-          </div>
+          <div className="hr-nav" />
         </div>
       );
       // if user not signed in
     } else {
       return (
-        <div className="nav">
-          <Link to="/landing-page">
-            <div className="logo">
-              <div className="design">Decision</div>
-              <div className="jam">Jam</div>
+        <div className="navigation-container">
+          <div className="header">
+            <Link to="/landing-page">
+              <div className="logo">
+                <div className="design">Decision</div>
+                <div className="jam">Jam</div>
+              </div>
+            </Link>
+            <div className="signin-container">
+              <Link className="signin button" to="/signin">
+                SIGN IN
+              </Link>
+              <Link className="signup button" to="/signup">
+                SIGN UP
+              </Link>
             </div>
-          </Link>
-          <div className="signin-container">
-            <Link className="signin button" to="/signin">
-              SIGN IN
-            </Link>
-            <Link className="signup button" to="/signup">
-              SIGN UP
-            </Link>
           </div>
+          <div className="hr-nav" />
         </div>
       );
     }
