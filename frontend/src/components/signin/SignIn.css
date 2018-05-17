@@ -1,4 +1,11 @@
-form {
+.login-error {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  font-size: 14px;
+  color: red;
+}
+
+.signinform {
   width: 100%;
   padding-top: 100px;
 }

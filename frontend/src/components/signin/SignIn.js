@@ -84,7 +84,7 @@ class Signup extends Component {
 
     return (
       <div>
-        <form className="form-container" onSubmit={this.handleFormSubmit}>
+        <form className="signinform" onSubmit={this.handleFormSubmit}>
           <label>Username</label>
           <input
             type="text"

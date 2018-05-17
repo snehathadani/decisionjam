@@ -8,7 +8,7 @@ class Billing extends Component {
   render() {
     // console.log(this.props);
     return (
-      <div className="billing">
+      <div className="billing-container">
         <div className="elements">
           <div className="paymentform-title">Payment Form</div>
           <Elements>

@@ -12,7 +12,7 @@ class DecisionPost extends Component {
       decisionCode: this.props.decisionCode
     };
   }
-
+  // 5afce3eb92077289eb089bd0
   handleAnswerInput = e => {
     e.preventDefault();
     this.setState({ newAnswer: e.target.value });
@@ -30,10 +30,6 @@ class DecisionPost extends Component {
       answersArray: newAnswersArray,
       newAnswer: ""
     });
-
-    // use decisionCode to get all answers for a decision
-    // NEED GET REQUEST
-
     // use decisionCode to save answers in the database
     axios
       .put(`${ROOT_URL}/api/decision/${decisionCode}/answer`, answersObject)

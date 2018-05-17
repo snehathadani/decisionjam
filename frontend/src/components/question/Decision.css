@@ -1,25 +1,33 @@
-.post-container {
-  width: 800px;
+.decision-container {
+  background-color: white;
   margin: auto;
+  width: 800px;
+  border: 1px solid #ebebeb;
+}
+
+.hr-decisions {
+  border-bottom: 1px solid #ebebeb;
 }
 
 .decision-title {
-  font-size: 30px;
-  padding-top: 20px;
-  padding-bottom: 10px;
+  font-size: 18px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  font-weight: 700;
 }
 
 .decision-code {
-  padding-bottom: 30px;
+  font-size: 14px;
+  padding-bottom: 5px;
 }
 
 /* tabs */
-.decision-buttons-container {
+.decision-tabs-container {
   width: 600px;
   margin: auto;
   display: flex;
   justify-content: space-between;
-  padding-bottom: 50px;
+  padding-bottom: 10px;
 }
 
 .decision-button {
@@ -35,8 +43,13 @@
 }
 /* answers */
 
-.answers-container {
+.post-container {
   width: 800px;
+  margin: auto;
+}
+
+.answers-container {
+  width: 750px;
   height: 400px;
 }
 
@@ -45,8 +58,8 @@
 }
 
 .answer-container {
-  border: solid 1px;
-  width: 800px;
+  border: 1px solid #ebebeb;
+  width: 750px;
   margin: auto;
   height: 50px;
   margin-bottom: 10px;
@@ -56,7 +69,7 @@
   text-align: left;
   padding-left: 10px;
   padding-top: 10px;
-  width: 750px;
+  width: 710px;
   margin: auto;
 }
 

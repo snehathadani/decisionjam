@@ -5,7 +5,6 @@ import Landing from "./components/landing/Landing";
 import Billing from "./components/billing/Billing";
 import { StripeProvider } from "react-stripe-elements";
 import Question from "./components/question/Question";
-import PaymentResult from "./components/billing/PaymentResult";
 import Main from "./components/question/Main";
 import SignUp from "./components/signup/SignUp";
 import SignIn from "./components/signin/SignIn";
@@ -24,13 +23,11 @@ class App extends Component {
             <Route exact path="/billing/:id" component={Billing} />
             <Route exact path="/billing" component={Billing} />
             <Route exact path="/question-page" component={Question} />
-            <Route exact path="/payment-result" component={PaymentResult} />
             <Route exact path="/mainpage" component={Main} />
             <Route path="/decision/:id" component={Decision} />
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/signin" component={SignIn} />
             <Route exact path="/logout" component={Landing} />
-            <Route exact path="/decision" component={Decision} />
           </div>
         </BrowserRouter>
       </StripeProvider>

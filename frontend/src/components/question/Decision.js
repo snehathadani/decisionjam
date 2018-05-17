@@ -67,10 +67,12 @@ class Decision extends Component {
     console.log("this.props", this.props);
 
     return (
-      <div>
-        <div className="decision-title">Decision:{this.state.decision}</div>
-        <div className="decision-code">Code:{this.state.decisionCode} </div>
-        <div className="decision-buttons-container">
+      <div className="decision-container">
+        <div className="decision-title">{this.state.decision}</div>
+        <div className="decision-code">Code: {this.state.decisionCode} </div>
+        <div className="hr-decisions" />
+
+        <div className="decision-tabs-container">
           <button
             className={this.state.postIsActive ? "white" : "gray"}
             onClick={this.onPostButtonClick}
@@ -90,6 +92,8 @@ class Decision extends Component {
             Reveal
           </button>
         </div>
+        <div className="hr-decisions" />
+
         {(() => {
           switch (this.state.renderPage) {
             // pass decisionCode and decision to components

@@ -1,15 +1,13 @@
-.billing {
+.billing-container {
   width: 800px;
   margin: auto;
   display: flex;
   justify-content: space-around;
-  padding-top: 30px;
 }
 
 .paymentform-title {
-  padding-left: 40px;
-  padding-top: 30px;
-  padding-bottom: 10px;
+  padding-top: 20px;
+  padding-bottom: 30px;
   font-weight: bold;
 }
 
@@ -25,13 +23,6 @@
 
 .continue-text {
   padding-right: 10px;
-}
-
-body,
-html {
-  background-color: #f6f9fc;
-  font-size: 18px;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 label {
