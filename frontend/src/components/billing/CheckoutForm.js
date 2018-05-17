@@ -4,6 +4,7 @@ import "./Billing.css";
 import CardSection from "./CardSection";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ROOT_URL = "http://localhost:8000";
 
@@ -15,12 +16,8 @@ class CheckoutForm extends Component {
       selectedOption: props.plan.params.id,
       success: false,
       fail: false,
-      jwtToken: localStorage.getItem("token"),
+      jwtToken: localStorage.getItem("token")
     };
-  }
-
-  componentDidMount() {
-    const { dispatch, currentURL } = this.props
   }
 
   handleSubmit = e => {
@@ -67,14 +64,13 @@ class CheckoutForm extends Component {
     // console.log("this.state:", this.state);
     console.log("this.props:", this.props);
 
-    const planID = this.props.plan.params.id;
     const success = this.state.success;
     const fail = this.state.fail;
     const jwtToken = this.state.jwtToken;
-    console.log('jwtToken', jwtToken);
+    console.log("jwtToken", jwtToken);
 
     if (!jwtToken) {
-      return <Redirect to={`/signup/?redirect=${window.location.pathname}`}/>;
+      return <Redirect to={`/signup/?redirect=${window.location.pathname}`} />;
     }
 
     if (success) {

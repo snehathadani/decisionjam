@@ -75,6 +75,7 @@ module.exports = server => {
     }
   );
 
+  // when sign up as free user button clicked, save free user info in billing model
   // based on userID check subscription end date and compare with today's date
   server.get("/api/make-decision/:soID", (req, res) => {
     console.log("req.params", req.params.soID);

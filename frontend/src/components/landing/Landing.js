@@ -2,29 +2,26 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./Landing.css";
 import splash from "./splash-image.png";
-import Navigation from "./Navigation";
-import Question from "../question/Question";
-import { Route } from "react-router-dom";
 
 class LandingPage extends Component {
   render() {
     let token = localStorage.getItem("token");
-    console.log(token);
+    // console.log(token);
 
+    // if returning user show welcome back page
     if (token) {
       return (
         <div>
-          <Navigation />
-          <h1> Welcome back</h1>
+          <h1> Welcome </h1>
           <Link className="question" to="/question-page">
             Make new decision.
           </Link>
         </div>
       );
+      // if new user show landing page
     } else {
       return (
         <div className="landing">
-          <Navigation />
           <div className="image-container">
             <div className="description-container">
               <div className="slogan">Make decisions faster</div>
@@ -34,8 +31,18 @@ class LandingPage extends Component {
                 proposed answers.
               </div>
               <div className="buy-container">
-                <Link className="buy" to="/landing-page">
+                <Link className="buy" to="/billing">
                   BUY NOW
+                </Link>
+              </div>
+              <div className="or">OR</div>
+              <div className="freeuser-container">
+                <Link
+                  className="freeuser"
+                  to="/signup"
+                  onClick={this.onFreeUserButtonClick}
+                >
+                  Sign Up As A Free User
                 </Link>
               </div>
             </div>
@@ -44,7 +51,9 @@ class LandingPage extends Component {
             </div>
           </div>
           <div className="pricing-container">
-            <div className="pricing-title">Pricing Plans</div>
+            <div name="Pricing" className="pricing-title">
+              Pricing Plans
+            </div>
             <div className="pricing-options">
               <div className="options">
                 <h1>Unlimited</h1>
