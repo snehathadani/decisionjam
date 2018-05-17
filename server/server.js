@@ -37,7 +37,7 @@ server.get("/", function(req, res) {
   res.status(200).json({ message: "API running" });
 });
 
-server.get("/api/users", function(req, res) {
+server.get("/api/users", passport.authenticate("jwt", { session: false }), function(req, res) {
   User.find({}, (err, users) => {
     if (err) {
       res.status(STATUS_USER_ERROR).json({ error: "Could not find the user." });
@@ -76,7 +76,7 @@ server.post("/api/users/adduser", function(req, res) {
   });
 });
 
-server.post('/api/decision/create', function(req, res) {
+server.post('/api/decision/create',passport.authenticate("jwt", { session: false }), function(req, res) {
   const newDecision = new Decision (req.body);
   let decisionCode = 'feck';
   console.log(decisionCode);
@@ -125,7 +125,7 @@ server.post('/api/decision/create', function(req, res) {
   })
 })
 
-server.get("/api/decision/:id", function(req, res) {
+server.get('/api/decision/:id',passport.authenticate("jwt", { session: false }), function(req, res) {
   const id = req.params.id;
   Decision.find({ _id: id }).then(
     decision => res.status(STATUS_OKAY).json(decision),
@@ -147,8 +147,10 @@ server.get('/api/decision/decisionCode/:decisionCode', function(req, res) {
 
 server.put('/api/decision/:id/answer', function(req,res) {
   const id = req.params.id;
-  console.log(req.body);
+  console.log(`req.body ${req.body.answer}`);
+  
   const answer = req.body.answer; //TODO add with the user id right now only string
+  console.log(answer);
   Decision.findOne({ _id: id }).then(
     decision => {
       let answers = decision.answers;
@@ -290,24 +292,12 @@ server.post("/api/login", function(req, res) {
     });
   });
 
-  /* Handle Logout */
-  // nice to have, need to refresh the session on each authorised route so the user
-  
+  /* Handle Logout */ 
   //see last comment https://stackoverflow.com/questions/45541182/passport-req-logout-function-not-working 
 server.get('/api/logout', passport.authenticate('jwt', { session: false }),function(req, res) {
   console.log("I am Logout")
   req.logout(); 
   res.status(200).redirect('/');
-});
-
-/* Handle Logout */
-// nice to have, need to refresh the session on each authorised route so the user
-
-//see last comment https://stackoverflow.com/questions/45541182/passport-req-logout-function-not-working
-server.get("/api/logout", function(req, res) {
-  console.log("I am Logged Out");
-  req.logout();
-  res.status(200).redirect("/");
 });
 
 //how to setup routes that need auth as well as test it on postman
