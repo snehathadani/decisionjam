@@ -152,7 +152,7 @@ server.put('/api/decision/:id/answer', function(req,res) {
   const answer = req.body.answer; //TODO add with the user id right now only string
   //check if string answer is empty or null
   // https://stackoverflow.com/questions/154059/how-do-you-check-for-an-empty-string-in-javascript
-  if (!answer || answer.length == 0) {
+  if (!answer) {
     console.log('answer is blank or undefined');
     res
         .status(STATUS_USER_ERROR)
