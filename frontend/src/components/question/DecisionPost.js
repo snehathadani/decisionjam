@@ -14,13 +14,32 @@ class DecisionPost extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    //if your props is received after the component is mounted, then this function will update the state accordingly.
-    console.log("nextProps", nextProps);
-    if (this.props.answersArray !== nextProps.answersArray) {
-      this.setState({ answersArray: nextProps.answersArray });
-      console.log("nextProps after if", nextProps);
-    }
+  // componentWillReceiveProps(nextProps) {
+  //   //if your props is received after the component is mounted, then this function will update the state accordingly.
+  //   console.log("nextProps", nextProps);
+  //   if (this.props.answersArray !== nextProps.answersArray) {
+  //     this.setState({ answersArray: nextProps.answersArray });
+  //     console.log("nextProps after if", nextProps);
+  //   }
+  // }
+
+  componentDidMount() {
+    const decisionCode = this.state.decisionCode;
+    axios
+      .get(`${ROOT_URL}/api/decision/${decisionCode}`)
+      .then(res => {
+        // console.log("res.data", res.data);
+        this.setState({
+          // decision: res.data[0].decisionText,
+          answersArray: res.data[0].answers.map(x => x.answerText)
+        });
+      })
+
+      .catch(error => {
+        // console.log("erorr", error.response.data.error);
+        this.setState({ decision: error.response.data.error });
+      });
+    // console.log("answersArray,", this.state.anwersArray);
   }
 
   handleAnswerInput = e => {

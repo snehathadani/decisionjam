@@ -13,22 +13,24 @@ class DecisionVote extends Component {
     };
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     const decisionCode = this.state.decisionCode;
-
-    // use decisionCode to query answers
     axios
       .get(`${ROOT_URL}/api/decision/${decisionCode}`)
       .then(res => {
-        console.log("res", res);
+        console.log("res.data", res.data);
         this.setState({
-          // answersArray: newAnswersArray
+          // decision: res.data[0].decisionText,
+          answersArray: res.data[0].answers.map(x => x.answerText)
         });
       })
+
       .catch(error => {
-        console.log(error.response);
+        // console.log("erorr", error.response.data.error);
+        this.setState({ decision: error.response.data.error });
       });
-  };
+    console.log("answersArray,", this.state.anwersArray);
+  }
 
   render() {
     console.log("this.props", this.props);
@@ -39,10 +41,10 @@ class DecisionVote extends Component {
     return (
       <div className="reveal-container">
         <div className="reveal-title">We have a winner!</div>
-        <div className="answers-container">
+        <div>
           {this.state.answersArray.map((answers, i) => (
             <div className="answer-container" key={i}>
-              <div className="answer-text">{answers.answer}</div>
+              <div className="answer-text">{answers}</div>
             </div>
           ))}
         </div>
