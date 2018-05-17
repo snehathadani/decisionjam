@@ -5,14 +5,24 @@ const ROOT_URL = "http://localhost:8000";
 
 class DecisionPost extends Component {
   constructor(props) {
+    console.log("props", props);
     super(props);
     this.state = {
-      answersArray: [],
+      answersArray: this.props.answersArray,
       newAnswer: "",
       decisionCode: this.props.decisionCode
     };
   }
-  // 5afce3eb92077289eb089bd0
+
+  componentWillReceiveProps(nextProps) {
+    //if your props is received after the component is mounted, then this function will update the state accordingly.
+    console.log("nextProps", nextProps);
+    if (this.props.answersArray !== nextProps.answersArray) {
+      this.setState({ answersArray: nextProps.answersArray });
+      console.log("nextProps after if", nextProps);
+    }
+  }
+
   handleAnswerInput = e => {
     e.preventDefault();
     this.setState({ newAnswer: e.target.value });
@@ -22,19 +32,23 @@ class DecisionPost extends Component {
     e.preventDefault();
 
     const decisionCode = this.state.decisionCode;
-    const answersObject = { answerText: this.state.newAnswer };
+    const answersObject = { answer: this.state.newAnswer };
 
-    const newAnswersArray = this.state.answersArray;
-    newAnswersArray.push(answersObject);
-    this.setState({
-      answersArray: newAnswersArray,
-      newAnswer: ""
-    });
+    // const newAnswersArray = this.state.answersArray;
+    // newAnswersArray.push(answersObject);
+    // this.setState({
+    //   answersArray: newAnswersArray,
+    //   newAnswer: ""
+    // });
     // use decisionCode to save answers in the database
     axios
       .put(`${ROOT_URL}/api/decision/${decisionCode}/answer`, answersObject)
       .then(res => {
-        console.log("res", res);
+        // console.log("res", res);
+        console.log("res", res.data);
+        this.setState({
+          answersArray: res.data.answers.map(x => x.answerText)
+        });
       })
       .catch(error => {
         console.log(error.response);
@@ -42,7 +56,7 @@ class DecisionPost extends Component {
   };
 
   render() {
-    // console.log("this.props", this.props);
+    console.log("this.props", this.props);
     // console.log("this.state", this.state);
     const answersArray = this.state.answersArray.length;
 
@@ -55,7 +69,7 @@ class DecisionPost extends Component {
             <div>
               {this.state.answersArray.map((answers, i) => (
                 <div className="answer-container" key={i}>
-                  <div className="answer-text">{answers.answerText}</div>
+                  <div className="answer-text">{answers}</div>
                 </div>
               ))}
             </div>

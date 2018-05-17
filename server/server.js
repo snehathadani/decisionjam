@@ -90,8 +90,12 @@ server.post("/api/decision/create", function(req, res) {
 
 server.get("/api/decision/:id", function(req, res) {
   const id = req.params.id;
+  console.log("id", id);
   Decision.find({ _id: id }).then(
-    decision => res.status(STATUS_OKAY).json(decision),
+    decision => {
+      res.status(STATUS_OKAY).json(decision);
+      console.log("decision", decision);
+    },
     err =>
       res
         .status(STATUS_NOT_FOUND)
@@ -102,14 +106,18 @@ server.get("/api/decision/:id", function(req, res) {
 server.put("/api/decision/:id/answer", function(req, res) {
   const id = req.params.id;
   const answer = req.body.answer; //TODO add with the user id right now only string
+  console.log("answer", req.body);
+
   Decision.findOne({ _id: id }).then(
     decision => {
       let answers = decision.answers;
+      console.log("answers", answers);
       if (answers === undefined) {
         answers = [{ answerText: answer }];
       } else {
         answers.push({ answerText: answer });
       }
+      console.log("answers before update one", answers);
       Decision.updateOne({ _id: id }, { $set: { answers: answers } }).then(
         result => res.status(STATUS_OKAY).json(decision),
         err =>

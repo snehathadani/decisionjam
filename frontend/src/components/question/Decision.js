@@ -16,7 +16,8 @@ class Decision extends Component {
       voteIsActive: false,
       revealIsActive: false,
       decisionCode: props.match.params.id,
-      decision: ""
+      decision: "",
+      answersArray: []
     };
   }
 
@@ -26,8 +27,15 @@ class Decision extends Component {
     axios
       .get(`${ROOT_URL}/api/decision/${decisionCode}`)
       .then(res => {
-        // console.log("res.data", res.data);
-        this.setState({ decision: res.data[0].decisionText });
+        console.log("res.data", res.data);
+        this.setState({
+          decision: res.data[0].decisionText,
+          answersArray: res.data[0].answers.map(x => x.answerText)
+        });
+        // console.log(
+        //   "res.data[0].answers.map(x => x.answerText)",
+        //   res.data[0].answers.map(x => x.answerText)
+        // );
       })
       .catch(error => {
         // console.log("erorr", error.response.data.error);
@@ -63,8 +71,8 @@ class Decision extends Component {
   };
 
   render() {
-    console.log("this.state", this.state);
-    console.log("this.props", this.props);
+    // console.log("this.state", this.state);
+    // console.log("this.props", this.props);
 
     return (
       <div className="decision-container">
@@ -102,6 +110,7 @@ class Decision extends Component {
                 <DecisionPost
                   decisionCode={this.state.decisionCode}
                   decision={this.state.decision}
+                  answersArray={this.state.answersArray}
                 />
               );
             case "vote":
@@ -109,6 +118,7 @@ class Decision extends Component {
                 <DecisionVote
                   decisionCode={this.state.decisionCode}
                   decision={this.state.decision}
+                  answersArray={this.state.answersArray}
                 />
               );
             case "reveal":
@@ -116,6 +126,7 @@ class Decision extends Component {
                 <DecisionReveal
                   decisionCode={this.state.decisionCode}
                   decision={this.state.decision}
+                  answersArray={this.state.answersArray}
                 />
               );
             default:

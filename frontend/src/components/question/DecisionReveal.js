@@ -42,7 +42,7 @@ class DecisionVote extends Component {
         <div className="answers-container">
           {this.state.answersArray.map((answers, i) => (
             <div className="answer-container" key={i}>
-              <div className="answer-text">{answers.answerText}</div>
+              <div className="answer-text">{answers.answer}</div>
             </div>
           ))}
         </div>
