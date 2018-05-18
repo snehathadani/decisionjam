@@ -40,13 +40,15 @@ class DecisionVote extends Component {
 
     return (
       <div className="reveal-container">
-        <div className="reveal-title">We have a winner!</div>
-        <div>
-          {this.state.answersArray.map((answers, i) => (
-            <div className="answer-container" key={i}>
-              <div className="answer-text">{answers}</div>
-            </div>
-          ))}
+        <div className="answers-container">
+          <div className="reveal-title">We have a winner!</div>
+          <div>
+            {this.state.answersArray.map((answers, i) => (
+              <div className="answer-container" key={i}>
+                <div className="answer-text">{answers}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );

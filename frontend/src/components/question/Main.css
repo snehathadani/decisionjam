@@ -1,0 +1,13 @@
+.main-wrapper {
+  padding-top: 200px;
+}
+
+.main-input-wrapper {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.main-input {
+  width: 20px;
+  height: 40px;
+}

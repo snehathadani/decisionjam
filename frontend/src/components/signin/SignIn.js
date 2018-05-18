@@ -59,6 +59,7 @@ class Signup extends Component {
     // console.log("this.props:", this.props);
 
     if (this.state.redirect) {
+      // if there is a subscription ID, go to landing page
       if (this.state.subscriptionID) {
         return <Redirect to="/landing-page" />;
       } else {
@@ -74,6 +75,7 @@ class Signup extends Component {
         let redirect = getQueryString("redirect");
         console.log("redirect", redirect);
 
+        // go to billing page
         if (redirect === "undefined" || redirect === null) {
           return <Redirect to="/billing" />;
         } else {
@@ -83,26 +85,35 @@ class Signup extends Component {
     }
 
     return (
-      <div>
-        <form className="signinform" onSubmit={this.handleFormSubmit}>
-          <label>Username</label>
-          <input
-            type="text"
-            name="username"
-            value={this.state.username}
-            onChange={this.handleUsernameChange}
-          />
-          <label>Password</label>
-          <input
-            type="text"
-            name="password"
-            value={this.state.password}
-            onChange={this.handlePasswordChange}
-          />
+      <div className="signinpage-container">
+        <form className="signin-form" onSubmit={this.handleFormSubmit}>
+          <div className="signin-labels">
+            <label>Username</label>
+            <div>
+              <input
+                type="text"
+                name="username"
+                value={this.state.username}
+                onChange={this.handleUsernameChange}
+              />
+            </div>
+          </div>
+          <div className="signin-labels">
+            <label>Password</label>
+            <div>
+              <input
+                type="text"
+                name="password"
+                value={this.state.password}
+                onChange={this.handlePasswordChange}
+              />
+            </div>
+          </div>
+
+          <button type="submit">Sign In</button>
           <div>
             <div className="login-error">{this.state.loginError}</div>
           </div>
-          <button type="submit">Sign In</button>
         </form>
       </div>
     );

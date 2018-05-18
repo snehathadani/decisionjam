@@ -4,7 +4,7 @@
 }
 
 .hr-nav {
-  border-bottom: 1px solid #ebebeb;
+  border-bottom: 1px solid #d8d8d8;
 }
 
 /* header */
@@ -48,6 +48,7 @@
   width: 60px;
   color: #505050;
   margin-top: 4px;
+  padding-right: 10px;
 }
 
 .signup {

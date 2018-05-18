@@ -81,9 +81,11 @@ class Decision extends Component {
     return (
       <div className="decision-container">
         <div className="decision-title">{this.state.decision}</div>
-        <div className="decision-code">Code: {this.state.decisionCode} </div>
+        <div className="decision-code">
+          <div className="code-title">Code</div>
+          <div className="code-text"> {this.state.decisionCode} </div>
+        </div>
         <div className="hr-decisions" />
-
         <div className="decision-tabs-container">
           <button
             className={this.state.postIsActive ? "active-tab" : "inactive-tab"}
@@ -106,9 +108,8 @@ class Decision extends Component {
           >
             Reveal
           </button>
-        </div>
-        <div className="hr-decisions" />
-
+        </div>{" "}
+        <div className="hr-decisions " />
         {(() => {
           switch (this.state.renderPage) {
             // pass decisionCode and decision to components

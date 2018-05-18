@@ -94,10 +94,9 @@ class DecisionPost extends Component {
             </div>
           )}
         </div>
-        <form
-          className="answer-form-container"
-          onSubmit={this.handleFormSubmit}
-        >
+        <div className="hr-decisions " />
+
+        <form onSubmit={this.handleFormSubmit}>
           <input
             type="text"
             className="answer-input"

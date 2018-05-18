@@ -46,10 +46,13 @@ class LandingPage extends Component {
                 </Link>
               </div>
             </div>
+
             <div>
               <img className="image" alt="logo" src={splash} />
             </div>
           </div>
+          <div className="hr-landing" />
+
           <div className="pricing-container">
             <div name="Pricing" className="pricing-title">
               Pricing Plans

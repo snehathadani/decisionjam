@@ -3,10 +3,14 @@
   font-family: Camphor, Open Sans, Segoe UI, sans-serif;
 }
 
+.hr-landing {
+  border-bottom: 1px solid #d8d8d8;
+}
+
 /* image */
 
 .image-container {
-  background-color: #eef7fa;
+  /* background-color: #eef7fa; */
   height: 600px;
   display: flex;
   justify-content: center;
@@ -129,7 +133,7 @@ p {
 }
 
 .footer {
-  background-color: #eef7fa;
+  /* background-color: #eef7fa; */
   height: 80px;
   display: flex;
   justify-content: center;

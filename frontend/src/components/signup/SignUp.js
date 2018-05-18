@@ -64,35 +64,41 @@ class Signup extends Component {
     }
 
     return (
-      <div>
+      <div className="signuppage-container">
         <form className="signup-form" onSubmit={this.handleFormSubmit}>
-          <label>
-            Username
-            <input
-              type="text"
-              name="username"
-              value={this.state.username}
-              onChange={this.handleUsernameChange}
-            />
-          </label>
-          <label>
-            Email
-            <input
-              type="text"
-              name="email"
-              value={this.state.email}
-              onChange={this.handleEmailChange}
-            />
-          </label>
-          <label>
-            Password
-            <input
-              type="text"
-              name="password"
-              value={this.state.password}
-              onChange={this.handlePasswordChange}
-            />
-          </label>
+          <div className="signup-labels">
+            <label>Username</label>
+            <div>
+              <input
+                type="text"
+                name="username"
+                value={this.state.username}
+                onChange={this.handleUsernameChange}
+              />
+            </div>
+          </div>
+          <div className="signup-labels">
+            <label>Email </label>
+            <div>
+              <input
+                type="text"
+                name="email"
+                value={this.state.email}
+                onChange={this.handleEmailChange}
+              />
+            </div>
+          </div>
+          <div className="signup-labels">
+            <label>Password </label>
+            <div>
+              <input
+                type="text"
+                name="password"
+                value={this.state.password}
+                onChange={this.handlePasswordChange}
+              />
+            </div>
+          </div>
           <div className="login-error">{this.state.loginError}</div>
           <button type="submit">Sign Up</button>
         </form>

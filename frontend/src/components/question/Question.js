@@ -11,16 +11,19 @@ class Question extends Component {
 
   render() {
     return (
-      <div>
-        <div>
-          <label> Question or decision </label>
+      <div className="question-wrapper">
+        <label className="question-title"> Create A New Question </label>
+        <div className="question-input-wrapper">
           <input
+            className="question-input"
             type="text"
             value={this.state.decisionText}
             onChange={this.setDecisionText}
           />
         </div>
-        <button onClick={this.createQuestion}> Create Question </button>
+        <div>
+          <button onClick={this.createQuestion}> Create Question </button>
+        </div>
       </div>
     );
   }
