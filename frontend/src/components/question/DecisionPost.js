@@ -5,7 +5,7 @@ const ROOT_URL = "http://localhost:8000";
 
 class DecisionPost extends Component {
   constructor(props) {
-    console.log("props", props);
+    // console.log("props", props);
     super(props);
     this.state = {
       answersArray: this.props.answersArray,
@@ -23,12 +23,13 @@ class DecisionPost extends Component {
   //   }
   // }
 
+  // auto load answers from database
   componentDidMount() {
     const decisionCode = this.state.decisionCode;
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`)
+      .get(`${ROOT_URL}/api/decision/decisionCode/${decisionCode}`)
       .then(res => {
-        // console.log("res.data", res.data);
+        // console.log("GET res.data", res.data);
         this.setState({
           // decision: res.data[0].decisionText,
           answersArray: res.data[0].answers.map(x => x.answerText)
@@ -52,30 +53,29 @@ class DecisionPost extends Component {
 
     const decisionCode = this.state.decisionCode;
     const answersObject = { answer: this.state.newAnswer };
-
     // const newAnswersArray = this.state.answersArray;
     // newAnswersArray.push(answersObject);
     // this.setState({
     //   answersArray: newAnswersArray,
     //   newAnswer: ""
     // });
+
     // use decisionCode to save answers in the database
     axios
       .put(`${ROOT_URL}/api/decision/${decisionCode}/answer`, answersObject)
       .then(res => {
-        // console.log("res", res);
-        console.log("res", res.data);
         this.setState({
           answersArray: res.data.answers.map(x => x.answerText)
         });
+        console.log("res.data put", res.data);
       })
       .catch(error => {
-        console.log(error.response);
+        console.log("error.response", error.response);
       });
   };
 
   render() {
-    console.log("this.props", this.props);
+    // console.log("this.props", this.props);
     // console.log("this.state", this.state);
     const answersArray = this.state.answersArray.length;
 

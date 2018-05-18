@@ -16,7 +16,7 @@ class DecisionVote extends Component {
   componentDidMount() {
     const decisionCode = this.state.decisionCode;
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`)
+      .get(`${ROOT_URL}/api/decision/decisionCode/${decisionCode}`)
       .then(res => {
         console.log("res.data", res.data);
         this.setState({

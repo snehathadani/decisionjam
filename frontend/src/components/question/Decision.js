@@ -25,9 +25,9 @@ class Decision extends Component {
   componentDidMount() {
     const decisionCode = this.state.decisionCode;
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`)
+      .get(`${ROOT_URL}/api/decision/decisionCode/${decisionCode}`)
       .then(res => {
-        console.log("res.data", res.data);
+        // console.log("res.data", res.data);
         this.setState({
           decision: res.data[0].decisionText,
           answersArray: res.data[0].answers.map(x => x.answerText)

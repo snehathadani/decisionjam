@@ -111,10 +111,13 @@ server.post(
       },
       function(err, result) {
         if (err) {
-          // console.log("in err");
-          //res.status(STATUS_USER_ERROR).json({error: "Error while adding", err});
+          console.log("in err");
+          res
+            .status(STATUS_USER_ERROR)
+            .json({ error: "Error while adding", err });
         }
         if (result) {
+          console.log("result", result);
           console.log(
             "got a duplicate code server should be setup to generate another code"
           );
@@ -184,8 +187,8 @@ server.get("/api/decision/decisionCode/:decisionCode", function(req, res) {
 
 server.put("/api/decision/:id/answer", function(req, res) {
   const id = req.params.id;
+  console.log("id", id);
   console.log(`req.body ${req.body.answer}`);
-
   const answer = req.body.answer; //TODO add with the user id right now only string
   //check if string answer is empty or null
   // https://stackoverflow.com/questions/154059/how-do-you-check-for-an-empty-string-in-javascript
@@ -193,16 +196,19 @@ server.put("/api/decision/:id/answer", function(req, res) {
     console.log("answer is blank or undefined");
     res.status(STATUS_USER_ERROR).json({ error: "Answer cannot be blank" });
   } else {
-    console.log(answer);
-    Decision.findOne({ _id: id }).then(
+    Decision.findOne({ decisionCode: id }).then(
       decision => {
+        console.log("decision", decision);
         let answers = decision.answers;
         if (answers === undefined) {
           answers = [{ answerText: answer }];
         } else {
           answers.push({ answerText: answer });
         }
-        Decision.updateOne({ _id: id }, { $set: { answers: answers } }).then(
+        Decision.updateOne(
+          { decisionCode: id },
+          { $set: { answers: answers } }
+        ).then(
           result => res.status(STATUS_OKAY).json(decision),
           err =>
             res.status(STATUS_NOT_FOUND).json({
