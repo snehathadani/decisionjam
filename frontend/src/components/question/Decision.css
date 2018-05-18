@@ -34,13 +34,19 @@
   font-size: 14px;
 }
 
-.white {
-  background-color: 6772e5;
+.active-tab {
+  background-color: #6772e5;
 }
 
-.gray {
-  background-color: #b8b8b8;
+.inactive-tab {
+  background-color: #9999ff;
 }
+
+button:disabled {
+  pointer-events: none;
+  background-color: #f7f7f7;
+}
+
 /* answers */
 
 .post-container {
