@@ -55,10 +55,9 @@ class DecisionPost extends Component {
     const answersObject = { answer: this.state.newAnswer };
     // const newAnswersArray = this.state.answersArray;
     // newAnswersArray.push(answersObject);
-    // this.setState({
-    //   answersArray: newAnswersArray,
-    //   newAnswer: ""
-    // });
+    this.setState({
+      newAnswer: ""
+    });
 
     // use decisionCode to save answers in the database
     axios
@@ -95,17 +94,18 @@ class DecisionPost extends Component {
           )}
         </div>
         <div className="hr-decisions " />
-
-        <form onSubmit={this.handleFormSubmit}>
-          <input
-            type="text"
-            className="answer-input"
-            placeholder="Suggest an answer..."
-            value={this.state.newAnswer}
-            onChange={this.handleAnswerInput}
-          />
-          <button type="submit">Submit</button>
-        </form>
+        <div className="answer-form-container">
+          <form onSubmit={this.handleFormSubmit}>
+            <input
+              type="text"
+              className="answer-input"
+              placeholder="Suggest an answer..."
+              value={this.state.newAnswer}
+              onChange={this.handleAnswerInput}
+            />
+            <button type="submit">Submit</button>
+          </form>
+        </div>
       </div>
     );
   }

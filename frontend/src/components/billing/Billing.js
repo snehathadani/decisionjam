@@ -9,16 +9,15 @@ class Billing extends Component {
     // console.log(this.props);
     return (
       <div className="billing-container">
-        <div className="elements">
+        <div className="elements-container">
           <div className="paymentform-title">Payment Form</div>
           <Elements>
             <InjectedCheckoutForm plan={this.props.match} />
           </Elements>
         </div>
-        <hr width="1" size="600" />
 
-        <div className="continue">
-          <div className="continue-text">Continue as a free user: </div>
+        <div className="continue-container">
+          <div className="continue-text">Continue as a free user </div>
           <Link to="/landing-page">Home</Link>
         </div>
       </div>

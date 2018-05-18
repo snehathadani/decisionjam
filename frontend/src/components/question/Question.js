@@ -14,7 +14,7 @@ class Question extends Component {
       <div className="question-wrapper">
         <label className="question-title"> Create A New Question </label>
         <div className="question-input-wrapper">
-          <input
+          <textarea
             className="question-input"
             type="text"
             value={this.state.decisionText}

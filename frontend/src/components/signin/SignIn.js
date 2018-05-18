@@ -110,10 +110,10 @@ class Signup extends Component {
             </div>
           </div>
 
-          <button type="submit">Sign In</button>
           <div>
             <div className="login-error">{this.state.loginError}</div>
           </div>
+          <button type="submit">Sign In</button>
         </form>
       </div>
     );

@@ -9,7 +9,8 @@ class Main extends Component {
   render() {
     return (
       <div className="main-wrapper">
-        <label> "Lucky You" </label>
+        <label className="luckyyou"> "Lucky You" </label>
+        <div className="enter-text">Enter Decision Code</div>
         <div className="main-input-wrapper">
           <input
             className="main-input"

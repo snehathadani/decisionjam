@@ -1,8 +1,16 @@
 .billing-container {
-  width: 800px;
+  width: 900px;
   margin: auto;
   display: flex;
   justify-content: space-around;
+}
+
+.elements-container {
+  width: 500px;
+  margin: auto;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid #ebebeb;
 }
 
 .paymentform-title {
@@ -15,8 +23,14 @@
   width: 450px;
 }
 
+.continue-container {
+  margin: auto;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid #ebebeb;
+}
+
 .continue {
-  padding-top: 80px;
   display: flex;
   justify-content: center;
 }
