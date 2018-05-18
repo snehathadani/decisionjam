@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import "./Landing.css";
-import splash from "./splash-image.png";
+import appImage from "./decisionjam-screenshot.png";
 
 class LandingPage extends Component {
   render() {
@@ -11,11 +11,12 @@ class LandingPage extends Component {
     // if returning user show welcome back page
     if (token) {
       return (
-        <div>
+        <div className="welcome-container">
           <h1> Welcome </h1>
-          <Link className="question" to="/question-page">
-            Make new decision.
-          </Link>
+          <div className="hr-landing" />
+          <div className="create-decision-home">
+            <Link to="/question-page">Create a new decision now.</Link>
+          </div>
         </div>
       );
       // if new user show landing page
@@ -46,10 +47,13 @@ class LandingPage extends Component {
                 </Link>
               </div>
             </div>
+
             <div>
-              <img className="image" alt="logo" src={splash} />
+              <img className="image" alt="logo" src={appImage} />
             </div>
           </div>
+          <div className="hr-landing" />
+
           <div className="pricing-container">
             <div name="Pricing" className="pricing-title">
               Pricing Plans

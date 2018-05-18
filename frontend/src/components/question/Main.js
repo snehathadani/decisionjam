@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-// import {Route} from 'react-router-dom';
-// import history from '../BrowserHistory';
+import "./Main.css";
 
 class Main extends Component {
   state = {
@@ -9,14 +8,18 @@ class Main extends Component {
 
   render() {
     return (
-      <div>
-        <label> "Lucky You" </label>
-        <div>
+      <div className="main-wrapper">
+        <label className="luckyyou"> "Lucky You" </label>
+        <div className="enter-text">Enter Decision Code</div>
+        <div className="main-input-wrapper">
           <input
+            className="main-input"
             type="text"
             value={this.state.decisionCode}
             onChange={this.setDecisionCode}
           />
+        </div>
+        <div>
           <button onClick={this.joinDecision}> Join </button>
         </div>
       </div>
@@ -28,7 +31,9 @@ class Main extends Component {
   };
 
   joinDecision = event => {
-    this.props.history.push("/decision/" + this.state.decisionCode);
+    this.props.history.push(
+      "/decision/decisionCode/" + this.state.decisionCode
+    );
   };
 }
 export default Main;

@@ -7,9 +7,12 @@ const jwt = require("jwt-simple");
 module.exports = server => {
   // charge customer
 
-  server.post("/api/payment",passport.authenticate("jwt", { session: false }), function(req, res) {
-      console.log('req.user', req.user);
-      // console.log("req", req);
+  server.post(
+    "/api/payment",
+    passport.authenticate("jwt", { session: false }),
+    function(req, res) {
+      console.log("req.user", req.user);
+      console.log("req.body", req.body);
 
       const stripeToken = req.body.postData.stripeToken.id;
       const selectedOption = req.body.postData.selectedOption;

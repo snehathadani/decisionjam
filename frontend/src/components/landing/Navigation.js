@@ -10,7 +10,7 @@ class Navigation extends Component {
   handleLogoutClick = e => {
     localStorage.removeItem("token");
     axios.get(`${ROOT_URL}/api/logout`).then(res => {
-      // console.log("res", res, "logged out");
+      console.log("res", res, "logged out");
     });
   };
 

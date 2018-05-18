@@ -1,41 +1,62 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import "./Question.css";
-import axios from 'axios'
+import axios from "axios";
 
-class Question extends Component { 
-    state = {
-        decisionText : '',
-    }
-   
-    render () {
-        return(
-            <div>
-                <div>
-                    <label> Question or decision </label>
-                    <input type = "text"
-                           value = {this.state.decisionText} 
-                           onChange = {this.setDecisionText}/>
-                </div>    
-                <button onClick = {this.createQuestion}> Create Question </button>
-            </div>
-        )
-    }
+class Question extends Component {
+  state = {
+    decisionText: "",
+    jwtToken: localStorage.getItem("token"),
+    decisionCode: ""
+  };
 
-    setDecisionText = (event) => {
-        this.setState ({
-           decisionText: event.target.value
-        })
-    }
+  render() {
+    return (
+      <div className="question-wrapper">
+        <label className="question-title"> Create A New Question </label>
+        <div className="question-input-wrapper">
+          <textarea
+            className="question-input"
+            type="text"
+            value={this.state.decisionText}
+            onChange={this.setDecisionText}
+          />
+        </div>
+        <div>
+          <button onClick={this.createQuestion}> Create Question </button>
+        </div>
+      </div>
+    );
+  }
 
-    createQuestion = (event) => {
-        console.log("Sending " + this.state.decisionText);
-        axios.post("http://localhost:8000/api/decision/create", this.state)
-             .then(({data: {decisionId}}) => {
-                 //TODO redirect to the next page with the decsion id here
-                 console.log(decisionId) ;
-                })
-             .catch((e) => console.log("Got error " + e));
-    }
+  setDecisionText = event => {
+    this.setState({
+      decisionText: event.target.value
+    });
+  };
+
+  createQuestion = event => {
+    console.log("Sending " + this.state.decisionText);
+    const postData = {
+      decisionText: this.state.decisionText
+    };
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: this.state.jwtToken
+    };
+    console.log("decisionText", this.state.decisionText);
+
+    axios
+      .post("http://localhost:8000/api/decision/create", postData, { headers })
+      .then(decision => {
+        //TODO redirect to the next page with the decsion id here
+        console.log("decision", decision);
+        this.setState({ decisionCode: decision.data.decision.decisionCode });
+        this.props.history.push(
+          "/decision/decisionCode/" + this.state.decisionCode
+        );
+      })
+      .catch(error => console.log("Got error " + error.response.data.error));
+  };
 }
 
 export default Question;

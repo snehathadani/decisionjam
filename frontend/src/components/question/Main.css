@@ -1,15 +1,4 @@
-.login-error {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  font-size: 14px;
-  color: red;
-}
-
-.signinpage-container {
-  padding-top: 80px;
-}
-
-.signin-form {
+.main-wrapper {
   width: 400px;
   padding: 20px;
   margin: auto;
@@ -17,15 +6,29 @@
   border: 1px solid #ebebeb;
 }
 
-.signin-labels {
-  text-align: left;
-  padding-top: 10px;
+.luckyyou {
+  font-size: 30px;
+  color: #ffa500;
 }
-/* 
 
-input[type="text"],
+.enter-text {
+  color: #505050;
+  padding-top: 30px;
+}
+
+.main-input-wrapper {
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.main-input {
+  width: 20px;
+  height: 40px;
+}
+
+.main-input[type="text"],
 select {
-  width: 400px;
+  width: 100px;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
@@ -34,4 +37,4 @@ select {
   box-sizing: border-box;
   font-size: 16px;
   background-color: #f8f8f8;
-} */
+}

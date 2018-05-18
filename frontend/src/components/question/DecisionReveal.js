@@ -16,7 +16,7 @@ class DecisionVote extends Component {
   componentDidMount() {
     const decisionCode = this.state.decisionCode;
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`)
+      .get(`${ROOT_URL}/api/decision/decisionCode/${decisionCode}`)
       .then(res => {
         console.log("res.data", res.data);
         this.setState({
@@ -40,13 +40,15 @@ class DecisionVote extends Component {
 
     return (
       <div className="reveal-container">
-        <div className="reveal-title">We have a winner!</div>
-        <div>
-          {this.state.answersArray.map((answers, i) => (
-            <div className="answer-container" key={i}>
-              <div className="answer-text">{answers}</div>
-            </div>
-          ))}
+        <div className="answers-container">
+          <div className="reveal-title">We have a winner!</div>
+          <div>
+            {this.state.answersArray.map((answers, i) => (
+              <div className="answer-container" key={i}>
+                <div className="answer-text">{answers}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );

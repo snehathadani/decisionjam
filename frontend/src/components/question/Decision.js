@@ -17,7 +17,8 @@ class Decision extends Component {
       revealIsActive: false,
       decisionCode: props.match.params.id,
       decision: "",
-      answersArray: []
+      answersArray: [],
+      decisionCreatorId: ""
     };
   }
 
@@ -25,17 +26,19 @@ class Decision extends Component {
   componentDidMount() {
     const decisionCode = this.state.decisionCode;
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`)
+      .get(`${ROOT_URL}/api/decision/decisionCode/${decisionCode}`)
       .then(res => {
         console.log("res.data", res.data);
         this.setState({
           decision: res.data[0].decisionText,
-          answersArray: res.data[0].answers.map(x => x.answerText)
+          answersArray: res.data[0].answers.map(x => x.answerText),
+          decisionCreatorId: res.data[0].decisionCreatorId
         });
         // console.log(
         //   "res.data[0].answers.map(x => x.answerText)",
         //   res.data[0].answers.map(x => x.answerText)
         // );
+        // console.log("decisionCreatorId", this.state.decisionCreatorId);
       })
       .catch(error => {
         // console.log("erorr", error.response.data.error);
@@ -73,35 +76,40 @@ class Decision extends Component {
   render() {
     // console.log("this.state", this.state);
     // console.log("this.props", this.props);
+    // console.log("decisionCreatorId", this.state.decisionCreatorId);
 
     return (
       <div className="decision-container">
         <div className="decision-title">{this.state.decision}</div>
-        <div className="decision-code">Code: {this.state.decisionCode} </div>
+        <div className="decision-code">
+          <div className="code-title">Code</div>
+          <div className="code-text"> {this.state.decisionCode} </div>
+        </div>
         <div className="hr-decisions" />
-
         <div className="decision-tabs-container">
           <button
-            className={this.state.postIsActive ? "white" : "gray"}
+            className={this.state.postIsActive ? "active-tab" : "inactive-tab"}
             onClick={this.onPostButtonClick}
           >
             Post
           </button>
           <button
-            className={this.state.voteIsActive ? "white" : "gray"}
+            className={this.state.voteIsActive ? "active-tab" : "inactive-tab"}
             onClick={this.onVoteButtonClick}
           >
             Vote
           </button>
           <button
-            className={this.state.revealIsActive ? "white" : "gray"}
+            disabled={!this.state.decisionCreatorId}
+            className={
+              this.state.revealIsActive ? "active-tab" : "inactive-tab"
+            }
             onClick={this.onRevealButtonClick}
           >
             Reveal
           </button>
-        </div>
-        <div className="hr-decisions" />
-
+        </div>{" "}
+        <div className="hr-decisions " />
         {(() => {
           switch (this.state.renderPage) {
             // pass decisionCode and decision to components
