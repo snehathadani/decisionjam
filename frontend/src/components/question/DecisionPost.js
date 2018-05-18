@@ -40,7 +40,7 @@ class DecisionPost extends Component {
         // console.log("erorr", error.response.data.error);
         this.setState({ decision: error.response.data.error });
       });
-    // console.log("answersArray,", this.state.anwersArray);
+    // console.log("answersArray,", this.state.answersArray);
   }
 
   handleAnswerInput = e => {

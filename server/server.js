@@ -175,7 +175,7 @@ server.get(
 // postman test example localhost:8000/api/decision/decisionCode/k65gy
 server.get("/api/decision/decisionCode/:decisionCode", function(req, res) {
   const decisionCode = req.params.decisionCode;
-  console.log(decisionCode);
+  console.log("decisionCode", decisionCode);
   Decision.find({ decisionCode: decisionCode }).then(
     decision => res.status(STATUS_OKAY).json(decision),
     err =>

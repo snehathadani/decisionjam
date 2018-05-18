@@ -5,7 +5,8 @@ import axios from "axios";
 class Question extends Component {
   state = {
     decisionText: "",
-    jwtToken: localStorage.getItem("token")
+    jwtToken: localStorage.getItem("token"),
+    decisionCode: ""
   };
 
   render() {
@@ -45,9 +46,10 @@ class Question extends Component {
       .post("http://localhost:8000/api/decision/create", postData, { headers })
       .then(decision => {
         //TODO redirect to the next page with the decsion id here
-        console.log(
-          "decision.data.decision.decisionCode",
-          decision.data.decision.decisionCode
+        console.log("decision", decision);
+        this.setState({ decisionCode: decision.data.decision.decisionCode });
+        this.props.history.push(
+          "/decision/decisionCode/" + this.state.decisionCode
         );
       })
       .catch(error => console.log("Got error " + error.response.data.error));

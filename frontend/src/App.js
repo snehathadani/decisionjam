@@ -24,7 +24,7 @@ class App extends Component {
             <Route exact path="/billing" component={Billing} />
             <Route exact path="/question-page" component={Question} />
             <Route exact path="/mainpage" component={Main} />
-            <Route path="/decision/:id" component={Decision} />
+            <Route path="/decision/decisionCode/:id" component={Decision} />
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/signin" component={SignIn} />
             <Route exact path="/logout" component={Landing} />
