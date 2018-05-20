@@ -8,9 +8,11 @@ class DecisionPost extends Component {
     // console.log("props", props);
     super(props);
     this.state = {
-      answersArray: this.props.answersArray,
+      answersArray: [],
       newAnswer: "",
-      decisionCode: this.props.decisionCode
+      decisionCode: this.props.decisionCode,
+      jwtToken: localStorage.getItem("token")
+
     };
   }
 
@@ -26,8 +28,12 @@ class DecisionPost extends Component {
   // auto load answers from database
   componentDidMount() {
     const decisionCode = this.state.decisionCode;
+    console.log("state", this.state);
+    const headers = {
+      Authorization: this.state.jwtToken
+    };
     axios
-      .get(`${ROOT_URL}/api/decision/decisionCode/${decisionCode}`)
+      .get(`${ROOT_URL}/api/decision/${decisionCode}`, {headers})
       .then(res => {
         // console.log("GET res.data", res.data);
         this.setState({
