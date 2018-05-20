@@ -173,11 +173,12 @@ server.get(
 );
 
 // postman test example localhost:8000/api/decision/decisionCode/k65gy
-server.get("/api/decision/decisionCode/:decisionCode", function(req, res) {
+server.get("/api/decision/decisionCode/:decisionCode", passport.authenticate("jwt", { session: false }),function(req, res) {
+  const currentLoddgedInUserId = req.user ? req.user._id : "5b01aeb1abaade1eacdc67ce";
   const decisionCode = req.params.decisionCode;
   console.log("decisionCode", decisionCode);
   Decision.find({ decisionCode: decisionCode }).then(
-    decision => res.status(STATUS_OKAY).json(decision),
+    decision => {decision = Object.assign({currentLoddgedInUserId},decision);return res.status(STATUS_OKAY).json(decision)}, //Object.assign({currentLoddgedInUserId: 'pat'},decision)
     err =>
       res
         .status(STATUS_NOT_FOUND)
@@ -370,7 +371,7 @@ server.get(
 );
 
 mongoose.Promise = global.Promise;
-const connect = mongoose.connect("mongodb://localhost/test");
+const connect = mongoose.connect("mongodb://localhost/test13");
 //  'mongodb://sneha.thadani:decisionjam@ds163769.mlab.com:63769/decisionjam');
 
 connect.then(

@@ -18,7 +18,9 @@ class Decision extends Component {
       decisionCode: props.match.params.id,
       decision: "",
       answersArray: [],
-      decisionCreatorId: ""
+      decisionCreatorId: "",
+      currentLoggedInUserId : "",
+      voteOver : false,
     };
   }
 
@@ -29,10 +31,15 @@ class Decision extends Component {
       .get(`${ROOT_URL}/api/decision/decisionCode/${decisionCode}`)
       .then(res => {
         console.log("res.data", res.data);
+        console.log(res.data[0].decisionCreatorId);
+        //console.log(res.data[0].currentLoggedInUserId);
+        console.log('pat collins');
         this.setState({
           decision: res.data[0].decisionText,
           answersArray: res.data[0].answers.map(x => x.answerText),
-          decisionCreatorId: res.data[0].decisionCreatorId
+          decisionCreatorId: res.data[0].decisionCreatorId,
+          currentLoggedInUserId: res.data[0].currentLoggedInUserId,
+          voteOver: res.data[0].voteOver
         });
         // console.log(
         //   "res.data[0].answers.map(x => x.answerText)",
@@ -44,6 +51,7 @@ class Decision extends Component {
         // console.log("erorr", error.response.data.error);
         this.setState({ decision: error.response.data.error });
       });
+    console.log('decisionCreatorId is ' + this.state.decision);
   }
 
   onPostButtonClick = () => {
@@ -53,6 +61,7 @@ class Decision extends Component {
       voteIsActive: false,
       revealIsActive: false
     });
+    
   };
 
   onVoteButtonClick = () => {
@@ -69,8 +78,26 @@ class Decision extends Component {
       renderPage: "reveal",
       postIsActive: false,
       voteIsActive: false,
-      revealIsActive: true
+      revealIsActive: true,
+      voteOver: true,
     });
+    
+    //todo wrap this axios request in a conditional to stop the update
+    // request from firing on every reveal button click , we only need it to reveal once
+    // conditional would be ((decisionid == currentLoggedInUserId) && this.state.voteOver == false )
+    //but first want to get this working and test
+
+
+    const voteBodyObject = { voteOver: this.state.voteOver };
+    // update the decision making sure the vote is over
+    axios
+      .put(`${ROOT_URL}/api/decision/${this.state.decisionCode}/voteOverUpdate`, voteBodyObject)
+      .then(res => {
+        console.log("res.data put", res.data);
+      })
+      .catch(error => {
+        console.log("error.response", error.response);
+      });
   };
 
   render() {
@@ -96,11 +123,13 @@ class Decision extends Component {
           <button
             className={this.state.voteIsActive ? "active-tab" : "inactive-tab"}
             onClick={this.onVoteButtonClick}
+            // if there are no answers or vote is over , there is nothing to vote on
+            disabled= {!(this.state.answersArray || voteOver )}  //answersArray empty, null or lenght 0 is false
           >
             Vote
           </button>
           <button
-            disabled={!this.state.decisionCreatorId}
+            disabled={!((this.state.decisionCreatorId == this.state.currentLoddgedInUserId || voteOver))}
             className={
               this.state.revealIsActive ? "active-tab" : "inactive-tab"
             }
