@@ -100,7 +100,7 @@ class Decision extends Component {
             Vote
           </button>
           <button
-            disabled={!this.state.decisionCreatorId}
+            // disabled={!this.state.decisionCreatorId}
             className={
               this.state.revealIsActive ? "active-tab" : "inactive-tab"
             }
@@ -108,7 +108,7 @@ class Decision extends Component {
           >
             Reveal
           </button>
-        </div>{" "}
+        </div>
         <div className="hr-decisions " />
         {(() => {
           switch (this.state.renderPage) {
