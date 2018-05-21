@@ -34,7 +34,7 @@ class DecisionPost extends Component {
           result: true,
           answersArray: res.data[0].answers.map(x => x.answerText)
         });
-        console.log("this.state.answersArray", this.state.answersArray);
+        // console.log("this.state.answersArray", this.state.answersArray);
       })
       .catch(error => {
         // console.log("erorr", error.response.data.error);
@@ -77,7 +77,7 @@ class DecisionPost extends Component {
   render() {
     // console.log("this.props", this.props);
     // console.log("this.state", this.state);
-    console.log("this.state.answersArray", this.state.answersArray);
+    // console.log("this.state.answersArray", this.state.answersArray);
 
     const answersArray = this.state.answersArray.length;
 

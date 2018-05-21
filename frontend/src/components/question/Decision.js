@@ -18,17 +18,22 @@ class Decision extends Component {
       decisionCode: props.match.params.id,
       decision: "",
       answersArray: [],
-      decisionCreatorId: ""
+      decisionCreatorId: "",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token")
+      }
     };
   }
 
   // get question based on code
   componentDidMount() {
+    const headers = this.state.headers;
     const decisionCode = this.state.decisionCode;
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`)
+      .get(`${ROOT_URL}/api/decision/${decisionCode}`, { headers })
       .then(res => {
-        console.log("res.data", res.data);
+        // console.log("res", res);
         this.setState({
           decision: res.data[0].decisionText,
           answersArray: res.data[0].answers.map(x => x.answerText),
