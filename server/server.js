@@ -159,7 +159,7 @@ server.get(
     const id = req.params.id;
     console.log("decision user is " + req.user);
     console.log("id", id);
-    Decision.find({ _id: id }).then(
+    Decision.find({ decisionCode: id }).then(
       decision => {
         res.status(STATUS_OKAY).json(decision);
         console.log("decision", decision);
@@ -243,6 +243,7 @@ server.put(
       Decision.findOne({ "answers._id": answerId })
         .then(
           decision => {
+            console.log(decision);
             let answers = decision.answers;
             const voteForAnswer = answers.find(x => String(x._id) === answerId);
             const upVotes = voteForAnswer.upVotes;
@@ -269,7 +270,7 @@ server.put(
                   err => res.status(STATUS_SERVER_ERROR).json({ error: err })
                 );
             } else {
-              res.status(STATUS_OKAY).json({
+              res.status(STATUS_USER_ERROR).json({
                 status: "User already voted not allowed to vote again"
               });
             }
@@ -402,8 +403,9 @@ server.get(
 );
 
 mongoose.Promise = global.Promise;
-const connect = mongoose.connect("mongodb://localhost/test13");
-//  'mongodb://sneha.thadani:decisionjam@ds163769.mlab.com:63769/decisionjam');
+const connect = mongoose.connect 
+//("mongodb://localhost/test");
+ ('mongodb://sneha.thadani:decisionjam@ds163769.mlab.com:63769/decisionjam');
 
 connect.then(
   () => {
