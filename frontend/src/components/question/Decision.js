@@ -38,7 +38,7 @@ class Decision extends Component {
           decision: res.data[0].decisionText,
           answersArray: res.data[0].answers.map(x => x.answerText),
           decisionCreatorId: res.data[0].decisionCreatorId,
-          currentLoggedInUserId: res.data[0].currentLoggedInUserId,
+          currentLoggedInUserId: res.data.currentLoggedInUserId,
           voteOver: res.data[0].voteOver
         });
         // console.log(
@@ -124,12 +124,13 @@ class Decision extends Component {
             className={this.state.voteIsActive ? "active-tab" : "inactive-tab"}
             onClick={this.onVoteButtonClick}
             // if there are no answers or vote is over , there is nothing to vote on
-            disabled= {!(this.state.answersArray || voteOver )}  //answersArray empty, null or lenght 0 is false
+            disabled= {!(this.state.answersArray || this.state.voteOver )}  //answersArray empty, null or lenght 0 is false
           >
             Vote
           </button>
           <button
-            disabled={!((this.state.decisionCreatorId == this.state.currentLoddgedInUserId || voteOver))}
+            //disabled if (decisionCreatorid or Logged in userid empty or if the id's don't match or if the vote is over)
+            disabled={!((this.state.decisionCreatorId && this.state.currentLoggedInUserId) && (this.state.decisionCreatorId == this.state.currentLoggedInUserId) || (this.state.voteOver))}
             className={
               this.state.revealIsActive ? "active-tab" : "inactive-tab"
             }
