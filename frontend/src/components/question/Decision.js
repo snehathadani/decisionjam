@@ -18,17 +18,22 @@ class Decision extends Component {
       decisionCode: props.match.params.id,
       decision: "",
       answersArray: [],
-      decisionCreatorId: ""
+      decisionCreatorId: "",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token")
+      }
     };
   }
 
   // get question based on code
   componentDidMount() {
+    const headers = this.state.headers;
     const decisionCode = this.state.decisionCode;
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`)
+      .get(`${ROOT_URL}/api/decision/${decisionCode}`, { headers })
       .then(res => {
-        console.log("res.data", res.data);
+        // console.log("res", res);
         this.setState({
           decision: res.data[0].decisionText,
           answersArray: res.data[0].answers.map(x => x.answerText),
@@ -100,7 +105,7 @@ class Decision extends Component {
             Vote
           </button>
           <button
-            disabled={!this.state.decisionCreatorId}
+            // disabled={!this.state.decisionCreatorId}
             className={
               this.state.revealIsActive ? "active-tab" : "inactive-tab"
             }
@@ -108,7 +113,7 @@ class Decision extends Component {
           >
             Reveal
           </button>
-        </div>{" "}
+        </div>
         <div className="hr-decisions " />
         {(() => {
           switch (this.state.renderPage) {

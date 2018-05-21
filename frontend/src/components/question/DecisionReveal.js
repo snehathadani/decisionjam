@@ -9,34 +9,34 @@ class DecisionVote extends Component {
     this.state = {
       answersArray: [],
       newAnswer: "",
-      decisionCode: this.props.decisionCode
+      decisionCode: this.props.decisionCode,
+      jwtToken: localStorage.getItem("token")
     };
   }
 
   componentDidMount() {
     const decisionCode = this.state.decisionCode;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: this.state.jwtToken
+    };
     axios
-      .get(`${ROOT_URL}/api/decision/decisionCode/${decisionCode}`)
+      .get(`${ROOT_URL}/api/decision/${decisionCode}`, { headers })
       .then(res => {
         console.log("res.data", res.data);
         this.setState({
-          // decision: res.data[0].decisionText,
-          answersArray: res.data[0].answers.map(x => x.answerText)
+          answersArray: res.data[0].answers
         });
       })
-
       .catch(error => {
         // console.log("erorr", error.response.data.error);
         this.setState({ decision: error.response.data.error });
       });
-    console.log("answersArray,", this.state.anwersArray);
   }
 
   render() {
-    console.log("this.props", this.props);
-    console.log("this.state", this.state);
-
-    const answersArray = this.state.answersArray.length;
+    // console.log("this.props", this.props);
+    // console.log("this.state", this.state);
 
     return (
       <div className="reveal-container">
@@ -45,7 +45,10 @@ class DecisionVote extends Component {
           <div>
             {this.state.answersArray.map((answers, i) => (
               <div className="answer-container" key={i}>
-                <div className="answer-text">{answers}</div>
+                <div className="answer-text">{answers.answerText}</div>
+                <div className="answer-text">
+                  {answers.upVotes.length - answers.downVotes.length}
+                </div>
               </div>
             ))}
           </div>
