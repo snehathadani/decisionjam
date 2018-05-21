@@ -9,8 +9,6 @@ class Question extends Component {
     decisionCode: "",
     redirect: false,
     result: false,
-    jwtToken: localStorage.getItem("token"),
-
     headers: {
       "Content-Type": "application/json",
       Authorization: localStorage.getItem("token")

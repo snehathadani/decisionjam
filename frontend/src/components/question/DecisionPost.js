@@ -18,7 +18,7 @@ class DecisionPost extends Component {
   // auto load answers from database
   componentDidMount() {
     const decisionCode = this.state.decisionCode;
-    console.log("state", this.state);
+    console.log("this.state", this.state);
     const headers = {
       Authorization: this.state.jwtToken
     };
