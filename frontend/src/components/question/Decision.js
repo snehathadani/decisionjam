@@ -21,19 +21,24 @@ class Decision extends Component {
       decisionCreatorId: "",
       currentLoggedInUserId : "",
       voteOver : false,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token")
+      }
     };
   }
 
   // get question based on code
   componentDidMount() {
+    const headers = this.state.headers;
     const decisionCode = this.state.decisionCode;
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`)
+      .get(`${ROOT_URL}/api/decision/${decisionCode}`, { headers })
       .then(res => {
         console.log("res.data", res.data);
         console.log(res.data[0].decisionCreatorId);
         //console.log(res.data[0].currentLoggedInUserId);
-        console.log('pat collins');
+        // console.log("res", res);
         this.setState({
           decision: res.data[0].decisionText,
           answersArray: res.data[0].answers.map(x => x.answerText),
@@ -129,8 +134,10 @@ class Decision extends Component {
             Vote
           </button>
           <button
+
             //disabled if (decisionCreatorid or Logged in userid empty or if the id's don't match or if the vote is over)
             disabled={!((this.state.decisionCreatorId && this.state.currentLoggedInUserId) && (this.state.decisionCreatorId == this.state.currentLoggedInUserId) || (this.state.voteOver))}
+            // disabled={!this.state.decisionCreatorId}
             className={
               this.state.revealIsActive ? "active-tab" : "inactive-tab"
             }
@@ -138,7 +145,7 @@ class Decision extends Component {
           >
             Reveal
           </button>
-        </div>{" "}
+        </div>
         <div className="hr-decisions " />
         {(() => {
           switch (this.state.renderPage) {
