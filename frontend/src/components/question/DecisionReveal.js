@@ -38,8 +38,6 @@ class DecisionVote extends Component {
     // console.log("this.props", this.props);
     // console.log("this.state", this.state);
 
-    const answersArray = this.state.answersArray.length;
-
     return (
       <div className="reveal-container">
         <div className="answers-container">

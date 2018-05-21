@@ -12,18 +12,8 @@ class DecisionPost extends Component {
       newAnswer: "",
       decisionCode: this.props.decisionCode,
       jwtToken: localStorage.getItem("token")
-
     };
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   //if your props is received after the component is mounted, then this function will update the state accordingly.
-  //   console.log("nextProps", nextProps);
-  //   if (this.props.answersArray !== nextProps.answersArray) {
-  //     this.setState({ answersArray: nextProps.answersArray });
-  //     console.log("nextProps after if", nextProps);
-  //   }
-  // }
 
   // auto load answers from database
   componentDidMount() {
@@ -33,7 +23,7 @@ class DecisionPost extends Component {
       Authorization: this.state.jwtToken
     };
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`, {headers})
+      .get(`${ROOT_URL}/api/decision/${decisionCode}`, { headers })
       .then(res => {
         // console.log("GET res.data", res.data);
         this.setState({
@@ -83,11 +73,21 @@ class DecisionPost extends Component {
     // console.log("this.props", this.props);
     // console.log("this.state", this.state);
     const answersArray = this.state.answersArray.length;
-
     return (
       <div className="post-container">
         <div className="answers-container">
-          {answersArray === 0 ? (
+          {answersArray !== 0 ? (
+            <div>
+              {this.state.answersArray.map((answers, i) => (
+                <div className="answer-container" key={i}>
+                  <div className="answer-text">{answers}</div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="no-answer">Suggest an answer</div>
+          )}
+          {/* {answersArray === 0 ? (
             <div className="no-answer">Suggest an answer</div>
           ) : (
             <div>
@@ -97,7 +97,7 @@ class DecisionPost extends Component {
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </div>
         <div className="hr-decisions " />
         <div className="answer-form-container">
