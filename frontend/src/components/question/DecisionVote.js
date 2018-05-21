@@ -73,8 +73,8 @@ class DecisionVote extends Component {
               {this.state.answersArray.map((answer) => (
                 <div className="answer-container" key={answer._id}>
                   <div className="answer-text">{answer.answerText}</div>
-                    <button onClick={this.handleUpvote.bind(this, answer._id)}> + {answer.upVotes.length}</button>   
-                    <button onClick={this.handleDownvote.bind(this, answer._id)}> - {answer.downVotes.length}</button>
+                    <button onClick={this.handleUpvote.bind(this, answer._id)}> + </button>   
+                    <button onClick={this.handleDownvote.bind(this, answer._id)}> - }</button>
                   
                 </div>
               ))}
