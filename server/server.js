@@ -172,6 +172,20 @@ server.get(
   }
 );
 
+// postman test example localhost:8000/api/decision/decisionCode/k65gy
+server.get("/api/decision/decisionCode/:decisionCode", passport.authenticate("jwt", { session: false }),function(req, res) {
+  const currentLoddgedInUserId = req.user ? req.user._id : "5b01aeb1abaade1eacdc67ce";
+  const decisionCode = req.params.decisionCode;
+  console.log("decisionCode", decisionCode);
+  Decision.find({ decisionCode: decisionCode }).then(
+    decision => {decision = Object.assign({currentLoddgedInUserId},decision);return res.status(STATUS_OKAY).json(decision)}, //{decision = Object.assign({currentLoddgedInUserId},decision);return 
+    err =>
+      res
+        .status(STATUS_NOT_FOUND)
+        .json({ error: "Decision with code " + decisionCode + " not found" })
+  );
+});
+
 server.put("/api/decision/:id/answer", function(req, res) {
   const id = req.params.id;
   console.log("id", id);
@@ -271,6 +285,37 @@ server.put(
   }
 );
 
+// when react wants to change voteOver from false to true
+server.put("/api/decision/:decisionCode/voteOverUpdate", passport.authenticate("jwt", { session: false }), function(req, res) {
+  const decisonCode = req.params.deisionCode;
+  console.log("id", decisonCode);
+  console.log(`req.body ${req.body.voteOver}`);
+  const voteOver = req.body.voteOver; //TODO add with the user id right now only string
+  //check if string answer is empty or null
+  // https://stackoverflow.com/questions/154059/how-do-you-check-for-an-empty-string-in-javascript
+  
+    Decision.findOne({ decisionCode }).then(
+      decision => {
+        console.log("decision", decision);
+        Decision.updateOne(
+          { decisionCode },
+          { $set: { voteOver } }
+        ).then(
+          result => res.status(STATUS_OKAY).json(decision),
+          err =>
+            res.status(STATUS_NOT_FOUND).json({
+              error: "Decision with id " + id + " not updated" + " " + err
+            })
+        );
+      },
+      err =>
+        res
+          .status(STATUS_NOT_FOUND)
+          .json({ error: "Decision with id " + id + " not found" })
+    );
+  }
+);
+
 //gotta convert ugly callback code to beautiful promises
 //http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/
 // route to authenticate a user (POST http://localhost:8080/api/login)
@@ -314,7 +359,7 @@ server.post("/api/login", function(req, res) {
                   res.json({
                     success: true,
                     token: "JWT " + token,
-                    subscriptionID: subscription.subscriptionID
+                    subscriptionID: subscription.subscriptionID,
                   });
                 }
               });

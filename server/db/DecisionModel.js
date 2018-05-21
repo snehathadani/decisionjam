@@ -14,6 +14,11 @@ const DecisionSchema =  new mongoose.Schema({
     },
     decisionCreatorId : String,
 
+    voteOver: {
+        type: Boolean,
+        default : false,
+    },
+
     answers: [{    
         answerText: {
         type: String,
