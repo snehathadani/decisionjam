@@ -172,7 +172,7 @@ server.get(
   }
 );
 
-server.put("/api/decision/:2id/answer", function(req, res) {
+server.put("/api/decision/:id/answer", function(req, res) {
   const id = req.params.id;
   console.log("id", id);
   console.log(`req.body ${req.body.answer}`);
