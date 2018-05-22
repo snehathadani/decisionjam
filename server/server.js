@@ -105,7 +105,7 @@ server.post(
     //}
     Decision.findOne(
       {
-        decisonCode: (decisionCode = Math.random()
+        decisionCode: (decisionCode = Math.random()
           .toString(36)
           .substr(2, 5))
       },
@@ -157,12 +157,12 @@ server.get(
   passport.authenticate("jwt", { session: false }),
   function(req, res) {
     const id = req.params.id;
-    console.log("decision user is " + req.user);
-    console.log("id", id);
+    //console.log("decision user is " + req.user);
+    //console.log("id", id);
     Decision.find({ decisionCode: id }).then(
       decision => {
         res.status(STATUS_OKAY).json(decision);
-        console.log("decision", decision);
+       // console.log("decision", decision);
       },
       err =>
         res
@@ -176,15 +176,35 @@ server.get(
 server.get("/api/decision/decisionCode/:decisionCode", passport.authenticate("jwt", { session: false }),function(req, res) {
   const currentLoggedInUserId = req.user ? req.user._id : "5b01aeb1abaade1eacdc67ce";
   const decisionCode = req.params.decisionCode;
-  console.log("decisionCode", decisionCode);
-  console.log ('logged in userId ', currentLoggedInUserId);
-  Decision.find({ decisionCode: decisionCode }).then(
-    decision => {decision = Object.assign({decision},{currentLoggedInUserId});return res.status(STATUS_OKAY).json(decision)}, //{decision = Object.assign({currentLoddgedInUserId},decision);return
-    //decision =>  res.status(STATUS_OKAY).json({decision,currentLoddgedInUserId}), //{decision = Object.assign({currentLoddgedInUserId},decision);return 
+  console.log('decisonCode is '+ decisionCode);
+  console.log("currentLoggedInUserId Pat", currentLoggedInUserId);
+  // Decision.find({ decisionCode: decisionCode }).then(
+  //   //decision => {decision = Object.assign({decision},{currentLoggedInUserId});return res.status(STATUS_OKAY).json(decision)}, //{decision = Object.assign({currentLoddgedInUserId},decision);return
+  //   decision =>  res.status(STATUS_OKAY).json({decision), 
+  //   err =>
+  //     res
+  //       .status(STATUS_NOT_FOUND)
+  //       .json({ error: "Decision with code " + decisionCode + " not found" })
+  // );
+  
+  Decision.findOne({ decisionCode }).then(
+    decision => {
+      //console.log("decision", decision);
+      Decision.updateOne(
+        { decision },
+        { $set: { currentLoggedInUserId } }
+      ).then(
+        result => res.status(STATUS_OKAY).json(decision),
+        err =>
+          res.status(STATUS_NOT_FOUND).json({
+            error: "Decision with id " + id + " not updated" + " " + err
+          })
+      );
+    },
     err =>
       res
         .status(STATUS_NOT_FOUND)
-        .json({ error: "Decision with code " + decisionCode + " not found" })
+        .json({ error: "Decision with id " + id + " not found" })
   );
 });
 

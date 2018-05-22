@@ -21,24 +21,24 @@ class Decision extends Component {
       decisionCreatorId: "",
       currentLoggedInUserId : "",
       voteOver : false,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: localStorage.getItem("token")
-      }
+      jwtToken: localStorage.getItem("token")
     };
   }
 
   // get question based on code
   componentDidMount() {
-    const headers = this.state.headers;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: this.state.jwtToken
+    };
     const decisionCode = this.state.decisionCode;
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`, { headers })
+      .get(`${ROOT_URL}/api/decisionCode/${decisionCode}`, { headers })
       .then(res => {
-        console.log("res", res);
+        console.log("res", res.data);
         console.log('decison creator pulled from res data is '+ res.data[0].decisionCreatorId);
         console.log(res.data[0].decisionCreatorId);
-        console.log(res.data[0].currentLoggedInUserId);
+        console.log('userId is'+ res.data[0].currentLoggedInUserId);
         // console.log("res", res);
         this.setState({
           decision: res.data[0].decisionText,
@@ -57,7 +57,7 @@ class Decision extends Component {
         // console.log("erorr", error.response.data.error);
         this.setState({ decision: error.response.data.error });
       });
-    console.log('decisionCreatorId is ' + this.state.decision);
+    //console.log('decisionCreatorId is ' + this.state.decision);
   }
 
   onPostButtonClick = () => {
@@ -137,7 +137,7 @@ class Decision extends Component {
           <button
 
             //disabled if (decisionCreatorid or Logged in userid empty or if the id's don't match or if the vote is over)
-            disabled={!((this.state.decisionCreatorId && this.state.currentLoggedInUserId) && (this.state.decisionCreatorId == this.state.currentLoggedInUserId) || (this.state.voteOver))}
+            disabled={!( (this.state.decisionCreatorId == this.state.currentLoggedInUserId) || (this.state.voteOver))}
             // disabled={!this.state.decisionCreatorId}
             className={
               this.state.revealIsActive ? "active-tab" : "inactive-tab"

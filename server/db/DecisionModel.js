@@ -34,6 +34,11 @@ const DecisionSchema =  new mongoose.Schema({
         required: true,
         default: Date.now,
     },
+
+    currentLoggedInUserId: {
+        type: String,
+        default: '',
+    }
 });
 
 const DecisionModel = mongoose.model('Decision', DecisionSchema);
