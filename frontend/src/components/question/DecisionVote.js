@@ -24,8 +24,10 @@ class DecisionVote extends Component {
       .get(`${ROOT_URL}/api/decision/${decisionCode}`, {headers}) 
       .then(res => {
           this.setState({
-          decision: res.data[0].decisionText,
-          answersArray: res.data[0].answers
+          decision: res.data.decisionText,
+          answersArray: res.data.answers,
+          maxVotesPerUser: res.data.maxVotesPerUser,
+          votesByUser: res.data.votesByUser
         });
       })
 
@@ -54,8 +56,12 @@ class DecisionVote extends Component {
     };
     axios
     .put(`${ROOT_URL}/api/decision/answer/${answerId}/vote?vote=${upOrDown}`,{}, {headers})
-    .then(res => { this.setState({...this.state, answersArray: res.data.answers})})
+    .then(res => { this.setState({...this.state, answersArray: res.data.answers, votesByUser: res.data.votesByUser})})
     .catch(e => console.log("Vote not counted"))    
+  }
+
+  areVotesDisabled() {
+      return (this.state.votesByUser >= this.state.maxVotesPerUser);     
   }
 
   render() {
@@ -73,9 +79,8 @@ class DecisionVote extends Component {
               {this.state.answersArray.map((answer) => (
                 <div className="answer-container" key={answer._id}>
                   <div className="answer-text">{answer.answerText}</div>
-                    <button onClick={this.handleUpvote.bind(this, answer._id)}> + </button>   
-                    <button onClick={this.handleDownvote.bind(this, answer._id)}> - }</button>
-                  
+                    <button onClick={this.handleUpvote.bind(this, answer._id)} disabled={this.areVotesDisabled() ? 'disabled' : false}> + </button>   
+                    <button onClick={this.handleDownvote.bind(this, answer._id)} disabled={this.areVotesDisabled() ? 'disabled' : false}> - </button>
                 </div>
               ))}
             </div>
