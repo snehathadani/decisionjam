@@ -66,7 +66,7 @@ class Billing extends Component {
       return (
         <div className="subscription-info-container">
           <div className="subscription-info-title">
-            Subscription Information:
+            Subscription Information
           </div>
           <div className="hr-billing " />
 
@@ -92,14 +92,15 @@ class Billing extends Component {
       return (
         <div className="billing-container">
           <div className="elements-container">
-            <div className="paymentform-title">Payment Form</div>
+            <div className="paymentform-title">Create a subscription now!</div>
             <div className="hr-billing " />
-
+            <div className="paymentform-title">Payment</div>
+            <div className="hr-billing " />
             <Elements>
               <InjectedCheckoutForm plan={this.props.match} />
             </Elements>
           </div>
-
+          <div className="or-divider">Or</div>
           <div className="continue-container">
             <div className="continue-text">Continue as a free user </div>
             <Link to="/landing-page">Home</Link>

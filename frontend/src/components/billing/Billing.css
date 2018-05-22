@@ -1,5 +1,5 @@
 .billing-container {
-  width: 900px;
+  width: 1000px;
   margin: auto;
   display: flex;
   justify-content: space-around;
@@ -10,9 +10,18 @@
   margin-bottom: 30px;
 }
 
+.or-divider {
+  padding: 30px;
+  /* background-color: white;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  border: 1px solid #ebebeb;
+  text-align: center; */
+}
+
 .elements-container {
   width: 500px;
-  margin: auto;
   padding: 20px;
   background-color: white;
   border: 1px solid #ebebeb;
@@ -29,7 +38,7 @@
 }
 
 .continue-container {
-  margin: auto;
+  height: 100px;
   padding: 20px;
   background-color: white;
   border: 1px solid #ebebeb;
@@ -42,6 +51,7 @@
 
 .continue-text {
   padding-right: 10px;
+  padding-top: 20px;
 }
 
 label {
@@ -102,7 +112,7 @@ button:hover {
   margin: auto;
   padding: 30px;
   text-align: left;
-  width: 200px;
+  width: 150px;
 }
 
 .subscription-info-title {
