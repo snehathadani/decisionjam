@@ -35,9 +35,10 @@ class Decision extends Component {
     axios
       .get(`${ROOT_URL}/api/decision/${decisionCode}`, { headers })
       .then(res => {
-        console.log("res.data", res.data);
+        console.log("res", res);
+        console.log('decison creator pulled from res data is '+ res.data[0].decisionCreatorId);
         console.log(res.data[0].decisionCreatorId);
-        //console.log(res.data[0].currentLoggedInUserId);
+        console.log(res.data[0].currentLoggedInUserId);
         // console.log("res", res);
         this.setState({
           decision: res.data[0].decisionText,
