@@ -26,24 +26,30 @@ class Billing extends Component {
         // console.log("res", res);
       })
       .catch(error => {
-        this.setState({ didFetchResultFromServer: true, redirect: true });
+        console.log("error", error);
       });
     axios
       .get(`${ROOT_URL}/api/subscriptionID`, { headers })
       .then(res => {
         console.log("res", res);
-        if (res.data.subscription.subscriptionID) {
+        if (res.data.subscription && res.data.subscription.subscriptionID) {
           this.setState({
             hasSubscription: true,
             subscription: res.data.subscription,
             didFetchResultFromServer: true
           });
         } else {
-          this.setState({ hasSubscription: false });
+          this.setState({
+            hasSubscription: false,
+            didFetchResultFromServer: true
+          });
         }
       })
       .catch(error => {
-        console.log("error", error.response);
+        console.log("error", error);
+        this.setState({
+          didFetchResultFromServer: true
+        });
       });
   }
 
@@ -53,54 +59,53 @@ class Billing extends Component {
 
     // if subscription id, don't show payment form
 
-    if (this.state.didFetchResultFromServer) {
-      if (this.state.hasSubscription) {
-        return (
-          <div className="subscription-info-container">
-            <div className="subscription-info-title">
-              Subscription Information:{" "}
-            </div>
+    if (!this.state.didFetchResultFromServer) {
+      return null;
+    }
+    if (this.state.hasSubscription) {
+      return (
+        <div className="subscription-info-container">
+          <div className="subscription-info-title">
+            Subscription Information:
+          </div>
+          <div className="hr-billing " />
+
+          <div className="subscription-sub-info-container">
+            <div>Subscription Type: </div>
+            <div>{subscription.subscriptionType}</div>
+          </div>
+          <div className="subscription-sub-info-container">
+            <div>Amount Billed: </div>
+            <div>{subscription.amountBilled}</div>
+          </div>
+          <div className="subscription-sub-info-container">
+            <div>Subscription Start Date: </div>
+            <div>{subscription.subscriptionStartDate}</div>
+          </div>
+          <div className="subscription-sub-info-container">
+            <div>Subscription End Date: </div>
+            <div>{subscription.subscriptionEndDate}</div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="billing-container">
+          <div className="elements-container">
+            <div className="paymentform-title">Payment Form</div>
             <div className="hr-billing " />
 
-            <div className="subscription-sub-info-container">
-              <div>Subscription Type: </div>
-              <div>{subscription.subscriptionType}</div>
-            </div>
-            <div className="subscription-sub-info-container">
-              <div>Amount Billed: </div>
-              <div>{subscription.amountBilled}</div>
-            </div>
-            <div className="subscription-sub-info-container">
-              <div>Subscription Start Date: </div>
-              <div>{subscription.subscriptionStartDate}</div>
-            </div>
-            <div className="subscription-sub-info-container">
-              <div>Subscription End Date: </div>
-              <div>{subscription.subscriptionEndDate}</div>
-            </div>
+            <Elements>
+              <InjectedCheckoutForm plan={this.props.match} />
+            </Elements>
           </div>
-        );
-      } else {
-        return (
-          <div className="billing-container">
-            <div className="elements-container">
-              <div className="paymentform-title">Payment Form</div>
-              <div className="hr-billing " />
 
-              <Elements>
-                <InjectedCheckoutForm plan={this.props.match} />
-              </Elements>
-            </div>
-
-            <div className="continue-container">
-              <div className="continue-text">Continue as a free user </div>
-              <Link to="/landing-page">Home</Link>
-            </div>
+          <div className="continue-container">
+            <div className="continue-text">Continue as a free user </div>
+            <Link to="/landing-page">Home</Link>
           </div>
-        );
-      }
-    } else {
-      return null;
+        </div>
+      );
     }
   }
 }

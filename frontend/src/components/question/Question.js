@@ -29,6 +29,7 @@ class Question extends Component {
       .then(res => {
         // console.log("res", res);
         this.setState({
+          didFetchResultFromServer: true,
           username: res.data.user.username
         });
       })
@@ -40,11 +41,8 @@ class Question extends Component {
       .get(`${ROOT_URL}/api/subscriptionID`, { headers })
       .then(res => {
         console.log("res", res);
-        if (res.data.subscription.subscriptionID) {
-          this.setState({
-            hasSubscriptionID: true,
-            didFetchResultFromServer: true
-          });
+        if (res.data.subscription && res.data.subscription.subscriptionID) {
+          this.setState({ hasSubscriptionID: true });
         } else {
           this.setState({ hasSubscriptionID: false });
         }
