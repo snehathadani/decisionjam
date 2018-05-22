@@ -105,7 +105,7 @@ server.post(
     //}
     Decision.findOne(
       {
-        decisonCode: (decisionCode = Math.random()
+        decisionCode: (decisionCode = Math.random()
           .toString(36)
           .substr(2, 5))
       },
@@ -157,6 +157,8 @@ server.get(
   passport.authenticate("jwt", { session: false }),
   function(req, res) {
     const id = req.params.id;
+ console.log("decision", decision);
+
     const userId = req.user.username;
     Decision.findOne({ decisionCode: id }).then(
       decision => {
@@ -172,15 +174,37 @@ server.get(
 
 // postman test example localhost:8000/api/decision/decisionCode/k65gy
 server.get("/api/decision/decisionCode/:decisionCode", passport.authenticate("jwt", { session: false }),function(req, res) {
-  const currentLoddgedInUserId = req.user ? req.user._id : "5b01aeb1abaade1eacdc67ce";
+  const currentLoggedInUserId = req.user ? req.user._id : "5b01aeb1abaade1eacdc67ce";
   const decisionCode = req.params.decisionCode;
-  console.log("decisionCode", decisionCode);
-  Decision.find({ decisionCode: decisionCode }).then(
-    decision => {decision = Object.assign({currentLoddgedInUserId},decision);return res.status(STATUS_OKAY).json(decision)}, //{decision = Object.assign({currentLoddgedInUserId},decision);return 
+  console.log('decisonCode is '+ decisionCode);
+  console.log("currentLoggedInUserId Pat", currentLoggedInUserId);
+  // Decision.find({ decisionCode: decisionCode }).then(
+  //   //decision => {decision = Object.assign({decision},{currentLoggedInUserId});return res.status(STATUS_OKAY).json(decision)}, //{decision = Object.assign({currentLoddgedInUserId},decision);return
+  //   decision =>  res.status(STATUS_OKAY).json({decision), 
+  //   err =>
+  //     res
+  //       .status(STATUS_NOT_FOUND)
+  //       .json({ error: "Decision with code " + decisionCode + " not found" })
+  // );
+  
+  Decision.findOne({ decisionCode }).then(
+    decision => {
+      //console.log("decision", decision);
+      Decision.updateOne(
+        { decision },
+        { $set: { currentLoggedInUserId } }
+      ).then(
+        result => res.status(STATUS_OKAY).json(decision),
+        err =>
+          res.status(STATUS_NOT_FOUND).json({
+            error: "Decision with id " + id + " not updated" + " " + err
+          })
+      );
+    },
     err =>
       res
         .status(STATUS_NOT_FOUND)
-        .json({ error: "Decision with code " + decisionCode + " not found" })
+        .json({ error: "Decision with id " + id + " not found" })
   );
 });
 
@@ -282,10 +306,11 @@ server.put(
 
 // when react wants to change voteOver from false to true
 server.put("/api/decision/:decisionCode/voteOverUpdate", passport.authenticate("jwt", { session: false }), function(req, res) {
-  const decisonCode = req.params.deisionCode;
-  console.log("id", decisonCode);
+  const decisionCode = req.params.decisionCode;
+  console.log(req.params);
+  console.log("decisioncode", decisionCode);
   console.log(`req.body ${req.body.voteOver}`);
-  const voteOver = req.body.voteOver; //TODO add with the user id right now only string
+  const voteOverOrNot = req.body.voteOver; //TODO add with the user id right now only string
   //check if string answer is empty or null
   // https://stackoverflow.com/questions/154059/how-do-you-check-for-an-empty-string-in-javascript
   
@@ -294,7 +319,7 @@ server.put("/api/decision/:decisionCode/voteOverUpdate", passport.authenticate("
         console.log("decision", decision);
         Decision.updateOne(
           { decisionCode },
-          { $set: { voteOver } }
+          { $set: { voteOver: voteOverOrNot } }
         ).then(
           result => res.status(STATUS_OKAY).json(decision),
           err =>
