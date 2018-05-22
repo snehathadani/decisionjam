@@ -35,17 +35,18 @@ class Decision extends Component {
     axios
       .get(`${ROOT_URL}/api/decisionCode/${decisionCode}`, { headers })
       .then(res => {
-        console.log("res", res.data);
-        console.log('decison creator pulled from res data is '+ res.data[0].decisionCreatorId);
-        console.log(res.data[0].decisionCreatorId);
-        console.log('userId is'+ res.data[0].currentLoggedInUserId);
+        //console.log("res", res.data);
+       // console.log('decison creator pulled from res data is '+ res.data[0].decisionCreatorId);
+       // console.log(res.data[0].decisionCreatorId);
+       // console.log('userId is'+ res.data[0].currentLoggedInUserId);
+        //console.log(res.data.currentLoggedInUserId);
         // console.log("res", res);
         this.setState({
-          decision: res.data[0].decisionText,
-          answersArray: res.data[0].answers.map(x => x.answerText),
-          decisionCreatorId: res.data[0].decisionCreatorId,
+          decision: res.data.decisionText,
+          answersArray: res.data.answers.map(x => x.answerText),
+          decisionCreatorId: res.data.decisionCreatorId,
           currentLoggedInUserId: res.data.currentLoggedInUserId,
-          voteOver: res.data[0].voteOver
+          voteOver: res.data.voteOver
         });
         // console.log(
         //   "res.data[0].answers.map(x => x.answerText)",

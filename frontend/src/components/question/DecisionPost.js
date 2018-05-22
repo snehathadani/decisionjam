@@ -32,7 +32,7 @@ class DecisionPost extends Component {
         this.setState({
           // decision: res.data[0].decisionText,
           result: true,
-          answersArray: res.data[0].answers.map(x => x.answerText)
+          answersArray: res.data.answers.map(x => x.answerText)
         });
         // console.log("this.state.answersArray", this.state.answersArray);
       })

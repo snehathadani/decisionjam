@@ -15,7 +15,8 @@ class Signup extends Component {
       redirect: false,
       loginError: "",
       selectedOption: "",
-      url: ""
+      url: "",
+      signInCounter: localStorage.setItem("signInCounter", 1)
     };
   }
 
@@ -54,7 +55,6 @@ class Signup extends Component {
     // console.log("this.state:", this.state);
     // console.log("this.props:", this.props);
 
-    // redirect to signin page after sign up is successful
     if (this.state.redirect) {
       console.log("href", window.location.href);
       let newhref = window.location.href;
