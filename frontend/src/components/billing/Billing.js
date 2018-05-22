@@ -11,6 +11,8 @@ class Billing extends Component {
       <div className="billing-container">
         <div className="elements-container">
           <div className="paymentform-title">Payment Form</div>
+          <div className="hr-billing " />
+
           <Elements>
             <InjectedCheckoutForm plan={this.props.match} />
           </Elements>
