@@ -40,8 +40,8 @@ class Question extends Component {
     axios
       .get(`${ROOT_URL}/api/subscriptionID`, { headers })
       .then(res => {
-        // console.log("res", res);
-        if (res.data.subscriptionID) {
+        console.log("res", res);
+        if (res.data.subscription.subscriptionID) {
           this.setState({ hasSubscriptionID: true });
         } else {
           this.setState({ hasSubscriptionID: false });
@@ -101,7 +101,7 @@ class Question extends Component {
         return (
           <div>
             <div className="question-purchase-text">
-              Purchase a subscription to creation questions.
+              Purchase a subscription to creation decisions.
               <div className="question-buy-link-container">
                 <Link className="question-buy-link" to="/billing/">
                   BUY NOW

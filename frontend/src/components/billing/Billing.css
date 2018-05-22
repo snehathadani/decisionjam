@@ -104,3 +104,20 @@ button:hover {
   text-align: left;
   width: 200px;
 }
+
+.subscription-info-title {
+  padding: 30px;
+}
+
+.subscription-info-container {
+  width: 400px;
+  padding: 20px;
+  margin: auto;
+  background-color: white;
+  border: 1px solid #ebebeb;
+}
+
+.subscription-sub-info-container {
+  display: flex;
+  padding: 10px;
+}

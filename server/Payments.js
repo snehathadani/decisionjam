@@ -103,6 +103,7 @@ module.exports = server => {
       Billing.findOne({ username: req.user.username })
         .sort({ subscriptionID: -1 })
         .then((subscription, err) => {
+          console.log(subscription);
           if (!subscription) {
             res.json({
               success: true,
@@ -111,7 +112,7 @@ module.exports = server => {
           } else {
             res.json({
               success: true,
-              subscriptionID: subscription.subscriptionID
+              subscription: subscription
             });
           }
         });

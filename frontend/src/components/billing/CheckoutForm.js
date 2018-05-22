@@ -61,12 +61,12 @@ class CheckoutForm extends Component {
 
   render() {
     // console.log("this.state:", this.state);
-    console.log("this.props:", this.props);
+    // console.log("this.props:", this.props);
 
     const success = this.state.success;
     const fail = this.state.fail;
     const jwtToken = this.state.jwtToken;
-    console.log("jwtToken", jwtToken);
+    // console.log("jwtToken", jwtToken);
 
     if (!jwtToken) {
       return <Redirect to={`/signup/?redirect=${window.location.pathname}`} />;

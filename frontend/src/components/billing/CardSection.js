@@ -1,41 +1,39 @@
 // CardSection.js
 import "./Billing.css";
-import React, { Component } from 'react';
-import {CardNumberElement, CardExpiryElement,CardCVCElement } from 'react-stripe-elements';
-
+import React, { Component } from "react";
+import {
+  CardNumberElement,
+  CardExpiryElement,
+  CardCVCElement
+} from "react-stripe-elements";
 
 const handleBlur = () => {
-  console.log('[blur]');
-}
+  console.log("[blur]");
+};
 
 const handleFocus = () => {
-  console.log('[focus]');
-}
+  console.log("[focus]");
+};
 
 class CardSection extends Component {
-
-
   render() {
     return (
       <div>
         <label>
           Card Number
-          <CardNumberElement
-            onBlur={handleBlur}
-            onFocus={handleFocus}
-          />
+          <CardNumberElement onBlur={handleBlur} onFocus={handleFocus} />
         </label>
         <label>
-          Expiration elements
-          <CardExpiryElement/>
+          Expiration
+          <CardExpiryElement />
         </label>
         <label>
           CVC
-          <CardCVCElement/>
+          <CardCVCElement />
         </label>
-        </div>
+      </div>
     );
   }
-};
+}
 
 export default CardSection;
