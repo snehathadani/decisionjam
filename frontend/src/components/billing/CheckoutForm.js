@@ -61,12 +61,12 @@ class CheckoutForm extends Component {
 
   render() {
     // console.log("this.state:", this.state);
-    console.log("this.props:", this.props);
+    // console.log("this.props:", this.props);
 
     const success = this.state.success;
     const fail = this.state.fail;
     const jwtToken = this.state.jwtToken;
-    console.log("jwtToken", jwtToken);
+    // console.log("jwtToken", jwtToken);
 
     if (!jwtToken) {
       return <Redirect to={`/signup/?redirect=${window.location.pathname}`} />;
@@ -81,33 +81,39 @@ class CheckoutForm extends Component {
         <form onSubmit={this.handleSubmit}>
           <CardSection />
           <div className="radiobuttons">
-            <label>
-              <input
-                type="radio"
-                value="Monthly"
-                checked={this.state.selectedOption === "Monthly"}
-                onChange={this.handleOptionChange}
-              />
-              Monthly
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="HalfYearly"
-                checked={this.state.selectedOption === "HalfYearly"}
-                onChange={this.handleOptionChange}
-              />
-              6 Months
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="Yearly"
-                checked={this.state.selectedOption === "Yearly"}
-                onChange={this.handleOptionChange}
-              />
-              Yearly
-            </label>
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  value="Monthly"
+                  checked={this.state.selectedOption === "Monthly"}
+                  onChange={this.handleOptionChange}
+                />
+                $5 - Monthly
+              </label>
+            </div>
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  value="HalfYearly"
+                  checked={this.state.selectedOption === "HalfYearly"}
+                  onChange={this.handleOptionChange}
+                />
+                $20 - 6 Months
+              </label>
+            </div>
+            <div>
+              <label>
+                <input
+                  type="radio"
+                  value="Yearly"
+                  checked={this.state.selectedOption === "Yearly"}
+                  onChange={this.handleOptionChange}
+                />
+                $50 - Yearly
+              </label>
+            </div>
           </div>
           <button>Confirm order</button>
         </form>

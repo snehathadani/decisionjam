@@ -9,7 +9,7 @@ class Main extends Component {
   state = {
     decisionCode: "",
     redirect: false,
-    result: false,
+    didFetchResultFromServer: false,
     isError: false,
     errorMessage: "",
     headers: {
@@ -24,11 +24,11 @@ class Main extends Component {
       .get(`${ROOT_URL}/api/routeThatNeedsJWTToken`, { headers })
       .then(res => {
         // console.log("res", res);
-        this.setState({ result: true });
+        this.setState({ didFetchResultFromServer: true });
       })
       .catch(error => {
         // console.log("error", error);
-        this.setState({ result: true, redirect: true });
+        this.setState({ didFetchResultFromServer: true, redirect: true });
       });
   }
 
@@ -76,7 +76,7 @@ class Main extends Component {
     const errorMessage = this.state.errorMessage;
     // console.log("errorMessage", errorMessage);
 
-    if (this.state.result) {
+    if (this.state.didFetchResultFromServer) {
       if (this.state.redirect === true) {
         return <Redirect to={"/signup"} />;
       } else {

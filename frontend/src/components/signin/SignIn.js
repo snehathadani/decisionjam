@@ -14,7 +14,8 @@ class Signup extends Component {
       password: "",
       redirect: false,
       loginError: "",
-      subscriptionID: false
+      subscriptionID: false,
+      signInCounter: localStorage.getItem("signInCounter")
     };
   }
 
@@ -55,16 +56,16 @@ class Signup extends Component {
   };
 
   render() {
-    // console.log("this.state:", this.state);
+    console.log("this.state:", this.state);
     // console.log("this.props:", this.props);
 
     if (this.state.redirect) {
       // if there is a subscription ID, go to landing page
-      if (this.state.subscriptionID) {
+
+      if (this.state.signInCounter === null) {
         return <Redirect to="/landing-page" />;
       } else {
-        console.log("redirect");
-
+        // console.log("redirect");
         const getQueryString = (field, url) => {
           let href = url ? url : window.location.href;
           let reg = new RegExp("[?&]" + field + "=([^&#]*)", "i");
@@ -73,8 +74,10 @@ class Signup extends Component {
           return string ? string[1] : null;
         };
         let redirect = getQueryString("redirect");
-        console.log("redirect", redirect);
+        // console.log("redirect", redirect);
 
+        localStorage.removeItem("signInCounter");
+        console.log(localStorage.getItem("signInCounter"));
         // go to billing page
         if (redirect === "undefined" || redirect === null) {
           return <Redirect to="/billing" />;

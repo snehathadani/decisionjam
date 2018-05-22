@@ -3,7 +3,7 @@ import axios from "axios";
 
 const ROOT_URL = "http://localhost:8000";
 
-class DecisionVote extends Component {
+class DecisionReveal extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,4 +58,4 @@ class DecisionVote extends Component {
   }
 }
 
-export default DecisionVote;
+export default DecisionReveal;
