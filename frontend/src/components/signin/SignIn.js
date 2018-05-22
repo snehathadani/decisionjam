@@ -61,11 +61,6 @@ class Signup extends Component {
 
     if (this.state.redirect) {
       // if there is a subscription ID, go to landing page
-      console.log("this.state.signInCounter", this.state.signInCounter);
-      console.log(
-        "this.state.signInCounter === null",
-        this.state.signInCounter === null
-      );
 
       if (this.state.signInCounter === null) {
         return <Redirect to="/landing-page" />;

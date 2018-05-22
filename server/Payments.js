@@ -92,4 +92,25 @@ module.exports = server => {
       }
     });
   });
+
+  server.get("/api/subscriptionID", function(req, res) {
+    console.log("req", req);
+    Billing.findOne({ username: req.body.username })
+      .sort({ subscriptionID: -1 })
+      .then((subscription, err) => {
+        if (!subscription) {
+          res.json({
+            success: true,
+            token: "JWT " + token,
+            subscriptionID: false
+          });
+        } else {
+          res.json({
+            success: true,
+            token: "JWT " + token,
+            subscriptionID: subscription.subscriptionID
+          });
+        }
+      });
+  });
 };
