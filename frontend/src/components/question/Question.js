@@ -29,7 +29,6 @@ class Question extends Component {
       .then(res => {
         // console.log("res", res);
         this.setState({
-          didFetchResultFromServer: true,
           username: res.data.user.username
         });
       })
@@ -42,7 +41,10 @@ class Question extends Component {
       .then(res => {
         console.log("res", res);
         if (res.data.subscription.subscriptionID) {
-          this.setState({ hasSubscriptionID: true });
+          this.setState({
+            hasSubscriptionID: true,
+            didFetchResultFromServer: true
+          });
         } else {
           this.setState({ hasSubscriptionID: false });
         }
