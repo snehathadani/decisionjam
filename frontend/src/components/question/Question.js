@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./Question.css";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const ROOT_URL = "http://localhost:8000";
 
@@ -11,6 +12,8 @@ class Question extends Component {
     decisionCode: "",
     redirect: false,
     didFetchResultFromServer: false,
+    username: "",
+    hasSubscriptionID: false,
     headers: {
       "Content-Type": "application/json",
       Authorization: localStorage.getItem("token")
@@ -24,32 +27,28 @@ class Question extends Component {
     axios
       .get(`${ROOT_URL}/api/routeThatNeedsJWTToken`, { headers })
       .then(res => {
-        console.log("res", res);
-        console.log("res.data.user.username", res.data.user.username);
-        this.setState({ didFetchResultFromServer: true });
+        // console.log("res", res);
+        this.setState({
+          didFetchResultFromServer: true,
+          username: res.data.user.username
+        });
       })
       .catch(error => {
         this.setState({ didFetchResultFromServer: true, redirect: true });
       });
 
     axios
-      .post(`${ROOT_URL}/api/subscriptionID`)
+      .get(`${ROOT_URL}/api/subscriptionID`, { headers })
       .then(res => {
-        console.log("res.data", res);
-        if (res.data.success) {
-          if (res.data.subscriptionID) {
-            this.setState({ redirect: true, subscriptionID: true });
-          } else {
-            this.setState({ redirect: true, subscriptionID: false });
-          }
+        // console.log("res", res);
+        if (res.data.subscriptionID) {
+          this.setState({ hasSubscriptionID: true });
         } else {
-          console.log("login error", this.state.loginError);
-          this.setState({ loginError: res.data.msg });
+          this.setState({ hasSubscriptionID: false });
         }
       })
       .catch(error => {
         console.log("error", error.response);
-        this.setState({ loginError: error.response.data.error });
       });
   }
 
@@ -81,9 +80,7 @@ class Question extends Component {
     if (this.state.didFetchResultFromServer) {
       if (this.state.redirect === true) {
         return <Redirect to={"/signup"} />;
-      } else {
-        // if subscription id then show this
-        // else show link to billing page to buy subscription
+      } else if (this.state.hasSubscriptionID) {
         return (
           <div className="question-wrapper">
             <label className="question-title"> Create A New Question </label>
@@ -97,6 +94,19 @@ class Question extends Component {
             </div>
             <div>
               <button onClick={this.createQuestion}> Create Question </button>
+            </div>
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <div className="question-purchase-text">
+              Purchase a subscription to creation questions.
+              <div className="question-buy-link-container">
+                <Link className="question-buy-link" to="/billing/">
+                  BUY NOW
+                </Link>
+              </div>
             </div>
           </div>
         );

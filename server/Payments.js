@@ -1,6 +1,6 @@
 const stripe = require("stripe")("sk_test_LdNhOn0s563Qt83R14hhLyGQ");
 const server = require("./server.js");
-const BillingModel = require("./db/BillingModel.js");
+const Billing = require("./db/BillingModel.js");
 const passport = require("passport");
 const jwt = require("jwt-simple");
 
@@ -57,7 +57,7 @@ module.exports = server => {
                 subscriptionStartDate: subscription.current_period_start,
                 subscriptionEndDate: subscription.current_period_end
               };
-              const newBilling = new BillingModel(newModelData);
+              const newBilling = new Billing(newModelData);
               // console.log('newBilling', newBilling);
               newBilling.save();
               res.json({
@@ -83,7 +83,7 @@ module.exports = server => {
   server.get("/api/make-decision/:soID", (req, res) => {
     console.log("req.params", req.params.soID);
     const soID = req.params.soID;
-    BillingModel.findOne({ userID: soID }).then(endDate => {
+    Billing.findOne({ userID: soID }).then(endDate => {
       const newDate = new Date();
       const dateToday = Math.round(newDate.getTime() / 1000);
       const subEndDate = endDate.subscriptionEndDate;
@@ -93,24 +93,28 @@ module.exports = server => {
     });
   });
 
-  server.get("/api/subscriptionID", function(req, res) {
-    console.log("req", req);
-    Billing.findOne({ username: req.body.username })
-      .sort({ subscriptionID: -1 })
-      .then((subscription, err) => {
-        if (!subscription) {
-          res.json({
-            success: true,
-            token: "JWT " + token,
-            subscriptionID: false
-          });
-        } else {
-          res.json({
-            success: true,
-            token: "JWT " + token,
-            subscriptionID: subscription.subscriptionID
-          });
-        }
-      });
-  });
+  server.get(
+    "/api/subscriptionID",
+    passport.authenticate("jwt", { session: false }),
+    function(req, res) {
+      console.log("req", req);
+      console.log("req.user", req.user);
+
+      Billing.findOne({ username: req.user.username })
+        .sort({ subscriptionID: -1 })
+        .then((subscription, err) => {
+          if (!subscription) {
+            res.json({
+              success: true,
+              subscriptionID: false
+            });
+          } else {
+            res.json({
+              success: true,
+              subscriptionID: subscription.subscriptionID
+            });
+          }
+        });
+    }
+  );
 };
