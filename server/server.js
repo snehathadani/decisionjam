@@ -157,12 +157,10 @@ server.get(
   passport.authenticate("jwt", { session: false }),
   function(req, res) {
     const id = req.params.id;
-    console.log("decision user is " + req.user);
-    console.log("id", id);
-    Decision.find({ decisionCode: id }).then(
+    const userId = req.user.username;
+    Decision.findOne({ decisionCode: id }).then(
       decision => {
-        res.status(STATUS_OKAY).json(decision);
-        console.log("decision", decision);
+        res.status(STATUS_OKAY).json({...decision.toObject(), votesByUser: userVotes(decision, userId)});
       },
       err =>
         res
@@ -210,7 +208,7 @@ server.put("/api/decision/:id/answer", function(req, res) {
           { decisionCode: id },
           { $set: { answers: answers } }
         ).then(
-          result => res.status(STATUS_OKAY).json(decision),
+          result => res.status(STATUS_OKAY).json({...decision.toObject(), votesByUser: 0}),
           err =>
             res.status(STATUS_NOT_FOUND).json({
               error: "Decision with id " + id + " not updated" + " " + err
@@ -225,6 +223,13 @@ server.put("/api/decision/:id/answer", function(req, res) {
   }
 });
 
+function userVotes(decision, user) {
+  const allUsers = decision.answers.map(a => [...a.upVotes, ...a.downVotes]);
+  const flattenedUsers = [].concat.apply([], allUsers);
+  const votes = flattenedUsers.find(u => u === user);
+  return (votes === undefined) ? 0 : votes.length;
+}
+
 server.put(
   "/api/decision/answer/:id/vote",
   passport.authenticate("jwt", { session: false }),
@@ -232,33 +237,23 @@ server.put(
     const answerId = req.params.id;
     const vote = req.query.vote;
     const userId = req.user.username;
-    if (
-      vote === undefined ||
-      (vote.toUpperCase() !== "YES" && vote.toUpperCase() !== "NO")
-    ) {
-      res
-        .status(STATUS_USER_ERROR)
-        .json({ error: "Decision must be yes or no" });
+    if (vote === undefined || (vote.toUpperCase() !== "YES" && vote.toUpperCase() !== "NO")) {
+      res.status(STATUS_USER_ERROR).json({ error: "Decision must be yes or no" });
     } else {
       Decision.findOne({ "answers._id": answerId })
         .then(
           decision => {
+            const currentVotes = userVotes(decision, userId);
             console.log(decision);
             let answers = decision.answers;
             const voteForAnswer = answers.find(x => String(x._id) === answerId);
             const upVotes = voteForAnswer.upVotes;
             const downVotes = voteForAnswer.downVotes;
             var voted = false;
-            if (
-              vote.toUpperCase() === "YES" &&
-              upVotes.find(x => x === userId) === undefined
-            ) {
+            if (vote.toUpperCase() === "YES" && currentVotes < decision.maxVotesPerUser ) {
               upVotes.push(userId);
               voted = true;
-            } else if (
-              vote.toUpperCase() === "NO" &&
-              downVotes.find(x => x === userId) === undefined
-            ) {
+            } else if (vote.toUpperCase() === "NO" && currentVotes < decision.maxVotesPerUser) {
               downVotes.push(userId);
               voted = true;
             }
@@ -266,12 +261,12 @@ server.put(
               decision
                 .save()
                 .then(
-                  d => res.status(STATUS_OKAY).json(d),
+                  d => res.status(STATUS_OKAY).json({...d.toObject(), votesByUser: userVotes(d, userId)}),
                   err => res.status(STATUS_SERVER_ERROR).json({ error: err })
                 );
             } else {
               res.status(STATUS_USER_ERROR).json({
-                status: "User already voted not allowed to vote again"
+                status: "User already exceeds max vote count not allowed to vote again"
               });
             }
           },
@@ -353,13 +348,15 @@ server.post("/api/login", function(req, res) {
                   res.json({
                     success: true,
                     token: "JWT " + token,
-                    subscriptionID: false
+                    subscriptionID: false,
+                    user: req.body.username
                   });
                 } else {
                   res.json({
                     success: true,
                     token: "JWT " + token,
                     subscriptionID: subscription.subscriptionID,
+                    user: req.body.username
                   });
                 }
               });

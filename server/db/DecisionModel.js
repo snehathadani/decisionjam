@@ -29,6 +29,11 @@ const DecisionSchema =  new mongoose.Schema({
         downVotes: [String]}
     ],
 
+    maxVotesPerUser: {
+        type: Number,
+        default: 1
+    },
+
     createdOn: {
         type: Date,
         required: true,

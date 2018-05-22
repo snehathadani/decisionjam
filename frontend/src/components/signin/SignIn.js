@@ -38,6 +38,7 @@ class Signup extends Component {
         console.log("res.data", res);
         if (res.data.success) {
           localStorage.setItem("token", res.data.token);
+          localStorage.setItem("user", res.data.user);
           if (res.data.subscriptionID) {
             this.setState({ redirect: true, subscriptionID: true });
           } else {
