@@ -297,6 +297,7 @@ server.put(
     const answerId = req.params.id;
     const vote = req.query.vote;
     const userId = req.user.username;
+
     if (
       vote === undefined ||
       (vote.toUpperCase() !== "YES" && vote.toUpperCase() !== "NO")
@@ -309,12 +310,15 @@ server.put(
         .then(
           decision => {
             const currentVotes = userVotes(decision, userId);
-            // console.log(decision);
+            console.log("decision", decision);
             let answers = decision.answers;
             const voteForAnswer = answers.find(x => String(x._id) === answerId);
             const upVotes = voteForAnswer.upVotes;
             const downVotes = voteForAnswer.downVotes;
             var voted = false;
+            console.log("currentVotes", currentVotes);
+            console.log("voteForAnswer", voteForAnswer);
+
             if (
               vote.toUpperCase() === "YES" &&
               currentVotes < decision.maxVotesPerUser
@@ -329,6 +333,7 @@ server.put(
               voted = true;
             }
             if (voted) {
+              console.log("voted", voted);
               decision.save().then(
                 d =>
                   res.status(STATUS_OKAY).json({
@@ -394,13 +399,24 @@ server.put(
   passport.authenticate("jwt", { session: false }),
   function(req, res) {
     const decisionCode = req.params.decisionCode;
-    const newValue = req.query.newValue;
+    // const newValue = req.query.newValue;
+    const maxVotesPerUser = req.body.maxVotesPerUser;
+    console.log("req.body", req.body);
 
     Decision.findOne({ decisionCode }).then(decision => {
-      if (decision.decisionCreatorId === req.user.username) {
+      // console.log(
+      //   "decision.decisionCreatorId",
+      //   typeof decision.decisionCreatorId
+      // );
+      // console.log("req.user", typeof req.user._id);
+      // console.log(
+      //   "decision.decisionCreatorId === req.user._id",
+      //   decision.decisionCreatorId === String(req.user._id)
+      // );
+      if (decision.decisionCreatorId === String(req.user._id)) {
         Decision.updateOne(
           { decisionCode },
-          { $set: { maxVotesPerUser: newValue } }
+          { $set: { maxVotesPerUser: maxVotesPerUser } }
         ).then(
           d => res.status(STATUS_OKAY).json(decision),
           e =>

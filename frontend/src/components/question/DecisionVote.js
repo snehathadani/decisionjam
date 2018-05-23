@@ -10,16 +10,18 @@ class DecisionVote extends Component {
       error: "",
       answersArray: [],
       decisionCode: this.props.decisionCode,
-      jwtToken: localStorage.getItem("token")
+      maxVotesPerUser: null,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token")
+      }
     };
   }
 
   componentDidMount() {
     const decisionCode = this.state.decisionCode;
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: this.state.jwtToken
-    };
+    const headers = this.state.headers;
+
     axios
       .get(`${ROOT_URL}/api/decision/${decisionCode}`, { headers })
       .then(res => {
@@ -27,7 +29,7 @@ class DecisionVote extends Component {
         this.setState({
           // decision: res.data.decisionText,
           // answersArray: res.data.answers,
-          // maxVotesPerUser: res.data.maxVotesPerUser,
+          maxVotesPerUser: res.data.maxVotesPerUser,
           // votesByUser: res.data.votesByUser
           answersArray: res.data.answers
         });
@@ -52,10 +54,9 @@ class DecisionVote extends Component {
   }
 
   handleVote(upOrDown, answerId) {
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: this.state.jwtToken
-    };
+    const headers = this.state.headers;
+    console.log(upOrDown);
+
     axios
       .put(
         `${ROOT_URL}/api/decision/answer/${answerId}/vote?vote=${upOrDown}`,
@@ -70,14 +71,18 @@ class DecisionVote extends Component {
           votesByUser: res.data.votesByUser
         });
       })
-      .catch(e => console.log("Vote not counted"));
+      .catch(error => console.log("error", error));
   }
 
   // areVotesDisabled() {
-  //     return (this.state.votesByUser >= this.state.maxVotesPerUser);
+  //   return this.state.votesByUser >= this.state.maxVotesPerUser;
   // }
+
   onMaxVotesClickDown = () => {
     const decisionCode = this.state.decisionCode;
+    const headers = this.state.headers;
+    console.log("headers down", headers);
+
     if (this.state.maxVotesPerUser <= 0) {
       return;
     }
@@ -85,8 +90,15 @@ class DecisionVote extends Component {
     this.setState({ maxVotesPerUser: this.state.maxVotesPerUser - 1 });
 
     console.log(this.state.maxVotesPerUser);
+
     axios
-      .put(`${ROOT_URL}/api/decision/${decisionCode}/maxVotesPerUser`)
+      .put(
+        `${ROOT_URL}/api/decision/${decisionCode}/maxVotesPerUser`,
+        { maxVotesPerUser: this.state.maxVotesPerUser },
+        {
+          headers
+        }
+      )
       .then(res => {
         console.log("res", res);
         this.setState({});
@@ -96,17 +108,25 @@ class DecisionVote extends Component {
 
   onMaxVotesClickUp = () => {
     const decisionCode = this.state.decisionCode;
+    const headers = this.state.headers;
+    console.log("headers up", headers);
 
     this.setState({ maxVotesPerUser: this.state.maxVotesPerUser + 1 });
     console.log(this.state.maxVotesPerUser);
 
     axios
-      .put(`${ROOT_URL}/api/decision/${decisionCode}/maxVotesPerUser`)
+      .put(
+        `${ROOT_URL}/api/decision/${decisionCode}/maxVotesPerUser`,
+        { maxVotesPerUser: this.state.maxVotesPerUser },
+        {
+          headers
+        }
+      )
       .then(res => {
         console.log("res", res);
         // this.setState({});
       })
-      .catch(e => console.log("error"));
+      .catch(error => console.log("error.response", error.response));
   };
 
   render() {

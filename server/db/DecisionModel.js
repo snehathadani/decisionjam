@@ -33,7 +33,7 @@ const DecisionSchema = new mongoose.Schema({
 
   maxVotesPerUser: {
     type: Number,
-    default: 100
+    default: 1
   },
 
   createdOn: {
