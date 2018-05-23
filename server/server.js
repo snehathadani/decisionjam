@@ -82,14 +82,15 @@ server.post("/api/users/adduser", function(req, res) {
   });
 });
 
+// create decision/question
 server.post(
   "/api/decision/create",
   passport.authenticate("jwt", { session: false }),
   function(req, res) {
     const newDecision = new Decision(req.body);
-    console.log("req.body", req.body);
+    // console.log("req.body", req.body);
     let decisionCode = "feck";
-    console.log(decisionCode);
+    // console.log(decisionCode);
     let decisionCodeDupe = true;
 
     //while (decisionCodeDupe) {  // i need to get this working so that it loops
@@ -99,9 +100,9 @@ server.post(
     // a common solution for this as the general pattern i'm trying to cover is very common
     // just have to match it into node async way of doing things
     //getUser(Math.random().toString(36).substr(2, 5));
-    console.log("in loop");
+    // console.log("in loop");
     //decisionCodeNotUnique = true;
-    console.log(decisionCodeDupe);
+    // console.log(decisionCodeDupe);
     //}
     Decision.findOne(
       {
@@ -136,7 +137,7 @@ server.post(
     // console.log("newDecision", newDecision);
     newDecision.decisionCreatorId = req.user._id;
     // console.log("decision make is" + newDecision.decisionCreatorId);
-    console.log("decisionCode", decisionCode);
+    // console.log("decisionCode", decisionCode);
     //check the user contains all required data
 
     newDecision.save((err, decision) => {
@@ -157,12 +158,14 @@ server.get(
   passport.authenticate("jwt", { session: false }),
   function(req, res) {
     const id = req.params.id;
- console.log("decision", decision);
 
     const userId = req.user.username;
     Decision.findOne({ decisionCode: id }).then(
       decision => {
-        res.status(STATUS_OKAY).json({...decision.toObject(), votesByUser: userVotes(decision, userId)});
+        res.status(STATUS_OKAY).json({
+          ...decision.toObject(),
+          votesByUser: userVotes(decision, userId)
+        });
       },
       err =>
         res
@@ -173,55 +176,85 @@ server.get(
 );
 
 // postman test example localhost:8000/api/decision/decisionCode/k65gy
-server.get("/api/decision/decisionCode/:decisionCode", passport.authenticate("jwt", { session: false }),function(req, res) {
-  const currentLoggedInUserId = req.user ? req.user._id : "5b01aeb1abaade1eacdc67ce";
-  const decisionCode = req.params.decisionCode;
-  console.log('decisonCode is '+ decisionCode);
-  console.log("currentLoggedInUserId Pat", currentLoggedInUserId);
-  // Decision.find({ decisionCode: decisionCode }).then(
-  //   //decision => {decision = Object.assign({decision},{currentLoggedInUserId});return res.status(STATUS_OKAY).json(decision)}, //{decision = Object.assign({currentLoddgedInUserId},decision);return
-  //   decision =>  res.status(STATUS_OKAY).json({decision), 
-  //   err =>
-  //     res
-  //       .status(STATUS_NOT_FOUND)
-  //       .json({ error: "Decision with code " + decisionCode + " not found" })
-  // );
-  
-  Decision.findOne({ decisionCode }).then(
-    decision => {
-      //console.log("decision", decision);
-      Decision.updateOne(
-        { decision },
-        { $set: { currentLoggedInUserId } }
-      ).then(
-        result => res.status(STATUS_OKAY).json(decision),
-        err =>
-          res.status(STATUS_NOT_FOUND).json({
-            error: "Decision with id " + id + " not updated" + " " + err
-          })
-      );
-    },
-    err =>
-      res
-        .status(STATUS_NOT_FOUND)
-        .json({ error: "Decision with id " + id + " not found" })
-  );
-});
+server.get(
+  "/api/decision/decisionCode/:decisionCode",
+  passport.authenticate("jwt", { session: false }),
+  function(req, res) {
+    const currentLoggedInUserId = req.user
+      ? req.user._id
+      : "5b01aeb1abaade1eacdc67ce";
+    const decisionCode = req.params.decisionCode;
+    // console.log("decisonCode is " + decisionCode);
+    // console.log("currentLoggedInUserId Pat", currentLoggedInUserId);
+    //  Decision.find({ decisionCode: decisionCode }).then(
+    //   //decision => {decision = Object.assign({decision},{currentLoggedInUserId});return res.status(STATUS_OKAY).json(decision)}, //{decision = Object.assign({currentLoddgedInUserId},decision);return
+    //   decision =>  res.status(STATUS_OKAY).json({decision),
+    //   err =>
+    //     res
+    //       .status(STATUS_NOT_FOUND)
+    //       .json({ error: "Decision with code " + decisionCode + " not found" })
+    // );
+
+    // Decision.findOne({ decisionCode }).then(
+    //   decision => {
+    //     console.log("decision", decision);
+    //     Decision.updateOne(
+    //       { decision },
+    //       { $set: { currentLoggedInUserId } }
+    //     ).then(
+    //       result => {
+    //         console.log("result", result);
+    //         res.status(STATUS_OKAY).json(decision);
+    //       },
+    //       err => {
+    //         console.log("err", err);
+    //         res.status(STATUS_NOT_FOUND).json({
+    //           error: "Decision with id " + id + " not updated" + " " + err
+    //         });
+    //       }
+    //     );
+    //   },
+    //   err =>
+    //     res
+    //       .status(STATUS_NOT_FOUND)
+    //       .json({ error: "Decision with id " + id + " not found" })
+    // );
+
+    Decision.updateOne(
+      { decisionCode },
+      { $set: { currentLoggedInUserId } }
+    ).then(
+      result => {
+        console.log("result", result);
+        Decision.findOne({ decisionCode }).then(decision => {
+          console.log("decision", decision);
+          res.status(STATUS_OKAY).json(decision);
+        });
+      },
+      err => {
+        console.log("err", err);
+        res.status(STATUS_NOT_FOUND).json({
+          error: "Decision with id " + id + " not updated" + " " + err
+        });
+      }
+    );
+  }
+);
 
 server.put("/api/decision/:id/answer", function(req, res) {
   const id = req.params.id;
-  console.log("id", id);
-  console.log(`req.body ${req.body.answer}`);
+  // console.log("id", id);
+  // console.log(`req.body ${req.body.answer}`);
   const answer = req.body.answer; //TODO add with the user id right now only string
   //check if string answer is empty or null
   // https://stackoverflow.com/questions/154059/how-do-you-check-for-an-empty-string-in-javascript
   if (!answer) {
-    console.log("answer is blank or undefined");
+    // console.log("answer is blank or undefined");
     res.status(STATUS_USER_ERROR).json({ error: "Answer cannot be blank" });
   } else {
     Decision.findOne({ decisionCode: id }).then(
       decision => {
-        console.log("decision", decision);
+        // console.log("decision", decision);
         let answers = decision.answers;
         if (answers === undefined) {
           answers = [{ answerText: answer }];
@@ -232,7 +265,10 @@ server.put("/api/decision/:id/answer", function(req, res) {
           { decisionCode: id },
           { $set: { answers: answers } }
         ).then(
-          result => res.status(STATUS_OKAY).json({...decision.toObject(), votesByUser: 0}),
+          result =>
+            res
+              .status(STATUS_OKAY)
+              .json({ ...decision.toObject(), votesByUser: 0 }),
           err =>
             res.status(STATUS_NOT_FOUND).json({
               error: "Decision with id " + id + " not updated" + " " + err
@@ -251,7 +287,7 @@ function userVotes(decision, user) {
   const allUsers = decision.answers.map(a => [...a.upVotes, ...a.downVotes]);
   const flattenedUsers = [].concat.apply([], allUsers);
   const votes = flattenedUsers.find(u => u === user);
-  return (votes === undefined) ? 0 : votes.length;
+  return votes === undefined ? 0 : votes.length;
 }
 
 server.put(
@@ -261,36 +297,55 @@ server.put(
     const answerId = req.params.id;
     const vote = req.query.vote;
     const userId = req.user.username;
-    if (vote === undefined || (vote.toUpperCase() !== "YES" && vote.toUpperCase() !== "NO")) {
-      res.status(STATUS_USER_ERROR).json({ error: "Decision must be yes or no" });
+
+    if (
+      vote === undefined ||
+      (vote.toUpperCase() !== "YES" && vote.toUpperCase() !== "NO")
+    ) {
+      res
+        .status(STATUS_USER_ERROR)
+        .json({ error: "Decision must be yes or no" });
     } else {
       Decision.findOne({ "answers._id": answerId })
         .then(
           decision => {
             const currentVotes = userVotes(decision, userId);
-            console.log(decision);
+            console.log("decision", decision);
             let answers = decision.answers;
             const voteForAnswer = answers.find(x => String(x._id) === answerId);
             const upVotes = voteForAnswer.upVotes;
             const downVotes = voteForAnswer.downVotes;
             var voted = false;
-            if (vote.toUpperCase() === "YES" && currentVotes < decision.maxVotesPerUser ) {
+            console.log("currentVotes", currentVotes);
+            console.log("voteForAnswer", voteForAnswer);
+
+            if (
+              vote.toUpperCase() === "YES" &&
+              currentVotes < decision.maxVotesPerUser
+            ) {
               upVotes.push(userId);
               voted = true;
-            } else if (vote.toUpperCase() === "NO" && currentVotes < decision.maxVotesPerUser) {
+            } else if (
+              vote.toUpperCase() === "NO" &&
+              currentVotes < decision.maxVotesPerUser
+            ) {
               downVotes.push(userId);
               voted = true;
             }
             if (voted) {
-              decision
-                .save()
-                .then(
-                  d => res.status(STATUS_OKAY).json({...d.toObject(), votesByUser: userVotes(d, userId)}),
-                  err => res.status(STATUS_SERVER_ERROR).json({ error: err })
-                );
+              console.log("voted", voted);
+              decision.save().then(
+                d =>
+                  res.status(STATUS_OKAY).json({
+                    ...d.toObject(),
+                    votesByUser: userVotes(d, userId)
+                  }),
+                err => res.status(STATUS_SERVER_ERROR).json({ error: err })
+              );
             } else {
               res.status(STATUS_USER_ERROR).json({
-                status: "User already exceeds max vote count not allowed to vote again"
+                status:
+                  "User already exceeds max vote count not allowed to vote again"
               });
             }
           },
@@ -305,18 +360,21 @@ server.put(
 );
 
 // when react wants to change voteOver from false to true
-server.put("/api/decision/:decisionCode/voteOverUpdate", passport.authenticate("jwt", { session: false }), function(req, res) {
-  const decisionCode = req.params.decisionCode;
-  console.log(req.params);
-  console.log("decisioncode", decisionCode);
-  console.log(`req.body ${req.body.voteOver}`);
-  const voteOverOrNot = req.body.voteOver; //TODO add with the user id right now only string
-  //check if string answer is empty or null
-  // https://stackoverflow.com/questions/154059/how-do-you-check-for-an-empty-string-in-javascript
-  
+server.put(
+  "/api/decision/:decisionCode/voteOverUpdate",
+  passport.authenticate("jwt", { session: false }),
+  function(req, res) {
+    const decisionCode = req.params.decisionCode;
+    // console.log(req.params);
+    // console.log("decisioncode", decisionCode);
+    // console.log(`req.body ${req.body.voteOver}`);
+    const voteOverOrNot = req.body.voteOver; //TODO add with the user id right now only string
+    //check if string answer is empty or null
+    // https://stackoverflow.com/questions/154059/how-do-you-check-for-an-empty-string-in-javascript
+
     Decision.findOne({ decisionCode }).then(
       decision => {
-        console.log("decision", decision);
+        // console.log("decision", decision);
         Decision.updateOne(
           { decisionCode },
           { $set: { voteOver: voteOverOrNot } }
@@ -333,6 +391,45 @@ server.put("/api/decision/:decisionCode/voteOverUpdate", passport.authenticate("
           .status(STATUS_NOT_FOUND)
           .json({ error: "Decision with id " + id + " not found" })
     );
+  }
+);
+
+server.put(
+  "/api/decision/:decisionCode/maxVotesPerUser",
+  passport.authenticate("jwt", { session: false }),
+  function(req, res) {
+    const decisionCode = req.params.decisionCode;
+    // const newValue = req.query.newValue;
+    const maxVotesPerUser = req.body.maxVotesPerUser;
+    console.log("req.body", req.body);
+
+    Decision.findOne({ decisionCode }).then(decision => {
+      // console.log(
+      //   "decision.decisionCreatorId",
+      //   typeof decision.decisionCreatorId
+      // );
+      // console.log("req.user", typeof req.user._id);
+      // console.log(
+      //   "decision.decisionCreatorId === req.user._id",
+      //   decision.decisionCreatorId === String(req.user._id)
+      // );
+      if (decision.decisionCreatorId === String(req.user._id)) {
+        Decision.updateOne(
+          { decisionCode },
+          { $set: { maxVotesPerUser: maxVotesPerUser } }
+        ).then(
+          d => res.status(STATUS_OKAY).json(decision),
+          e =>
+            res
+              .status(STATUS_SERVER_ERROR)
+              .json({ error: "FAiled to update max votes" + " " + e })
+        );
+      } else {
+        res
+          .status(STATUS_USER_ERROR)
+          .json({ error: "FAiled to update max votes user is not owner" });
+      }
+    });
   }
 );
 

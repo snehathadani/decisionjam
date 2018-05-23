@@ -7,27 +7,31 @@ class DecisionVote extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: '',
+      error: "",
       answersArray: [],
       decisionCode: this.props.decisionCode,
-      jwtToken: localStorage.getItem("token")
+      maxVotesPerUser: null,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token")
+      }
     };
   }
 
   componentDidMount() {
     const decisionCode = this.state.decisionCode;
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: this.state.jwtToken
-    };
+    const headers = this.state.headers;
+
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`, {headers}) 
+      .get(`${ROOT_URL}/api/decision/${decisionCode}`, { headers })
       .then(res => {
-          this.setState({
-          decision: res.data.decisionText,
-          answersArray: res.data.answers,
+        console.log("res", res);
+        this.setState({
+          // decision: res.data.decisionText,
+          // answersArray: res.data.answers,
           maxVotesPerUser: res.data.maxVotesPerUser,
-          votesByUser: res.data.votesByUser
+          // votesByUser: res.data.votesByUser
+          answersArray: res.data.answers
         });
       })
 
@@ -42,27 +46,88 @@ class DecisionVote extends Component {
   };
 
   handleUpvote(answerId, e) {
-    this.handleVote('YES', answerId)
+    this.handleVote("YES", answerId);
   }
 
   handleDownvote(answerId, e) {
-    this.handleVote('NO', answerId)
+    this.handleVote("NO", answerId);
   }
 
   handleVote(upOrDown, answerId) {
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: this.state.jwtToken
-    };
+    const headers = this.state.headers;
+    console.log(upOrDown);
+
     axios
-    .put(`${ROOT_URL}/api/decision/answer/${answerId}/vote?vote=${upOrDown}`,{}, {headers})
-    .then(res => { this.setState({...this.state, answersArray: res.data.answers, votesByUser: res.data.votesByUser})})
-    .catch(e => console.log("Vote not counted"))    
+      .put(
+        `${ROOT_URL}/api/decision/answer/${answerId}/vote?vote=${upOrDown}`,
+        {},
+        { headers }
+      )
+      .then(res => {
+        console.log("res", res);
+        this.setState({
+          ...this.state,
+          answersArray: res.data.answers,
+          votesByUser: res.data.votesByUser
+        });
+      })
+      .catch(error => console.log("error", error));
   }
 
-  areVotesDisabled() {
-      return (this.state.votesByUser >= this.state.maxVotesPerUser);     
-  }
+  // areVotesDisabled() {
+  //   return this.state.votesByUser >= this.state.maxVotesPerUser;
+  // }
+
+  onMaxVotesClickDown = () => {
+    const decisionCode = this.state.decisionCode;
+    const headers = this.state.headers;
+    console.log("headers down", headers);
+
+    if (this.state.maxVotesPerUser <= 0) {
+      return;
+    }
+
+    this.setState({ maxVotesPerUser: this.state.maxVotesPerUser - 1 });
+
+    console.log(this.state.maxVotesPerUser);
+
+    axios
+      .put(
+        `${ROOT_URL}/api/decision/${decisionCode}/maxVotesPerUser`,
+        { maxVotesPerUser: this.state.maxVotesPerUser },
+        {
+          headers
+        }
+      )
+      .then(res => {
+        console.log("res", res);
+        this.setState({});
+      })
+      .catch(e => console.log("error"));
+  };
+
+  onMaxVotesClickUp = () => {
+    const decisionCode = this.state.decisionCode;
+    const headers = this.state.headers;
+    console.log("headers up", headers);
+
+    this.setState({ maxVotesPerUser: this.state.maxVotesPerUser + 1 });
+    console.log(this.state.maxVotesPerUser);
+
+    axios
+      .put(
+        `${ROOT_URL}/api/decision/${decisionCode}/maxVotesPerUser`,
+        { maxVotesPerUser: this.state.maxVotesPerUser },
+        {
+          headers
+        }
+      )
+      .then(res => {
+        console.log("res", res);
+        // this.setState({});
+      })
+      .catch(error => console.log("error.response", error.response));
+  };
 
   render() {
     //console.log("this.props", this.props);
@@ -71,16 +136,39 @@ class DecisionVote extends Component {
 
     return (
       <div className="post-container">
+        <div className="maxvotes-container">
+          <div className="maxVotes">
+            <div>Max votes per person</div>
+            <button onClick={this.onMaxVotesClickDown}>-</button>
+            <div>{this.state.maxVotesPerUser}</div>
+            <button onClick={this.onMaxVotesClickUp}>+</button>
+          </div>
+          <div>Total Votes</div>
+          <div>Your Votes</div>
+        </div>
         <div className="answers-container">
           {answersArray === 0 ? (
             <div className="no-answer">There are no answers yet. </div>
           ) : (
             <div>
-              {this.state.answersArray.map((answer) => (
+              {this.state.answersArray.map(answer => (
                 <div className="answer-container" key={answer._id}>
                   <div className="answer-text">{answer.answerText}</div>
-                    <button onClick={this.handleUpvote.bind(this, answer._id)} disabled={this.areVotesDisabled() ? 'disabled' : false}> + </button>   
-                    <button onClick={this.handleDownvote.bind(this, answer._id)} disabled={this.areVotesDisabled() ? 'disabled' : false}> - </button>
+                  <button
+                    onClick={this.handleDownvote.bind(this, answer._id)}
+                    // disabled={this.areVotesDisabled() ? "disabled" : false}
+                  >
+                    {" "}
+                    -{" "}
+                  </button>
+                  <div> {answer.upVotes.length - answer.downVotes.length}</div>
+                  <button
+                    onClick={this.handleUpvote.bind(this, answer._id)}
+                    // disabled={this.areVotesDisabled() ? "disabled" : false}
+                  >
+                    {" "}
+                    +{" "}
+                  </button>
                 </div>
               ))}
             </div>
@@ -89,8 +177,6 @@ class DecisionVote extends Component {
       </div>
     );
   }
-
-
 }
 
 export default DecisionVote;

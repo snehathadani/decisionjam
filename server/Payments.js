@@ -97,13 +97,13 @@ module.exports = server => {
     "/api/subscriptionID",
     passport.authenticate("jwt", { session: false }),
     function(req, res) {
-      console.log("req", req);
-      console.log("req.user", req.user);
+      // console.log("req", req);
+      // console.log("req.user", req.user);
 
       Billing.findOne({ username: req.user.username })
         .sort({ subscriptionID: -1 })
         .then((subscription, err) => {
-          console.log(subscription);
+          // console.log(subscription);
           if (!subscription) {
             res.json({
               success: true,

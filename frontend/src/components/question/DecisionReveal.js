@@ -23,14 +23,14 @@ class DecisionReveal extends Component {
     axios
       .get(`${ROOT_URL}/api/decision/${decisionCode}`, { headers })
       .then(res => {
-        console.log("res.data", res.data);
+        // console.log("res.data", res.data);
         this.setState({
-          answersArray: res.data[0].answers
+          answersArray: res.data.answers
         });
       })
       .catch(error => {
-        // console.log("erorr", error.response.data.error);
-        this.setState({ decision: error.response.data.error });
+        console.log("erorr", error);
+        // this.setState({ decision: error.response.data.error });
       });
   }
 
