@@ -389,6 +389,34 @@ server.put(
   }
 );
 
+server.put(
+  "/api/decision/:decisionCode/maxVotesPerUser",
+  passport.authenticate("jwt", { session: false }),
+  function(req, res) {
+    const decisionCode = req.params.decisionCode;
+    const newValue = req.query.newValue;
+
+    Decision.findOne({ decisionCode }).then(decision => {
+      if (decision.decisionCreatorId === req.user.username) {
+        Decision.updateOne(
+          { decisionCode },
+          { $set: { maxVotesPerUser: newValue } }
+        ).then(
+          d => res.status(STATUS_OKAY).json(decision),
+          e =>
+            res
+              .status(STATUS_SERVER_ERROR)
+              .json({ error: "FAiled to update max votes" + " " + e })
+        );
+      } else {
+        res
+          .status(STATUS_USER_ERROR)
+          .json({ error: "FAiled to update max votes user is not owner" });
+      }
+    });
+  }
+);
+
 //gotta convert ugly callback code to beautiful promises
 //http://erikaybar.name/using-es6-promises-with-mongoosejs-queries/
 // route to authenticate a user (POST http://localhost:8080/api/login)
