@@ -20,6 +20,7 @@ class Decision extends Component {
       answersArray: [],
       decisionCreatorId: "",
       currentLoggedInUserId: "",
+      isCreator: false,
       voteOver: false,
       headers: {
         "Content-Type": "application/json",
@@ -43,6 +44,9 @@ class Decision extends Component {
         // console.log('userId is'+ res.data[0].currentLoggedInUserId);
         //console.log(res.data.currentLoggedInUserId);
         // console.log("res", res);
+        if (res.data.decisionCreatorId === res.data.currentLoggedInUserId) {
+          this.setState({ isCreator: true });
+        }
 
         this.setState({
           decision: res.data.decisionText,
@@ -118,11 +122,7 @@ class Decision extends Component {
     console.log("this.state", this.state);
     // console.log("this.props", this.props);
     // console.log("decisionCreatorId", this.state.decisionCreatorId);
-
-    // if currentLoggedInUserId === decisionCreatorId
-    // then they can click on reveal button
-
-    // they are not equal, then they have to wait for voteOver to be true
+    console.log("iscreator", this.state.isCreator);
 
     return (
       <div className="decision-container">
@@ -147,7 +147,7 @@ class Decision extends Component {
           >
             Vote
           </button>
-          <button
+          {/* <button
             //disabled if (decisionCreatorid or Logged in userid empty or if the id's don't match or if the vote is over)
             disabled={
               !(
@@ -162,7 +162,28 @@ class Decision extends Component {
             onClick={this.onRevealButtonClick}
           >
             Reveal
-          </button>
+          </button> */}
+
+          {this.state.isCreator ? (
+            <button
+              className={
+                this.state.revealIsActive ? "active-tab" : "inactive-tab"
+              }
+              onClick={this.onRevealButtonClick}
+            >
+              Reveal
+            </button>
+          ) : (
+            <button
+              disabled={!this.state.voteOver}
+              className={
+                this.state.revealIsActive ? "active-tab" : "inactive-tab"
+              }
+              onClick={this.onRevealButtonClick}
+            >
+              Reveal
+            </button>
+          )}
         </div>
         <div className="hr-decisions " />
         {(() => {
