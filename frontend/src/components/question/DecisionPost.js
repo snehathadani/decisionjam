@@ -10,7 +10,7 @@ class DecisionPost extends Component {
     this.state = {
       answersArray: [],
       newAnswer: "",
-      result: false,
+      didFetchResultFromServer: false,
       decisionCode: this.props.decisionCode,
       jwtToken: localStorage.getItem("token")
     };
@@ -26,19 +26,19 @@ class DecisionPost extends Component {
     };
 
     axios
-      .get(`${ROOT_URL}/api/decision/${decisionCode}`, { headers })
+      .get(`${ROOT_URL}/api/decision/decisionCode/${decisionCode}`, { headers })
       .then(res => {
-        // console.log("GET res.data", res.data);
+        // console.log("res.data", res.data);
         this.setState({
           // decision: res.data[0].decisionText,
-          result: true,
+          didFetchResultFromServer: true,
           answersArray: res.data.answers.map(x => x.answerText)
         });
         // console.log("this.state.answersArray", this.state.answersArray);
       })
       .catch(error => {
-        // console.log("erorr", error.response.data.error);
-        this.setState({ result: true, decision: error.response.data.error });
+        // console.log("error", error);
+        this.setState({ didFetchResultFromServer: true });
       });
     // console.log("answersArray,", this.state.answersArray);
   }
@@ -81,7 +81,7 @@ class DecisionPost extends Component {
 
     const answersArray = this.state.answersArray.length;
 
-    if (this.state.result) {
+    if (this.state.didFetchResultFromServer) {
       return (
         <div className="post-container">
           <div className="answers-container">

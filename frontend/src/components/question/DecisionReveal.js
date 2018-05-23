@@ -29,8 +29,8 @@ class DecisionReveal extends Component {
         });
       })
       .catch(error => {
-        // console.log("erorr", error.response.data.error);
-        this.setState({ decision: error.response.data.error });
+        console.log("erorr", error);
+        // this.setState({ decision: error.response.data.error });
       });
   }
 
