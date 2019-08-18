@@ -1,0 +1,17 @@
+{
+  "name": "decision-jam-server",
+  "version": "0.0.1",
+  "description": "Web Server for decisionjam",
+  "main": "server.js",
+  "scripts": {
+    "start": "cd server && npm install && node server.js"
+  },
+  "engines": {
+    "node": "8.10.0",
+    "npm": "6.4.0"
+  },
+  "author": "Sneha Thadani",
+  "license": "ISC",
+  "devDependencies": {
+  }
+}
