@@ -2,6 +2,8 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const server = express();
 const mongoose = require("mongoose");
+const path = require('path');
+const dotenv = require('dotenv');
 const User = require("./db/UserModel.js");
 const Decision = require("./db/DecisionModel.js");
 const cors = require("cors");
@@ -18,7 +20,7 @@ const STATUS_NOT_FOUND = 404;
 
 server.use(cors());
 server.use(bodyParser.json());
-
+dotenv.load({ path: path.join(__dirname, './../.env') });
 server.use(passport.initialize());
 // pass passport for configuration
 require("./config/passport")(passport);
@@ -522,6 +524,7 @@ server.get(
 );
 
 mongoose.Promise = global.Promise;
+console.log(process.env.MONGODB_URI)
 const connect = mongoose.connect(process.env.MONGODB_URI);
 //  ('mongodb://sneha.thadani:decisionjam@ds163769.mlab.com:63769/decisionjam');
 
