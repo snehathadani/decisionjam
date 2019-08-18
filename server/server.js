@@ -522,7 +522,7 @@ server.get(
 );
 
 mongoose.Promise = global.Promise;
-const connect = mongoose.connect("mongodb://localhost/test");
+const connect = mongoose.connect(process.env.MONGODB_URI);
 //  ('mongodb://sneha.thadani:decisionjam@ds163769.mlab.com:63769/decisionjam');
 
 connect.then(
